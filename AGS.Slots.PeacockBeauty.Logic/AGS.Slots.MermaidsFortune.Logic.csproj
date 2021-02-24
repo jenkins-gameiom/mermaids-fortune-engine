@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Engine\Resolvers\**" />
+    <EmbeddedResource Remove="Engine\Resolvers\**" />
+    <None Remove="Engine\Resolvers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Engine\Interfaces\IRandom.cs" />
+    <Compile Remove="Engine\Interfaces\IReelsScanner.cs" />
+    <Compile Remove="Engine\Interfaces\IMathFile.cs" />
+    <Compile Remove="Engine\MachineEngine.cs" />
+    <Compile Remove="Engine\ReelsScanner.cs" />
+    <Compile Remove="Engine\SlotGame.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.1.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AGS.Slots.PeacockBeauty.Common\AGS.Slots.MermaidsFortune.Common.csproj" />
+  </ItemGroup>
+
+</Project>

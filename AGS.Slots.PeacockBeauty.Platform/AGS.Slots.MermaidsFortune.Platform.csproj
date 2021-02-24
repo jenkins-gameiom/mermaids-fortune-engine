@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AGS.Slots.PeacockBeauty.Common\AGS.Slots.MermaidsFortune.Common.csproj" />
+    <ProjectReference Include="..\AGS.Slots.PeacockBeauty.Logic\AGS.Slots.MermaidsFortune.Logic.csproj" />
+  </ItemGroup>
+
+</Project>

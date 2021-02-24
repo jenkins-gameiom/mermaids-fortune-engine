@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Math94.json" />
+    <None Remove="Math96.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Math94.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Math96.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Moq" Version="4.15.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AGS.Slots.PeacockBeauty.Common\AGS.Slots.MermaidsFortune.Common.csproj" />
+    <ProjectReference Include="..\AGS.Slots.PeacockBeauty.Logic\AGS.Slots.MermaidsFortune.Logic.csproj" />
+    <ProjectReference Include="..\AGS.Slots.PeacockBeauty.WebAPI\AGS.Slots.MermaidsFortune.WebAPI.csproj" />
+  </ItemGroup>
+
+</Project>

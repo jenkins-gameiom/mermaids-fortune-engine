@@ -1,0 +1,34 @@
+{
+  "publicState": {
+    "action": "init",
+    "userName": "ags_test_4",
+    "gameId": 31,
+    "mode": "realPlay",
+    "jurisdiction": "uk"
+  },
+  "privateState": {
+    "completed": false,
+    "animationState": 0,
+    "userName": "ags_test_4",
+    "sessionId": "2923019d-c729-4922-ac57-4ff19b86997b",
+    "mode": "realPlay",
+    "isNewSession": true
+  },
+  "platform": {
+    "balance": 2678964.79,
+    "operatorId": 1,
+    "currency": "GBP",
+    "mode": "real",
+    "balanceDetails": {
+      "real": 2678964.79,
+      "bonus": 0.0
+    }
+  },
+  "config": {
+    "stakes": [ 88, 176, 264, 528, 880 ],
+    "defaultStake": 176,
+    "denominations": [ 1, 5, 10, 20 ],
+    "defaultDenomination": 1,
+    "rtp": 96.0
+  }
+}

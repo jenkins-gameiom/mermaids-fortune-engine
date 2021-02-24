@@ -1,0 +1,1560 @@
+{
+  "publicState": {
+    "action": "spin",
+    "gameId": 29,
+    "betAmount": 88,
+    "denom": 1
+  },
+  "privateState": {
+    "completed": true,
+    "freeSpinsLeft": 0,
+    "binaryNumber": 0,
+    "listCoins": [
+      [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          2,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    ],
+    "totalBetAmountForRevealance": 7725,
+    "WildSpinsLeftForBaseReel": [
+      [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    ],
+    "totalFreeSpins": 0,
+    "transactionId": "a091bf09-756a-4dec-bc0d-0df248655baa",
+    "userName": "ags_test_17",
+    "sessionId": "7d9ff512-0626-4ffb-a6d0-96afc11a64b4",
+    "mode": "realPlay",
+    "lastState": {
+      "action": "spin",
+      "gameId": 29,
+      "betAmount": 150,
+      "denom": 1,
+      "spin": {
+        "reels": [
+          [
+            4,
+            1,
+            1
+          ],
+          [
+            4,
+            7,
+            1
+          ],
+          [
+            4,
+            4,
+            8
+          ],
+          [
+            7,
+            5,
+            12
+          ],
+          [
+            8,
+            4,
+            5
+          ]
+        ],
+        "type": "spin",
+        "wins": [
+          {
+            "winAmount": 14,
+            "winningSymbolsPositions": [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                2,
+                0
+              ]
+            ],
+            "lineNumber": 1,
+            "symbolId": 4,
+            "multiplier": 14,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 10,
+            "winningSymbolsPositions": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "lineNumber": 2,
+            "symbolId": 1,
+            "multiplier": 10,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 14,
+            "winningSymbolsPositions": [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                2,
+                1
+              ]
+            ],
+            "lineNumber": 5,
+            "symbolId": 4,
+            "multiplier": 14,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 10,
+            "winningSymbolsPositions": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "lineNumber": 6,
+            "symbolId": 1,
+            "multiplier": 10,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 10,
+            "winningSymbolsPositions": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "lineNumber": 7,
+            "symbolId": 1,
+            "multiplier": 10,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 10,
+            "winningSymbolsPositions": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "lineNumber": 14,
+            "symbolId": 1,
+            "multiplier": 10,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 10,
+            "winningSymbolsPositions": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "lineNumber": 20,
+            "symbolId": 1,
+            "multiplier": 10,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 10,
+            "winningSymbolsPositions": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "lineNumber": 22,
+            "symbolId": 1,
+            "multiplier": 10,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 10,
+            "winningSymbolsPositions": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "lineNumber": 25,
+            "symbolId": 1,
+            "multiplier": 10,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 10,
+            "winningSymbolsPositions": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "lineNumber": 28,
+            "symbolId": 1,
+            "multiplier": 10,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 14,
+            "winningSymbolsPositions": [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                2,
+                1
+              ]
+            ],
+            "lineNumber": 39,
+            "symbolId": 4,
+            "multiplier": 14,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 10,
+            "winningSymbolsPositions": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "lineNumber": 40,
+            "symbolId": 1,
+            "multiplier": 10,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 14,
+            "winningSymbolsPositions": [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                2,
+                1
+              ]
+            ],
+            "lineNumber": 41,
+            "symbolId": 4,
+            "multiplier": 14,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 10,
+            "winningSymbolsPositions": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "lineNumber": 42,
+            "symbolId": 1,
+            "multiplier": 10,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 14,
+            "winningSymbolsPositions": [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                2,
+                1
+              ]
+            ],
+            "lineNumber": 45,
+            "symbolId": 4,
+            "multiplier": 14,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 10,
+            "winningSymbolsPositions": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "lineNumber": 48,
+            "symbolId": 1,
+            "multiplier": 10,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 14,
+            "winningSymbolsPositions": [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                2,
+                0
+              ]
+            ],
+            "lineNumber": 51,
+            "symbolId": 4,
+            "multiplier": 14,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 10,
+            "winningSymbolsPositions": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "lineNumber": 52,
+            "symbolId": 1,
+            "multiplier": 10,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 14,
+            "winningSymbolsPositions": [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                2,
+                1
+              ]
+            ],
+            "lineNumber": 55,
+            "symbolId": 4,
+            "multiplier": 14,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 10,
+            "winningSymbolsPositions": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "lineNumber": 56,
+            "symbolId": 1,
+            "multiplier": 10,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 14,
+            "winningSymbolsPositions": [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                2,
+                0
+              ]
+            ],
+            "lineNumber": 59,
+            "symbolId": 4,
+            "multiplier": 14,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 10,
+            "winningSymbolsPositions": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "lineNumber": 60,
+            "symbolId": 1,
+            "multiplier": 10,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 14,
+            "winningSymbolsPositions": [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                2,
+                0
+              ]
+            ],
+            "lineNumber": 61,
+            "symbolId": 4,
+            "multiplier": 14,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 10,
+            "winningSymbolsPositions": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "lineNumber": 62,
+            "symbolId": 1,
+            "multiplier": 10,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 10,
+            "winningSymbolsPositions": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "lineNumber": 64,
+            "symbolId": 1,
+            "multiplier": 10,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 14,
+            "winningSymbolsPositions": [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                2,
+                1
+              ]
+            ],
+            "lineNumber": 65,
+            "symbolId": 4,
+            "multiplier": 14,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 10,
+            "winningSymbolsPositions": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "lineNumber": 66,
+            "symbolId": 1,
+            "multiplier": 10,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 10,
+            "winningSymbolsPositions": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "lineNumber": 68,
+            "symbolId": 1,
+            "multiplier": 10,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 14,
+            "winningSymbolsPositions": [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                2,
+                1
+              ]
+            ],
+            "lineNumber": 69,
+            "symbolId": 4,
+            "multiplier": 14,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 10,
+            "winningSymbolsPositions": [
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "lineNumber": 70,
+            "symbolId": 1,
+            "multiplier": 10,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 10,
+            "winningSymbolsPositions": [
+              [
+                0,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ],
+            "lineNumber": 72,
+            "symbolId": 1,
+            "multiplier": 10,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "Line",
+            "ReelNumber": 0
+          },
+          {
+            "winAmount": 0,
+            "lineNumber": 0,
+            "symbolId": 12,
+            "multiplier": 0,
+            "freeSpinsAmount": 0,
+            "wildIndex": 0,
+            "wildLevel": 0,
+            "evaluationType": "WildBonus",
+            "ReelNumber": 3
+          }
+        ],
+        "sumWins": 0,
+        "events": [],
+        "childFeature": [],
+        "complete": true,
+        "value": 0,
+        "totalSpinWin": 0,
+        "freeSpinsLeft": 0,
+        "totalFreeSpins": 0,
+        "WildSpinsLeftForBaseReel": [
+          [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              2,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ]
+        ],
+        "listCoins": [
+          [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              1,
+              2,
+              1
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ]
+        ],
+        "RevealanceLevel": 8,
+        "RevealanceSymbols": [
+          "1000",
+          "2000",
+          "1500",
+          "1750",
+          "JACKPOT",
+          "2250",
+          "2500",
+          "JACKPOT"
+        ]
+      }
+    },
+    "caseNumber": 3
+  },
+  "platform": {
+    "balance": 735696.94,
+    "operatorId": 1,
+    "currency": "GBP",
+    "mode": "real",
+    "balanceDetails": {
+      "real": 735696.94,
+      "bonus": 0
+    }
+  },
+  "config": {
+    "stakes": [
+      88,
+      176,
+      264,
+      528,
+      880
+    ],
+    "defaultStake": 150,
+    "denominations": [
+      1,
+      2,
+      5,
+      10,
+      20
+    ],
+    "defaultDenomination": 1,
+    "rtp": 96.0
+  }
+}

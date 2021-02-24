@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <UserSecretsId>e2aaf32a-87b6-42e0-8cae-99444aceff66</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="inits\spin.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="inits\spin.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.1.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.8" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AGS.Slots.PeacockBeauty.Common\AGS.Slots.MermaidsFortune.Common.csproj" />
+    <ProjectReference Include="..\AGS.Slots.PeacockBeauty.Platform\AGS.Slots.MermaidsFortune.Platform.csproj" />
+  </ItemGroup>
+
+
+</Project>

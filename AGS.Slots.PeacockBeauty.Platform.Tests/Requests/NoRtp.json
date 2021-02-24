@@ -1,0 +1,30 @@
+{
+  "publicState": {
+    "action": "init",
+    "userName": "ags_test_17",
+    "gameId": 31,
+    "mode": "realPlay",
+    "jurisdiction": "uk"
+  },
+  "privateState": {
+    "state": "ready",
+    "completed": true,
+    "isNewSession": true
+  },
+  "platform": {
+    "balance": 732497.85,
+    "operatorId": 1,
+    "currency": "GBP",
+    "mode": "real",
+    "balanceDetails": {
+      "real": 732497.85,
+      "bonus": 0.0
+    }
+  },
+  "config": {
+    "stakes": [ 88, 176, 264, 528, 880 ],
+    "defaultStake": 176,
+    "denominations": [ 1, 5, 10, 20 ],
+    "defaultDenomination": 1
+  }
+}

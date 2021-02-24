@@ -1,0 +1,46 @@
+﻿{
+  "action": "spin",
+  "spin": {
+    "type": "rootSpin",
+    "totalSpinWin": 3000,
+    "reels": null,
+    "wins": [
+      {
+        "evaluationType": "PowerXStream",
+        "winAmount": 2000,
+        "winningSymbolsPositions": [
+          [ 0, 1 ],
+          [ 1, 2 ],
+          [ 2, 2 ]
+        ],
+        "lineNumber": null,
+        "symbolId": 2,
+        "multiplier": 6,
+        "ways": null,
+        "freeSpinsAmount": 0,
+        "featureType": null
+      },
+      {
+        "evaluationType": "PowerXStream",
+        "winAmount": 1000,
+        "winningSymbolsPositions": [
+          [ 0, 2 ],
+          [ 1, 0 ],
+          [ 1, 2 ],
+          [ 2, 1 ]
+        ],
+        "lineNumber": null,
+        "symbolId": 1,
+        "multiplier": 2,
+        "ways": null,
+        "freeSpinsAmount": 0,
+        "featureType": null
+      }
+
+    ],
+    "sumWins": 200,
+    "childFeature": [],
+    "complete": true,
+    "events": []
+  }
+}

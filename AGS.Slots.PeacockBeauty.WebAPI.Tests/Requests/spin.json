@@ -1,0 +1,56 @@
+{
+  "publicState": {
+    "action": "spin",
+    "gameId": 31,
+    "betAmount": 176,
+    "denom": 1
+  },
+  "privateState": {
+    "TreasureChestTurnOver": 176,
+    "completed": true,
+    "freeSpinsLeft": 0,
+    "totalFreeSpins": 0,
+    "transactionId": "be9c0f9f-aa16-46ed-9ae4-293eb915ac88",
+    "userName": "",
+    "sessionId": "bb5d23c7-89a6-49e2-885b-25ef3c28bb90",
+    "mode": "",
+    "lastState": {
+      "action": "spin",
+      "betAmount": 176,
+      "denom": 1,
+      "spin": {
+        "reels": [
+          [ 11, 1, 1, 7 ],
+          [ 5, 8, 3, 3 ],
+          [ 4, 4, 10, 5 ],
+          [ 2, 5, 6, 3 ],
+          [ 5, 4, 8, 5 ]
+        ],
+        "type": "spin",
+        "wins": [],
+        "sumWins": 0,
+        "events": [],
+        "childFeature": [],
+        "MCSymbols": [],
+        "complete": true,
+        "totalSpinWin": 0,
+        "freeSpinsLeft": 0,
+        "totalFreeSpins": 0,
+        "treasureChestLevel": 0
+      }
+    }
+  },
+  "platform": {
+    "balance": 2092727.5,
+    "operatorId": 1,
+    "currency": "GBP",
+    "mode": "real"
+  },
+  "config": {
+    "stakes": [ 88, 176, 264, 528, 880 ],
+    "defaultStake": 176,
+    "denominations": [ 1, 5, 10, 20 ],
+    "defaultDenomination": 1,
+    "rtp": 96
+  }
+}
