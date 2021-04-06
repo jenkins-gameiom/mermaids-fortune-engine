@@ -7,8 +7,7 @@ namespace AGS.Slots.MermaidsFortune.Common.Enums
     public enum FeatureType
     {
         PowerXStream = 1,
-        pick,
-        jackpot,
+        fiveofakind,
         freeSpinWin
     }
 }

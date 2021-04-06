@@ -27,22 +27,33 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
 {
     public class Config : IMathFile
     {
+        private List<List<BaseTable>> base_reel_set = null;
+        private List<List<BaseTable>> fg_reel_set = null;
+        private List<List<BaseTable>> fg_binary_reel_set = null;
+        private List<ReelItemJackpot> base_bonus_weights = null;
+        private List<ReelItemJackpot> fg_bonus_weights = null;
+        private int[] base_reelset_weights = null;
+        private int[] fg_reelset_weights = null;
+
+
+
+
         private dynamic config;
 
-        private List<List<int>> lookup_table_symbols = null;
-        private List<List<int>> prize_reel_strip = null;
-        private List<List<int>> special_reel_strip = null;
+        //private List<List<int>> lookup_table_symbols = null;
+        //private List<List<int>> prize_reel_strip = null;
+        //private List<List<int>> special_reel_strip = null;
         private List<List<int>> progressive_information = null;
         private List<ReelItemJackpot> base_prize = null;
-        private List<ReelItemJackpotString> jackpot_bonus_outcome = null;
-        private List<Dictionary<string, List<string>>> jackpot_bonus_reveal = null;
-        private List<ReelItemJackpot> prize_spin_prize = null;
+        //private List<ReelItemJackpotString> jackpot_bonus_outcome = null;
+        //private List<Dictionary<string, List<string>>> jackpot_bonus_reveal = null;
+        //private List<ReelItemJackpot> prize_spin_prize = null;
         private List<List<int>> lookup_paytable = null;
-        private List<int[]> base_jackpot_bonus_trigger = null;
-        private List<int[]> fg_jackpot_bonus_trigger = null;
+        //private List<int[]> base_jackpot_bonus_trigger = null;
+        //private List<int[]> fg_jackpot_bonus_trigger = null;
         private List<int> betsteps = null;
         private List<int> denoms = null;
-        private List<int> long_term_persistence = null;
+        //private List<int> long_term_persistence = null;
 
         public Config()
         {
@@ -58,69 +69,96 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
 
         private void Populate()
         {
-            lookup_table_symbols = config.lookup_table_symbols.ToObject<List<List<int>>>();
-            prize_reel_strip = config.prize_reel_strip.ToObject<List<List<int>>>();
-            special_reel_strip = config.special_reel_strip.ToObject<List<List<int>>>();
-            base_prize = config.base_prize.ToObject<List<ReelItemJackpot>>();
-            foreach (var reelItems in base_prize)
+            base_reel_set = config.base_reel_set.ToObject<List<List<BaseTable>>>();
+            foreach (var base_bonus in base_reel_set)
             {
-                AggregateArray(reelItems.weights);
+                foreach (var x in base_bonus)
+                {
+                    foreach (var y in x.weights)
+                    {
+                        AggregateArray(y);
+                    }
+                }
             }
-            prize_spin_prize = config.prize_spin_prize.ToObject<List<ReelItemJackpot>>();
-            foreach (var reelItems in prize_spin_prize)
+            fg_reel_set = config.fg_reel_set.ToObject<List<List<BaseTable>>>();
+            foreach (var base_bonus in fg_reel_set)
             {
-                AggregateArray(reelItems.weights);
+                foreach (var x in base_bonus)
+                {
+                    foreach (var y in x.weights)
+                    {
+                        AggregateArray(y);
+                    }
+                }
             }
-            progressive_information = config.progressive_information.ToObject<List<List<int>>>();
-            base_jackpot_bonus_trigger = config.base_jackpot_bonus_trigger.ToObject<List<int[]>>();
-            foreach (var reelItems in base_jackpot_bonus_trigger)
+            fg_binary_reel_set = config.fg_binary_reel_set.ToObject<List<List<BaseTable>>>();
+            foreach (var base_bonus in fg_binary_reel_set)
             {
-                AggregateArray(reelItems);
-            }
-            jackpot_bonus_outcome = config.jackpot_bonus_outcome.ToObject<List<ReelItemJackpotString>>();
-            foreach (var reelItems in jackpot_bonus_outcome)
-            {
-                AggregateArray(reelItems.weights);
-            }
-            jackpot_bonus_reveal = config.jackpot_bonus_reveal.ToObject<List<Dictionary<string, List<string>>>>();
-            fg_jackpot_bonus_trigger = config.fg_jackpot_bonus_trigger.ToObject<List<int[]>>();
-            foreach (var reelItems in fg_jackpot_bonus_trigger)
-            {
-                AggregateArray(reelItems);
+                foreach (var x in base_bonus)
+                {
+                    foreach (var y in x.weights)
+                    {
+                        AggregateArray(y);
+                    }
+                }
             }
             lookup_paytable = config.lookup_paytable.ToObject<List<List<int>>>();
+
+            base_bonus_weights = config.base_bonus_weights.ToObject<List<ReelItemJackpot>>();
+            foreach (var base_bonus in base_bonus_weights)
+            {
+                AggregateArray(base_bonus.weights);
+            }
+
+            fg_bonus_weights = config.fg_bonus_weights.ToObject<List<ReelItemJackpot>>();
+            foreach (var fg_bonus in fg_bonus_weights)
+            {
+                AggregateArray(fg_bonus.weights);
+            }
+
+            base_reelset_weights = config.base_reelset_weights.ToObject<int[]>();
+            fg_reelset_weights = config.fg_reelset_weights.ToObject<int[]>();
+            AggregateArray(base_reelset_weights);
+            AggregateArray(fg_reelset_weights);
+
+
+            //From here its old
+
+            //lookup_table_symbols = config.lookup_table_symbols.ToObject<List<List<int>>>();
+            //prize_reel_strip = config.prize_reel_strip.ToObject<List<List<int>>>();
+            //special_reel_strip = config.special_reel_strip.ToObject<List<List<int>>>();
+            //base_prize = config.base_prize.ToObject<List<ReelItemJackpot>>();
+            //foreach (var reelItems in base_prize)
+            //{
+            //    AggregateArray(reelItems.weights);
+            //}
+            //prize_spin_prize = config.prize_spin_prize.ToObject<List<ReelItemJackpot>>();
+            //foreach (var reelItems in prize_spin_prize)
+            //{
+            //    AggregateArray(reelItems.weights);
+            //}
+            progressive_information = config.progressive_information.ToObject<List<List<int>>>();
+            //base_jackpot_bonus_trigger = config.base_jackpot_bonus_trigger.ToObject<List<int[]>>();
+            //foreach (var reelItems in base_jackpot_bonus_trigger)
+            //{
+            //    AggregateArray(reelItems);
+            //}
+            //jackpot_bonus_outcome = config.jackpot_bonus_outcome.ToObject<List<ReelItemJackpotString>>();
+            //foreach (var reelItems in jackpot_bonus_outcome)
+            //{
+            //    AggregateArray(reelItems.weights);
+            //}
+            //jackpot_bonus_reveal = config.jackpot_bonus_reveal.ToObject<List<Dictionary<string, List<string>>>>();
+            //fg_jackpot_bonus_trigger = config.fg_jackpot_bonus_trigger.ToObject<List<int[]>>();
+            //foreach (var reelItems in fg_jackpot_bonus_trigger)
+            //{
+            //    AggregateArray(reelItems);
+            //}
             betsteps = config.betsteps.ToObject<List<int>>();
             denoms = config.denoms.ToObject<List<int>>();
-            long_term_persistence = config.long_term_persistence.ToObject<List<int>>();
+            //long_term_persistence = config.long_term_persistence.ToObject<List<int>>();
 
         }
-
-        public bool WildTriggerJackpot(bool isFreeSpin, int betLevel, IRandom random = null)
-        {
-
-            if (random != null)
-            {
-                int[] val = null;
-                int valueToFind = 0;
-                if (isFreeSpin)
-                {
-                    val = fg_jackpot_bonus_trigger[betLevel];
-                }
-                else
-                {
-                    val = base_jackpot_bonus_trigger[betLevel];
-                }
-                valueToFind = random.Next(0, val[val.Length - 1]);
-                var selected = RandomWeightedIndex(val.ToArray(), valueToFind);
-                if (selected == 0)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-
         private static void AggregateArray(int[] arr)
         {
             for (int i = 1; i < arr.Count(); i++)
@@ -148,98 +186,63 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
             }
         }
 
-        public List<List<int>> GetReels()
-        {
-            return lookup_table_symbols;
-        }
-
-        public List<int> GetPrizeReelStrip()
-        {
-            return prize_reel_strip[0];
-
-        }
-
-        public List<int> GetSpecialReelStrip(RemoveX2Enum removeX2, bool removeX8)
-        {
-            if (removeX2 == RemoveX2Enum.Both)
-            {
-
-            }
-            var newList = special_reel_strip[0].ToList();
-            if (removeX2 != RemoveX2Enum.None)
-            {
-
-                if (removeX2 == RemoveX2Enum.First)
-                {
-                    newList.Remove(15);
-                }
-                if (removeX2 == RemoveX2Enum.Second)
-                {
-                    newList.RemoveAt(newList.FindLastIndex(x => x == 15));
-                }
-                if (removeX2 == RemoveX2Enum.Both)
-                {
-                    newList.RemoveAll(r => r == 15);
-                }
-
-            }
-            if (removeX8)
-            {
-                newList.RemoveAll(r => r == 16);
-            }
-            return newList;
-        }
+        //public List<List<int>> GetReels()
+        //{
+        //    return lookup_table_symbols;
+        //}
 
 
-        public int GetHoldSpinSymbolValue(int betAmount, TableTypeEnum type, int symbol, out string jackpotSymbol, IRandom random)
-        {
-            jackpotSymbol = symbol == 13 ? "prize" : symbol == 14 ? "paid" : symbol == 15 ? "x2" : symbol == 16 ? "x8" : null;
-            int betIndex = 0;
-            if (type == TableTypeEnum.Regular)
-            {
-                betIndex = BetSteps.IndexOf(betAmount);
-                return GetPrizeSpinPrize(betIndex, random);
-            }
-            else //(type == TableTypeEnum.Special)
-            {
-                //TODO I think that in special if you win paid, mx2, mx8 you dont get money but a prize (multiply 2 or 8 or pay now). so I dont return money
-                return 0;
-            }
-        }
 
-        public List<string> GetRandomJackpotCombination(string outcome, IRandom random)
-        {
-            var allOptionsForKey = jackpot_bonus_reveal[0].First(x => x.Key == outcome).Value;
-            var temp = random.Next(0, 2);
-            var valueToFind = random.Next(0, allOptionsForKey.Count);
-            var zz = allOptionsForKey[valueToFind];
-            var listToReturn = new List<string>();
-            for (int i = 0; i < zz.Length; i++)
-            {
-                if (zz[i] == '0')
-                {
-                    listToReturn.Add("mini");
-                }
-                if (zz[i] == '1')
-                {
-                    listToReturn.Add("minor");
-                }
-                if (zz[i] == '2')
-                {
-                    listToReturn.Add("major");
-                }
-                if (zz[i] == '3')
-                {
-                    listToReturn.Add("grand");
-                }
-                if (zz[i] == '4')
-                {
-                    listToReturn.Add("wild");
-                }
-            }
 
-            return listToReturn;
-        }
+        //public int GetHoldSpinSymbolValue(int betAmount, TableTypeEnum type, int symbol, out string jackpotSymbol, IRandom random)
+        //{
+        //    jackpotSymbol = symbol == 13 ? "prize" : symbol == 14 ? "paid" : symbol == 15 ? "x2" : symbol == 16 ? "x8" : null;
+        //    int betIndex = 0;
+        //    if (type == TableTypeEnum.Regular)
+        //    {
+        //        betIndex = BetSteps.IndexOf(betAmount);
+        //        return GetPrizeSpinPrize(betIndex, random);
+        //    }
+        //    else //(type == TableTypeEnum.Special)
+        //    {
+        //        //TODO I think that in special if you win paid, mx2, mx8 you dont get money but a prize (multiply 2 or 8 or pay now). so I dont return money
+        //        return 0;
+        //    }
+        //}
+
+        //public List<string> GetRandomJackpotCombination(string outcome, IRandom random)
+        //{
+        //    var allOptionsForKey = jackpot_bonus_reveal[0].First(x => x.Key == outcome).Value;
+        //    var temp = random.Next(0, 2);
+        //    var valueToFind = random.Next(0, allOptionsForKey.Count);
+        //    var zz = allOptionsForKey[valueToFind];
+        //    var listToReturn = new List<string>();
+        //    for (int i = 0; i < zz.Length; i++)
+        //    {
+        //        if (zz[i] == '0')
+        //        {
+        //            listToReturn.Add("mini");
+        //        }
+        //        if (zz[i] == '1')
+        //        {
+        //            listToReturn.Add("minor");
+        //        }
+        //        if (zz[i] == '2')
+        //        {
+        //            listToReturn.Add("major");
+        //        }
+        //        if (zz[i] == '3')
+        //        {
+        //            listToReturn.Add("grand");
+        //        }
+        //        if (zz[i] == '4')
+        //        {
+        //            listToReturn.Add("wild");
+        //        }
+        //    }
+        //
+        //    return listToReturn;
+        //}
 
         public List<int> GetProgressiveInformation()
         {
@@ -250,55 +253,8 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
         {
             get
             {
-                return 88;
+                return 50;
             }
-        }
-
-        public int GetJackpotItemWithoutRandomizing(TableTypeEnum type, int valueToFind, RemoveX2Enum removeX2, bool removeX8, out bool isJackpot, string force = null)
-        {
-            isJackpot = false;
-            List<int> reelItems;
-            if (type == TableTypeEnum.Regular)
-            {
-                reelItems = GetPrizeReelStrip();
-                var val = reelItems[valueToFind];
-                if (val == 13)
-                {
-                    isJackpot = true;
-                }
-                return reelItems[valueToFind];
-            }
-            else if (type == TableTypeEnum.Special)
-            {
-                reelItems = GetSpecialReelStrip(removeX2, removeX8);
-                var val = reelItems[valueToFind];
-                if (new int[] { 14, 15, 16 }.Contains(val))
-                {
-                    isJackpot = true;
-                }
-                if (force != null)
-                {
-
-                    if (force == "paid")
-                    {
-                        isJackpot = true;
-                        return 14;
-                        
-                    }
-                    if (force == "x2")
-                    {
-                        isJackpot = true;
-                        return 15;
-                    }
-                    if (force == "x8")
-                    {
-                        isJackpot = true;
-                        return 16;
-                    }
-                }
-                return reelItems[valueToFind];
-            }
-            return -1;
         }
 
         public string GetProgressiveValueFromNumber(int number)
@@ -326,37 +282,129 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
             }
         }
 
-        public int GetBasePrize(int betLevel, IRandom random)
+        //public int GetBasePrize(int betLevel, IRandom random)
+        //{
+        //    int valueToFind = random.Next(0, base_prize[betLevel].weights[base_prize[betLevel].weights.Length - 1]);
+        //    int selected = RandomWeightedIndex(base_prize[betLevel].weights, valueToFind);
+        //    return base_prize[betLevel].outcome[selected];
+        //    //return selected;
+        //}
+
+        //public ReelItemJackpot GetAllBasePrizes(int betLevel)
+        //{
+        //    return base_prize[betLevel];
+        //}
+
+        //public int GetPrizeSpinPrize(int betLevel, IRandom random)
+        //{
+        //    int valueToFind = random.Next(0, prize_spin_prize[betLevel].weights[prize_spin_prize[betLevel].weights.Length - 1]);
+        //    int selected = RandomWeightedIndex(prize_spin_prize[betLevel].weights, valueToFind);
+        //    return prize_spin_prize[betLevel].outcome[selected];
+        //}
+
+        //public string GetJackpotBonusOutcome(IRandom random)
+        //{
+        //    int valueToFind = random.Next(0, jackpot_bonus_outcome[0].weights[jackpot_bonus_outcome[0].weights.Length - 1]);
+        //    int selected = RandomWeightedIndex(jackpot_bonus_outcome[0].weights, valueToFind);
+        //    return jackpot_bonus_outcome[0].outcome[selected];
+        //}
+
+        public void AssignReelSet(IRequestContext _context, IRandom random)
         {
-            int valueToFind = random.Next(0, base_prize[betLevel].weights[base_prize[betLevel].weights.Length - 1]);
-            int selected = RandomWeightedIndex(base_prize[betLevel].weights, valueToFind);
-            return base_prize[betLevel].outcome[selected];
-            //return selected;
+            _context.State.reelSet = GetReelSet(_context.RequestItems.isFreeSpin, random);
         }
 
-        public ReelItemJackpot GetAllBasePrizes(int betLevel)
+        public SpinBagResult GetReels(IRequestContext _context, IRandom random)
         {
-            return base_prize[betLevel];
+            int reelSet = _context.State.reelSet;
+            SpinBagResult res = new SpinBagResult();
+            List<List<int>> reels = null;
+            List<int> weightedIndexes = null;
+            BaseTable reelsWithWeights = null;
+            if (_context.RequestItems.isFreeSpin)
+            {
+                if (_context.State.holdAndSpin != HoldAndSpin.None)
+                {
+                    
+                    reelsWithWeights = fg_binary_reel_set[(int) (_context.State.holdAndSpin - 1)][0];
+                }
+                else
+                {
+                    reelsWithWeights = fg_reel_set[reelSet][0];
+                    if (reelSet == 3)
+                    {
+
+                    }
+                }
+            }
+            else
+            {
+                reelsWithWeights = base_reel_set[reelSet][_context.MathFile.BetSteps.IndexOf(_context.GetBetAmount())];
+            }
+
+            List<int> chosenIndexes = new List<int>();
+            for (int i = 0; i < reelsWithWeights.outcome.Count; i++)
+            {
+                var xxx = random.Next(0, reelsWithWeights.weights[i][reelsWithWeights.weights[i].Length - 1]);
+                var selected = RandomWeightedIndex(reelsWithWeights.weights[i], xxx);
+                if (selected == 28 && i == 1)
+                {
+
+                }
+                chosenIndexes.Add(selected);
+            }
+            //var valueToFind = random.Next(0, reelsWithWeights.weights[reelsWithWeights.weights.Count - 1]);
+            //
+            
+            //return base_bonus_weights[reelSet].outcome[selected];
+            //
+            //
+            //weightedIndexes = GetWeightedSymbol(reelsWithWeights, random);
+            reels = reelsWithWeights.outcome;
+            //res.indexRes = weightedIndexes;
+            res.reels = reels.RandomizeReels(new List<int>(new int[] {3, 3, 4, 3, 3}), chosenIndexes);
+            return res;
         }
 
-        public int GetPrizeSpinPrize(int betLevel, IRandom random)
+        private int GetReelSet(bool isFreeSpins, IRandom random)
         {
-            int valueToFind = random.Next(0, prize_spin_prize[betLevel].weights[prize_spin_prize[betLevel].weights.Length - 1]);
-            int selected = RandomWeightedIndex(prize_spin_prize[betLevel].weights, valueToFind);
-            return prize_spin_prize[betLevel].outcome[selected];
+            int[] arr = null;
+            if (isFreeSpins)
+            {
+                arr = fg_reelset_weights;
+            }
+            else
+            {
+                arr = base_reelset_weights;
+            }
+            int valueToFind = random.Next(0, arr[arr.Length - 1]);
+            int selected = RandomWeightedIndex(arr, valueToFind);
+            return selected;
         }
 
-        public string GetJackpotBonusOutcome(IRandom random)
-        {
-            int valueToFind = random.Next(0, jackpot_bonus_outcome[0].weights[jackpot_bonus_outcome[0].weights.Length - 1]);
-            int selected = RandomWeightedIndex(jackpot_bonus_outcome[0].weights, valueToFind);
-            return jackpot_bonus_outcome[0].outcome[selected];
-        }
-
-        public ReelItemJackpot GetAllGetPrizeSpinPrizes(int betLevel)
-        {
-            return prize_spin_prize[betLevel];
-        }
+        //private List<int> GetWeightedSymbol(BaseTable table, IRandom random)
+        //{
+        //    List<int> ret = new List<int>();
+        //
+        //    var numOfReels = table.lookup_table_symbols.Count();
+        //    List<RandomNumber> randomNumbers = new List<RandomNumber>();
+        //    for (int i = 0; i < numOfReels; i++)
+        //    {
+        //        RandomNumber r = new RandomNumber();
+        //        r.Min = 0;
+        //        r.Max = table.bucket_sort_table_symbols[i].Count;
+        //        r.Quantity = 1;
+        //        randomNumbers.Add(r);
+        //    }
+        //    var rnumberres = random.GetRandomNumbers(randomNumbers);
+        //
+        //    for (var rn = 0; rn < rnumberres.Count(); rn++)
+        //    {
+        //        ret.Add(table.bucket_sort_table_symbols[rn][randomNumbers[rn].Values[0]]);
+        //    }
+        //    return ret;
+        //
+        //}
 
         public List<List<int>> GetLookupPaytable()
         {
@@ -374,29 +422,8 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
             get { return denoms; }
         }
 
+        
 
-        public void GetCurrentLongTermPersistence(IStateItems stateItems)
-        {
-            for (int i = 1; i < long_term_persistence.Count; i++)
-            {
-                //TODO - I devide by 100 because it should be by dollar and not cents.
-                if ((stateItems.TreasureChestTurnOver / 100) < long_term_persistence[i])
-                {
-                    if (i > stateItems.TreasureChestTurnState)
-                    {
-                        stateItems.TreasureChestTurnState++;
-                        //stateItems.TreasureChestTurnState = i;
-                    }
-                    return;
-                }
-            }
-            stateItems.TreasureChestTurnState++;
-            if (stateItems.TreasureChestTurnState > 4)
-            {
-                stateItems.TreasureChestTurnState = 4;
-            }
-            //stateItems.TreasureChestTurnState = long_term_persistence.Count;
-        }
         private static int RandomWeightedIndex(Array array, object valuetoFind)
         {
             int selectedIndex;
@@ -427,17 +454,24 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
         }
 
         //this method assign mcsymbol value to one item of the matrix
-        public string MoneyChargeSymbol(int betLevel, int valueToFind, IRandom random)
+        public int MoneyChargeSymbol(bool isFreeSpin, int reelSet, IRandom random)
         {
-            var vec = base_prize[betLevel].weights;
-            if (random != null)
+            int valueToFind = 0;
+            if (isFreeSpin)
             {
-                valueToFind = random.Next(0, vec[vec.Length - 1]);
+                valueToFind = random.Next(0,
+                    fg_bonus_weights[reelSet].weights[fg_bonus_weights[reelSet].weights.Length - 1]);
+                var selected = RandomWeightedIndex(fg_bonus_weights[reelSet].weights, valueToFind);
+                return fg_bonus_weights[reelSet].outcome[selected];
             }
-            var selected = RandomWeightedIndex(vec.ToArray(), valueToFind);
-            return base_prize[betLevel].outcome[selected].ToString();
+            else
+            {
+                valueToFind = random.Next(0, base_bonus_weights[reelSet].weights[base_bonus_weights[reelSet].weights.Length - 1]);
+                var selected = RandomWeightedIndex(base_bonus_weights[reelSet].weights, valueToFind);
+                return base_bonus_weights[reelSet].outcome[selected];
+            }
+            
         }
-
         public List<int> JackpotTableValues
         {
             get
@@ -446,11 +480,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
             }
 
         }
-        public class ReelItemJackpot
-        {
-            public List<int> outcome { get; set; }
-            public int[] weights { get; set; }
-        }
+        
 
         public class ReelItemJackpotString
         {

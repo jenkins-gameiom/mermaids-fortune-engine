@@ -97,5 +97,15 @@ namespace AGS.Slots.MermaidsFortune.Common
             get;set;
         }
 
+        public string RTP96
+        {
+            get; set;
+        }
+
+        public string RTP94
+        {
+            get; set;
+        }
+
     }
 }

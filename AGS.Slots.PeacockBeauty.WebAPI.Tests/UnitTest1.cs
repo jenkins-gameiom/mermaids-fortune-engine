@@ -34,7 +34,8 @@ namespace AGS.Slots.MermaidsFortune.WebAPI.Tests
             _mathFileService = new Mock<IMathFileService>();
             _mathFileService.Setup(x => x.GetMathFile(It.IsAny<MathFileType>())).Returns(new Logic.Engine.MermaidsFortune.Config());
             _logger = new Logger<RequestManager>(new LoggerFactory());
-            _requestManager = new RequestManager(_mathFileService.Object, _game, _logger, _context.Object);
+            _requestManager = null;
+            //new RequestManager(_mathFileService.Object, _game, _logger, _context.Object);
         }
 
         [Theory]

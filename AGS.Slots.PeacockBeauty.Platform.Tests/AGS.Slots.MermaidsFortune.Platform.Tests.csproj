@@ -11,20 +11,7 @@
     <None Remove="Math94.json" />
     <None Remove="Math96.json" />
     <None Remove="Requests\Init.json" />
-    <None Remove="Requests\JackpotPick1.json" />
-    <None Remove="Requests\JackpotPick\3201014.json" />
-    <None Remove="Requests\JackpotPick\32120014.json" />
-    <None Remove="Requests\JackpotPick\322004.json" />
-    <None Remove="Requests\JackpotPick\332120104.json" />
-    <None Remove="Requests\JackpotPick\33212014.json" />
-    <None Remove="Requests\JackpotPick\33221004.json" />
-    <None Remove="Requests\JackpotPick\421300.json" />
-    <None Remove="Requests\JackpotPick\430213.json" />
-    <None Remove="Requests\JackpotPick\431021.json" />
-    <None Remove="Requests\JackpotPick\Null.json" />
     <None Remove="Requests\NoRtp.json" />
-    <None Remove="Requests\Pick1.json" />
-    <None Remove="Requests\Pick1_Complete_True.json" />
     <None Remove="Requests\Spin1.json" />
   </ItemGroup>
 
@@ -41,46 +28,7 @@
     <Content Include="Requests\Init.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Requests\JackpotPick1.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Requests\JackpotPick\3201014.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Requests\JackpotPick\32120014.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Requests\JackpotPick\322004.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Requests\JackpotPick\332120104.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Requests\JackpotPick\33212014.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Requests\JackpotPick\33221004.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Requests\JackpotPick\421300.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Requests\JackpotPick\430213.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Requests\JackpotPick\431021.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Requests\JackpotPick\Null.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Requests\NoRtp.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Requests\Pick1.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Requests\Pick1_Complete_True.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Requests\Spin1.json">

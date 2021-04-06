@@ -193,8 +193,6 @@ namespace AGS.Slots.MermaidsFortune.Platform
                 int fwState = 0;
                 bool cleanPrivateState = true;
                 string userName = obj.publicState.userName ?? "";
-                var treasureChestState = _context.State != null ? _context.State.TreasureChestTurnState : 0;
-                var treasureChestTurnOver = _context.State != null ? _context.State.TreasureChestTurnOver : 0;
                 string mode = obj.publicState.mode ?? "";
                 string juri = Json.GetValueOrDefault(obj.publicState, "jurisdiction", "").Replace(" ", "_").ToLower();
                 obj.publicState = GetInitData(obj.config);
@@ -237,18 +235,11 @@ namespace AGS.Slots.MermaidsFortune.Platform
                 //Clean privae state if not needed
                 if (cleanPrivateState)
                     _context.State = new SpinPrivateState();
-                if (treasureChestState == 0)
-                {
-                    treasureChestState = 1;
-                }
-                _context.State.TreasureChestTurnState = treasureChestState;
-                _context.State.TreasureChestTurnOver = treasureChestTurnOver;
                 _context.State.completed = false;
                 _context.State.animationState = fwState;
                 _context.State.userName = userName;
                 _context.State.sessionId = Guid.NewGuid().ToString();
                 _context.State.mode = mode;
-                obj.publicState.treasureChestLevel = _context.State.TreasureChestTurnState;
             }
             catch (Exception ex)
             {

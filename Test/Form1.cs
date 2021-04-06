@@ -162,19 +162,17 @@ namespace TestSlots
                 var configs = new Configs();
                 context.RequestItems.isFreeSpin = false;
                 
-                BonusGameService bonusGameService = new BonusGameService(context, new Configs(), iindexMock.Object);
-                JackpotService jackpotService = new JackpotService(context);
                 GameEngine ge = new GameEngine(context, new MermaidsFortuneResolver(context, configs, iindexMock.Object),
                     new MermaidsFortuneScanner(context, iindexMock.Object, configs), configs, iindexMock.Object);
                 Result res = ge.Spin(null);
-                CalculateWin(context, bonusGameService, jackpotService, stats, res);
+                CalculateWin(context, stats, res);
                 while (context.State.freeSpinsLeft > 0)
                 {
                     context.RequestItems.isFreeSpin = true;
                     //ge = new GameEngine(context, new MermaidsFortuneResolver(context, configs, iindexMock.Object),
                     //    new MermaidsFortuneScanner(context, iindexMock.Object, configs), configs, iindexMock.Object);
                     Result resFreeSpin = ge.Spin(null);
-                    CalculateWin(context, bonusGameService, jackpotService, stats, resFreeSpin);
+                    CalculateWin(context, stats, resFreeSpin);
                 }
                 if (spins % 10000 == 0)
                 {
@@ -211,7 +209,7 @@ namespace TestSlots
             {
                 stakes = new List<int>
                 {
-                    88, 176, 264, 528, 880
+                    50,100, 150, 250, 500
                 },
                 denominations = new List<int>
                 {
@@ -236,46 +234,33 @@ namespace TestSlots
         private static long TotalAmountMajor;
         private static long TotalAmountMinor;
 
-        private static void CalculateWin(RequestExecutionContext context, BonusGameService bonusGameService,
-            JackpotService jackpotService, Statistics stats, Result res)
+        private static void CalculateWin(RequestExecutionContext context, Statistics stats, Result res)
         {
-            if (context.State.BonusGame != null)
-            {
-                stats.Collector.TotalBonusGameWinTimes++;
-                while (!context.State.BonusGame.complete)
-                {
-                    bonusGameService.SpinAll();
-                }
-                stats.Collector.TotalBonusMoneyWonAmount += bonusGameService.GetCashWon();
-                bonusGameService.EndBonus();
-            }
-            if (context.State.JackpotGame != null)
-            {
-                stats.Collector.TotalJackpotWinTimes++;
-                while (!context.State.JackpotGame.complete)
-                {
-                    jackpotService.HandleJackpot();
-                }
-
-                stats.Collector.TotalJackpotMoneyWonAmount += jackpotService.GetCashWonAndEndJackpot();
-            }
-
-
             foreach (var win in res.Wins)
             {
-                if ((win.WinType == WinType.FreeSpin || win.WinType == WinType.Regular) &&
-                    context.RequestItems.isFreeSpin)
+                if (context.RequestItems.isFreeSpin)
                 {
                     stats.Collector.TotalFreeSpinsMoneyWonAmount += win.WinAmount;
                     stats.Collector.AmountOfFreeSpinsWon++;
                 }
-
-                if ((win.WinType == WinType.FreeSpin || win.WinType == WinType.Regular) &&
-                    !context.RequestItems.isFreeSpin)
+                else
                 {
                     stats.Collector.TotalRegularSpinsMoneyWonAmount += win.WinAmount;
                     stats.Collector.TotalWinTimesInBase++;
                 }
+                //if ((win.WinType == WinType.FreeSpin || win.WinType == WinType.Regular || win.WinType == WinType.FiveOfAKind) &&
+                //    context.RequestItems.isFreeSpin)
+                //{
+                //    stats.Collector.TotalFreeSpinsMoneyWonAmount += win.WinAmount;
+                //    stats.Collector.AmountOfFreeSpinsWon++;
+                //}
+                //
+                //if ((win.WinType == WinType.FreeSpin || win.WinType == WinType.Regular || win.WinType == WinType.FiveOfAKind) &&
+                //    !context.RequestItems.isFreeSpin)
+                //{
+                //    stats.Collector.TotalRegularSpinsMoneyWonAmount += win.WinAmount;
+                //    stats.Collector.TotalWinTimesInBase++;
+                //}
             }
         }
 

@@ -20,6 +20,116 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Engine\MermaidsFortune\Forces\bigwin.json" />
+    <None Remove="Engine\MermaidsFortune\Forces\fiveofakind.json" />
+    <None Remove="Engine\MermaidsFortune\Forces\fiveofakindgrand.json" />
+    <None Remove="Engine\MermaidsFortune\Forces\fiveofakindinfs.json" />
+    <None Remove="Engine\MermaidsFortune\Forces\fiveofakindmajor.json" />
+    <None Remove="Engine\MermaidsFortune\Forces\fiveofakindmajorwithnumber.json" />
+    <None Remove="Engine\MermaidsFortune\Forces\fiveofakindminor.json" />
+    <None Remove="Engine\MermaidsFortune\Forces\fiveofakindminorwithnumber.json" />
+    <None Remove="Engine\MermaidsFortune\Forces\fiveofakindtwoways.json" />
+    <None Remove="Engine\MermaidsFortune\Forces\fiveofakindwithbothreelrespin.json" />
+    <None Remove="Engine\MermaidsFortune\Forces\fiveofakindwithfirstreelrespin.json" />
+    <None Remove="Engine\MermaidsFortune\Forces\fiveofakindwithregular.json" />
+    <None Remove="Engine\MermaidsFortune\Forces\fourofakind.json" />
+    <None Remove="Engine\MermaidsFortune\Forces\fourofakindtwoways.json" />
+    <None Remove="Engine\MermaidsFortune\Forces\freespinandregular.json" />
+    <None Remove="Engine\MermaidsFortune\Forces\freespininsidefreespin.json" />
+    <None Remove="Engine\MermaidsFortune\Forces\freespins.json" />
+    <None Remove="Engine\MermaidsFortune\Forces\freespinswithregular.json" />
+    <None Remove="Engine\MermaidsFortune\Forces\hugewin.json" />
+    <None Remove="Engine\MermaidsFortune\Forces\respinboth.json" />
+    <None Remove="Engine\MermaidsFortune\Forces\respinfirst.json" />
+    <None Remove="Engine\MermaidsFortune\Forces\respinsecond.json" />
+    <None Remove="Engine\MermaidsFortune\Forces\threeofakind.json" />
+    <None Remove="Engine\MermaidsFortune\Forces\threeofakindtwoways.json" />
+    <None Remove="Math94.json" />
+    <None Remove="Math96.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Engine\MermaidsFortune\Forces\bigwin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Engine\MermaidsFortune\Forces\fiveofakind.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Engine\MermaidsFortune\Forces\fiveofakindgrand.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Engine\MermaidsFortune\Forces\fiveofakindinfs.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Engine\MermaidsFortune\Forces\fiveofakindmajor.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Engine\MermaidsFortune\Forces\fiveofakindmajorwithnumber.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Engine\MermaidsFortune\Forces\fiveofakindminor.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Engine\MermaidsFortune\Forces\fiveofakindminorwithnumber.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Engine\MermaidsFortune\Forces\fiveofakindtwoways.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Engine\MermaidsFortune\Forces\fiveofakindwithbothreelrespin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Engine\MermaidsFortune\Forces\fiveofakindwithfirstreelrespin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Engine\MermaidsFortune\Forces\fiveofakindwithregular.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Engine\MermaidsFortune\Forces\fourofakind.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Engine\MermaidsFortune\Forces\fourofakindtwoways.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Engine\MermaidsFortune\Forces\freespinandregular.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Engine\MermaidsFortune\Forces\freespininsidefreespin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Engine\MermaidsFortune\Forces\freespins.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Engine\MermaidsFortune\Forces\freespinswithregular.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Engine\MermaidsFortune\Forces\hugewin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Engine\MermaidsFortune\Forces\respinboth.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Engine\MermaidsFortune\Forces\respinfirst.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Engine\MermaidsFortune\Forces\respinsecond.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Engine\MermaidsFortune\Forces\threeofakind.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Engine\MermaidsFortune\Forces\threeofakindtwoways.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Math94.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Math96.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autofac" Version="6.1.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />

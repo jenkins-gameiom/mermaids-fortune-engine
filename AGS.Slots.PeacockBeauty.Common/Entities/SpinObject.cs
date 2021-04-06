@@ -42,10 +42,7 @@ namespace AGS.Slots.MermaidsFortune.Common.Entities
     public enum SpinType
     {
         spin,
-        freeSpin,
-        pick,
-        freeSpinsAmount,
-        jackpotPick
+        freeSpin
 
     }
 
@@ -75,7 +72,6 @@ namespace AGS.Slots.MermaidsFortune.Common.Entities
         public int wildLevel { get; set; }
         public string evaluationType { get; set; }
         public string featureType { get; set; }
-        public bool gate { get; set; }
         public int[] indexes { get; set; }
     }
 
@@ -150,82 +146,35 @@ namespace AGS.Slots.MermaidsFortune.Common.Entities
 
     public class BonusGame
     {
-        //public List<string> symbols { get; set; }
-        //public string jackpotTypeIfWon { get; set; }
-        //public int selectedIndex { get; set; }
-        //public long winAmount { get; set; }
-        //public int betAmount { get; set; }
-        //public int caseNumber { get; set; }
-
-        //public MCSymbol[] MCSymbolsFromSpin { get; set; }
         public List<MCSymbol> MCSymbols { get; set; }
         public long winAmount { get; set; }
-        public int freeSpinsCount { get; set; }
-        public int fsLeft { get; set; }
-        public int fsDone { get; set; }
-        public int totalSpin { get; set; }
-        public int denom { get; set; }
-        public int bet { get; set; }
-        public bool complete { get; set; }
-        public RemoveX2Enum X2IndexesToRemove { get; set; }
-        public bool removeX8 { get; set; }
-        public int specialIndex { get; set; }
-        public long oldWonAmount { get; set; }
 
     }
 
-    public class JackpotGame
-    {
-        public JackpotGame()
-        {
-            selectedItems = new List<JackpotItem>();
-        }
-        public List<JackpotItem> selectedItems { get; set; }
-        public Dictionary<string, int> valuesDictionary { get; set; }
-        public long winAmount { get; set; }
-        public string outcome { get; set; }
-        public int leftItems { get; set; }
-        public bool complete
-        {
-            get
-            {
-                return leftItems == 0;
-            }
-        }
-        public int index;
 
-    }
-
-    public class JackpotItem
-    {
-        public int Index { get; set; }
-        public string Symbol { get; set; }
-    }
-
-    public class McFS
-    {
-        public List<MCSymbol> Symbols { get; set; }
-
-    }
     public class MCSymbol
     {
         public int index { get; set; }
         public Tuple<int, int> coordinate { get; set; }
         public int symbol { get; set; }
         public long winAmount { get; set; }
-        public bool IsLocked { get; set; }
 
         public TableTypeEnum Type { get; set; }
         public string JPSymbolIfString { get; set; }
 
-        public MCSymbol(int index, int reel, int row, int symbol, bool isLocked, TableTypeEnum type, long winAmount = 0)
+        public MCSymbol()
+        {
+
+        }
+
+        public MCSymbol(int index, int reel, int row, int symbol, TableTypeEnum type, long winAmount = 0, string jpSymbolIfString = null)
         {
             this.index = index;
             this.coordinate = new Tuple<int, int>(reel, row);
             this.symbol = symbol;
-            this.IsLocked = isLocked;
             this.Type = type;
             this.winAmount = winAmount;
+            this.JPSymbolIfString = jpSymbolIfString;
         }
 
     }
@@ -249,11 +198,13 @@ namespace AGS.Slots.MermaidsFortune.Common.Entities
         public int animationState { get; set; }
         public int TreasureChestTurnOver { get; set; }
         public int TreasureChestTurnState { get; set; }
+        public bool? isReSpin { get; set; }
         public BonusGame BonusGame { get; set; }
-        public JackpotGame JackpotGame { get; set; }
         public string state { get; set; }
         public bool? completed { get; set; }
         public int? freeSpinsLeft { get; set; }
+        public HoldAndSpin holdAndSpin { get; set; }
+        public int reelSet { get; set; }
         public int? totalFreeSpins { get; set; }
         public long? sumWinsFreeSpins { get; set; }
         public Guid? transactionId { get; set; }
@@ -269,17 +220,17 @@ namespace AGS.Slots.MermaidsFortune.Common.Entities
         public string state { get; set; }
         public int animationState { get; set; }
         public bool? completed { get; set; }
+        public bool? isReSpin { get; set; }
         public int? freeSpinsLeft { get; set; }
+        public HoldAndSpin holdAndSpin { get; set; }
+        public int reelSet { get; set; }
         public int? totalFreeSpins { get; set; }
-        public int TreasureChestTurnOver { get; set; }
-        public int TreasureChestTurnState { get; set; }
         public long? sumWinsFreeSpins { get; set; }
         public Guid? transactionId { get; set; }
         public string userName { get; set; }
         public string sessionId { get; set; }
         public string mode { get; set; }
         public BonusGame BonusGame { get; set; }
-        public JackpotGame JackpotGame { get; set; }
         public SpinPublicStateResponse lastState { get; set; }
         public State()
         {

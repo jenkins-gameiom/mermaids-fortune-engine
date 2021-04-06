@@ -15,16 +15,12 @@ namespace AGS.Slots.MermaidsFortune.Platform
     {
         //public static SlotGame CurrentGame = new RedSilk();
         private readonly Spins _spins;
-        private readonly BonusPick _bonusPick;
-        private readonly JackpotPick _jackpotPick;
         private readonly Init _init;
 
-        public Game(Spins spins,BonusPick pick,Init init, JackpotPick jackpotPick)
+        public Game(Spins spins,Init init)
         {
             _spins = spins;
-            _bonusPick = pick;
             _init = init;
-            _jackpotPick = jackpotPick;
         }
 
         public dynamic InitSlot(dynamic obj)
@@ -50,30 +46,6 @@ namespace AGS.Slots.MermaidsFortune.Platform
                 throw ex;
             }
         }
-
-        public dynamic Pick(dynamic obj)
-        {
-            try
-            {
-                return _bonusPick.Pick(obj);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-        public dynamic JackpotPick(dynamic obj)
-        {
-            try
-            {
-                return _jackpotPick.PickJackpot(obj);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
 
     }
 }

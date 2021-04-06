@@ -26,6 +26,7 @@ namespace AGS.Slots.MermaidsFortune.WebAPI
         private readonly IRequestContext _context;
         private readonly ILogger<RequestManager> _logger;
         private readonly IMathFileService _mathFileService;
+        private readonly Configs _applicationConfig;
 
 
         public static int SpinCounter = 0;
@@ -34,13 +35,13 @@ namespace AGS.Slots.MermaidsFortune.WebAPI
         public static int ErrorRequests = 0;
         public static DateTime LastAction;
 
-        public RequestManager(IMathFileService mathFileService, Game game, ILogger<RequestManager> logger, IRequestContext context)
+        public RequestManager(IMathFileService mathFileService, Game game, Configs applicationConfig, ILogger<RequestManager> logger, IRequestContext context)
         {
             _game = game;
             _logger = logger;
             _context = context;
             _mathFileService = mathFileService;
-
+            _applicationConfig = applicationConfig;
 
         }
 
@@ -64,11 +65,11 @@ namespace AGS.Slots.MermaidsFortune.WebAPI
                 };
                 _context.Config = platformRequest.Config;
                 ValidateRTP(_context.Config);
-                if (_context.Config.rtp == 96.0)
+                if (_context.Config.rtp.ToString() == _applicationConfig.RTP96)
                 {
                     _context.MathFile = _mathFileService.GetMathFile(MathFileType.Config96);
                 }
-                if (_context.Config.rtp == 94.0)
+                if (_context.Config.rtp.ToString() == _applicationConfig.RTP94)
                 {
                     _context.MathFile = _mathFileService.GetMathFile(MathFileType.Config94);
                 }
@@ -121,50 +122,6 @@ namespace AGS.Slots.MermaidsFortune.WebAPI
                         throw ex;
                     }
                 }
-                else if (platformRequest.PublicState.action == ActionType.pick.ToString())
-                {
-                    try
-                    {
-                        //request = Commons.Json.Clone(dynamicRequest);
-                        response =  _game.Pick(dynamicRequest);
-                        response.privateState.lastState = response.publicState;
-                        result = Json.Encode(response);
-                        if (Json.HasProperty(response, "error"))
-                        {
-                            ErrorRequests++;
-                            _logger.LogError((string)string.Format("MermaidsFortune generated an error during bonuspick, the request is:{0},action typeis:{1} stack trace is:{2}", request, ActionType.pick, (string)response.error.stackTrace));
-
-                        }
-                        SpinCounter++;
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, (string)string.Format("MermaidsFortune generated an error during bonuspick, the request is:{0},action typeis:{1} stack trace is:{2}", request, ActionType.pick, (string)response.error.stackTrace));
-                        throw ex;
-                    }
-                }
-                else if (platformRequest.PublicState.action == ActionType.jackpotpick.ToString())
-                {
-                    try
-                    {
-                        //request = Commons.Json.Clone(dynamicRequest);
-                        response =  _game.JackpotPick(dynamicRequest);
-                        response.privateState.lastState = response.publicState;
-                        result = Json.Encode(response);
-                        if (Json.HasProperty(response, "error"))
-                        {
-                            ErrorRequests++;
-                            _logger.LogError((string)string.Format("MermaidsFortune generated an error during jackpotpick, the request is:{0},action typeis:{1} stack trace is:{2}", request, ActionType.jackpotpick, (string)response.error.stackTrace));
-
-                        }
-                        SpinCounter++;
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, (string)string.Format("MermaidsFortune generated an error during jackpotpick, the request is:{0},action typeis:{1} stack trace is:{2}", request, ActionType.jackpotpick, (string)response.error.stackTrace));
-                        throw ex;
-                    }
-                }
                 else
                 {
                     var message = (string)string.Format("MermaidsFortune generated an error, unknown command during spin, the request is:{0}, stack trace is:{1}", dynamicRequest, (string)response.error.stackTrace);
@@ -188,7 +145,7 @@ namespace AGS.Slots.MermaidsFortune.WebAPI
             {
                 throw new Exception("Rtp shouldn't be empty");
             }
-            else if (platformRequest.rtp != 96.0 && platformRequest.rtp != 94.0)
+            else if (platformRequest.rtp.ToString() != _applicationConfig.RTP96 && platformRequest.rtp.ToString() != _applicationConfig.RTP94)
             {
                 throw new Exception("Rtp " + platformRequest.rtp + " is not valid to this game");
             }

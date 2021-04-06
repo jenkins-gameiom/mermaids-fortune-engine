@@ -43,7 +43,7 @@ namespace AGS.Slots.MermaidsFortune.Platform.Tests
             _spinsInstance = new Spins(_contextInstance.Object, _configsInstance, _gameEngine);
             _mathFile = new Logic.Engine.MermaidsFortune.Config("Math96");
             _contextInstance.Setup(a => a.MathFile).Returns(_mathFile);
-            _contextInstance.Setup(a => a.GetBetAmount()).Returns(88);
+            _contextInstance.Setup(a => a.GetBetAmount()).Returns(50);
             _contextInstance.Setup(a => a.GetDenom()).Returns(1);
         }
 
@@ -56,7 +56,7 @@ namespace AGS.Slots.MermaidsFortune.Platform.Tests
             _contextInstance.Setup(a => a.RequestItems).Returns(new RequestItems
             {
                 denom = 1,
-                betAmount = 88,
+                betAmount = 50,
                 isFreeSpin = false
             });
             var dynamicRequest = Json.ObjectToDynamic(req);
@@ -88,7 +88,7 @@ namespace AGS.Slots.MermaidsFortune.Platform.Tests
             _contextInstance.Setup(a => a.RequestItems).Returns(new RequestItems
             {
                 denom = 1,
-                betAmount = 88,
+                betAmount = 50,
                 isFreeSpin = false
             });
             var dynamicRequest = Json.ObjectToDynamic(req);
@@ -116,7 +116,7 @@ namespace AGS.Slots.MermaidsFortune.Platform.Tests
             _contextInstance.Setup(a => a.RequestItems).Returns(new RequestItems
             {
                 denom = 1,
-                betAmount = 88,
+                betAmount = 50,
                 isFreeSpin = false
             });
             var dynamicRequest = Json.ObjectToDynamic(req);
@@ -172,7 +172,7 @@ namespace AGS.Slots.MermaidsFortune.Platform.Tests
             _contextInstance.Setup(a => a.RequestItems).Returns(new RequestItems
             {
                 denom = 33,
-                betAmount = 88,
+                betAmount = 50,
                 isFreeSpin = false
             });
             _contextInstance.Setup(a => a.GetDenom()).Returns(3);
@@ -202,7 +202,7 @@ namespace AGS.Slots.MermaidsFortune.Platform.Tests
             _contextInstance.Setup(a => a.RequestItems).Returns(new RequestItems
             {
                 denom = 1,
-                betAmount = 88,
+                betAmount = 50,
                 isFreeSpin = true
             });
             var dynamicRequest = Json.ObjectToDynamic(req);
@@ -231,7 +231,7 @@ namespace AGS.Slots.MermaidsFortune.Platform.Tests
             _contextInstance.Setup(a => a.RequestItems).Returns(new RequestItems
             {
                 denom = 1,
-                betAmount = 88,
+                betAmount = 50,
                 isFreeSpin = false
             });
             var dynamicRequest = Json.ObjectToDynamic(req);
@@ -259,7 +259,7 @@ namespace AGS.Slots.MermaidsFortune.Platform.Tests
             _contextInstance.Setup(a => a.RequestItems).Returns(new RequestItems
             {
                 denom = 1,
-                betAmount = 88,
+                betAmount = 50,
                 isFreeSpin = false,
                 force = "3bnandnowin"
             });
@@ -293,7 +293,7 @@ namespace AGS.Slots.MermaidsFortune.Platform.Tests
             _contextInstance.Setup(a => a.RequestItems).Returns(new RequestItems
             {
                 denom = 1,
-                betAmount = 88,
+                betAmount = 50,
                 isFreeSpin = false,
                 force = "4bnandnowin"
             });
@@ -327,7 +327,7 @@ namespace AGS.Slots.MermaidsFortune.Platform.Tests
             _contextInstance.Setup(a => a.RequestItems).Returns(new RequestItems
             {
                 denom = 1,
-                betAmount = 88,
+                betAmount = 50,
                 isFreeSpin = false,
                 force = "5bnandnowin"
             });

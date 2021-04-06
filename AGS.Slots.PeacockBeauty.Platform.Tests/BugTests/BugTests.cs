@@ -52,7 +52,7 @@ namespace AGS.Slots.MermaidsFortune.Platform.Tests.BugTests
             var req = JsonConvert.DeserializeObject<PlatformRequest>(JsonsClass.GetReq("NoRtp"));
             _contextInstance.Setup(a => a.State).Returns(req.PrivateState);
             _contextInstance.Setup(a => a.Config).Returns(req.Config);
-            _contextInstance.Setup(a => a.RequestItems).Returns(new RequestItems { betAmount = 88 });
+            _contextInstance.Setup(a => a.RequestItems).Returns(new RequestItems { betAmount = 50 });
             _randomService.Setup(a => a.Next(It.IsAny<int>(), It.IsAny<int>())).Returns(3);
             _randomService.Setup(a => a.GetRandomNumbers(It.IsAny<List<RandomNumber>>()))
                 .Returns(BonusGameHelper.GenerateRandomNumbers(11));

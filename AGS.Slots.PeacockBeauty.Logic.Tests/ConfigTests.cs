@@ -15,7 +15,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Tests
         //AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
         private readonly Mock<IRandom> _random;
         private readonly Config _config;
-
+        private Mock<IRequestContext> _contextInstance;
 
 
 
@@ -32,6 +32,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Tests
                 new RandomNumber() {Min=0,Max=111,Quantity=1,Values=new List<int>(new int[]{60 })},
                 new RandomNumber() {Min=0,Max=104,Quantity=1,Values=new List<int>(new int[]{78 })} }));
             _config = new Config("Math96");
+            _contextInstance = new Mock<IRequestContext>();
 
 
 
@@ -40,7 +41,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Tests
         [Fact]
         public void TestTest()
         {
-            var sdss = _config.GetReels();
+            var sdss = _config.GetReels(_contextInstance.Object, _random.Object);
         }
 
 

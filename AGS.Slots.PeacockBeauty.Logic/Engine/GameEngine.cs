@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Mime;
 using System.Text;
+using AGS.Slots.MermaidsFortune.Common.Enums;
 using AGS.Slots.MermaidsFortune.Common.Interfaces;
 using AGS.Slots.MermaidsFortune.Logic.Engine.Math;
 using AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune;
@@ -46,31 +47,33 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine
 
                 if (_context.State.freeSpinsLeft <= 0)
                     throw new Exception("Error in validating freeSpins (freeSpinsLeft<=0)");
-                else
+                else if(_context.State.holdAndSpin == HoldAndSpin.None)
                     _context.State.freeSpinsLeft--;
-
             }
             else
             {
                 if (_context.State.freeSpinsLeft > 0)
                     throw new Exception("Should be in freeSpins " + _context.State.freeSpinsLeft + " Left and regular spin requested");
-
             }
         }
 
-        public Result Spin(List<List<int>> spinResult = null, int reelSize = 3)
+        public Result Spin(List<List<int>> spinResult = null)
         {
             //ValidateSpins();
             //this line is straight forward - we have in capital gains 5 different combinations for the reels.
             //4 for FS, and 1 for regular spin. why we have 5? cause we want different amount of wilds for different spins.
             //so here we just get the reels from the config.
             //**notice we dont get the reels result (3 number for each reel), but the WHOLE reels ( about 65 numbers for each reel)
-            List<List<int>> reels = _context.MathFile.GetReels();
-
+            //List<List<int>> reels = _context.MathFile.GetReels();
+            if (_context.State.isReSpin == null || !_context.State.isReSpin.Value)
+            {
+                _context.MathFile.AssignReelSet(_context, _random);
+            }
+            _context.State.BonusGame = null;
             //here, from the 5 whole reels, we get the actual matrix that will say if we won and what we won (5*3)
             //this is where the randomize functions kicks (Gamiume, C# Random etc.).
             if (spinResult == null)
-                spinResult = reels.RandomizeReels(_random);
+                spinResult = _context.MathFile.GetReels(_context, _random).reels;
             //here is actually the analysis of our result (3*5), we iterate the reels and see if we won something. options to win:
             //1 - scatter, we got 3 scatters (index 12) so we go to gateway-FS OR TO Gateway-MC
             //2 - regular line wins, 3 or more same symbols including wilds etc.
@@ -80,12 +83,54 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine
             
             ApplyResultion(spinResult, result);
             Scan(result);
-            CalculateResult(spinResult, result);
-            if (!_context.RequestItems.isFreeSpin && result.Wins.Count == 1 && result.Wins.Any(w => w.WinType == WinType.JackPot) && result.JackpotGame.outcome == "013")
+            CalculateResult(spinResult, result);//freespinandregular - 
+            if (result.Wins.Count == 1 && result.Wins.Any(x => x.WinType == WinType.FiveOfAKind)
+                && _context.State.holdAndSpin != HoldAndSpin.First)
             {
                 //3 scatters yes regular win "3 BN SYMBOLS + win"
-                SerializeObjectAndWriteToFile(result, "imperialjackpotminiminorgrand");
+                SerializeObjectAndWriteToFile(result, "fiveofakindwithfirstreelrespin");
             }
+            if (result.Wins.Count == 1 && result.Wins.Any(x => x.WinType == WinType.FiveOfAKind)
+                                       && _context.State.holdAndSpin != HoldAndSpin.Both)
+            {
+                //3 scatters yes regular win "3 BN SYMBOLS + win"
+                SerializeObjectAndWriteToFile(result, "fiveofakindwithbothreelrespin");
+            }
+
+
+            //FROM NOW THOSE CANT HAPPEN, no combination of JP1,JP2,JP4 exists
+            //if (!_context.RequestItems.isFreeSpin && result.Wins.Count == 1 && result.Wins.Any(x => x.WinType == WinType.FiveOfAKind)
+            //    && !_context.State.BonusGame.MCSymbols.Any(x => x.JPSymbolIfString == "grand")
+            //    && _context.State.BonusGame.MCSymbols.Any(x => x.JPSymbolIfString == "major")
+            //    && _context.State.BonusGame.MCSymbols.Any(x => x.JPSymbolIfString == "minor"))
+            //{
+            //    //3 scatters yes regular win "3 BN SYMBOLS + win"
+            //    SerializeObjectAndWriteToFile(result, "fiveofakindminormajor");
+            //}
+            //if (!_context.RequestItems.isFreeSpin && result.Wins.Count == 1 && result.Wins.Any(x => x.WinType == WinType.FiveOfAKind)
+            //    && _context.State.BonusGame.MCSymbols.Any(x => x.JPSymbolIfString == "grand")
+            //    && _context.State.BonusGame.MCSymbols.Any(x => x.JPSymbolIfString == "major")
+            //    && !_context.State.BonusGame.MCSymbols.Any(x => x.JPSymbolIfString == "minor"))
+            //{
+            //    //3 scatters yes regular win "3 BN SYMBOLS + win"
+            //    SerializeObjectAndWriteToFile(result, "fiveofakindmajorgrand");
+            //}
+            //if (!_context.RequestItems.isFreeSpin && result.Wins.Count == 1 && result.Wins.Any(x => x.WinType == WinType.FiveOfAKind)
+            //    && _context.State.BonusGame.MCSymbols.Any(x => x.JPSymbolIfString == "grand")
+            //    && !_context.State.BonusGame.MCSymbols.Any(x => x.JPSymbolIfString == "major")
+            //    && _context.State.BonusGame.MCSymbols.Any(x => x.JPSymbolIfString == "minor"))
+            //{
+            //    //3 scatters yes regular win "3 BN SYMBOLS + win"
+            //    SerializeObjectAndWriteToFile(result, "fiveofakindminorgrand");
+            //}
+            //if (!_context.RequestItems.isFreeSpin && result.Wins.Count == 1 && result.Wins.Any(x => x.WinType == WinType.FiveOfAKind)
+            //    && _context.State.BonusGame.MCSymbols.Any(x => x.JPSymbolIfString == "grand")
+            //    && _context.State.BonusGame.MCSymbols.Any(x => x.JPSymbolIfString == "major")
+            //    && _context.State.BonusGame.MCSymbols.Any(x => x.JPSymbolIfString == "minor"))
+            //{
+            //    //3 scatters yes regular win "3 BN SYMBOLS + win"
+            //    SerializeObjectAndWriteToFile(result, "fiveofakindminormajorgrand");
+            //}
             return result;
 
         }
@@ -144,7 +189,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine
                 {
                     ReferenceLoopHandling = ReferenceLoopHandling.Serialize
                 });
-                var fullPath2 = @"C:\Projects\MermaidsFortune\AGS.Slots.MermaidsFortune.Logic\Engine\MermaidsFortune\Forces\" + fileName + ".json";
+                var fullPath2 = @"C:\Projects\mermaids-fortune-engine\AGS.Slots.PeacockBeauty.Logic\Engine\MermaidsFortune\Forces\" + fileName + ".json";
                 System.IO.File.WriteAllText(fullPath2, objectString);
             }
             catch (Exception e)

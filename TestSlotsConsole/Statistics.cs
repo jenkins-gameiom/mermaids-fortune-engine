@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using AGS.Slots.MermaidsFortune.Common;
 using AGS.Slots.MermaidsFortune.Common.Entities;
+using AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune;
 
 namespace TestSlotsConsole
 {
@@ -11,7 +12,7 @@ namespace TestSlotsConsole
     {
         public Collector Collector { get; set; }
         public int Spins { get; set; }
-        public int TotalBetAmount { get; set; }
+        public long TotalBetAmount { get; set; }
         public int Errors { get; set; }
         public string LastErrorMessage { get; set; }
         public Statistics()
@@ -24,6 +25,10 @@ namespace TestSlotsConsole
     {
         public long TotalBonusMoneyWonAmount { get; set; }
         public long TotalJackpotMoneyWonAmount { get; set; }
+        public long TotalGrandMoneyWonAmount { get; set; }
+        public long TotalMajorMoneyWonAmount { get; set; }
+        public long TotalMinorMoneyWonAmount { get; set; }
+        public long TotalNumberMoneyWonAmount { get; set; }
         public long TotalRegularSpinsMoneyWonAmount { get; set; }
         public long TotalFreeSpinsMoneyWonAmount { get; set; }
         public long TotalBetMoneyAmount { get; set; }
@@ -44,7 +49,7 @@ namespace TestSlotsConsole
 
     public enum ResponseType
     {
-        Spin, Pick, FSpin, Jackpot
+        Spin, FSpin
     }
     public class SimulatorLogic
     {
@@ -56,14 +61,8 @@ namespace TestSlotsConsole
                 case ResponseType.Spin:
                     stats.Collector.TotalRegularSpinsMoneyWonAmount += totalWinAmount;
                     break;
-                case ResponseType.Pick:
-                    stats.Collector.TotalBonusMoneyWonAmount += totalWinAmount;
-                    break;
                 case ResponseType.FSpin:
                     stats.Collector.TotalFreeSpinsMoneyWonAmount += totalWinAmount;
-                    break;
-                case ResponseType.Jackpot:
-                    stats.Collector.TotalJackpotMoneyWonAmount += totalWinAmount;
                     break;
                 default:
                     break;
@@ -76,16 +75,55 @@ namespace TestSlotsConsole
             long totalDebit = stats.TotalBetAmount;
 
 
-            string ret = string.Format("{4}\n{0}\n{1}\n{2}\n{3}\n{5}\n{6}",
+            string ret = string.Format("{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\n{7}\n{8}",
+                string.Format("**Total RTP**: {0}", (totalCredit / (double)totalDebit) * 100),
                 string.Format("Base Contribute: {0}", (stats.Collector.TotalRegularSpinsMoneyWonAmount / (double)totalDebit) * 100),
                 string.Format("FS Contribute: {0}", (stats.Collector.TotalFreeSpinsMoneyWonAmount / (double)totalDebit) * 100),
                 string.Format("Bonus Contribute: {0}", (stats.Collector.TotalBonusMoneyWonAmount / (double)totalDebit) * 100),
                 string.Format("Jackpot Contribute: {0}", (stats.Collector.TotalJackpotMoneyWonAmount / (double)totalDebit) * 100),
-                 string.Format("**Total RTP**: {0}", (totalCredit / (double)totalDebit) * 100),
+                string.Format("**Total Credit**: {0}", (totalCredit)),
+                string.Format("**Total Debit**: {0}", ((double)totalDebit)),
                 string.Format("Spins: {0}", stats.Spins),
-                string.Format("Errors: {0}", stats.Errors)
+                string.Format("Errors: {0}", stats.Errors + "\n\n\n\n\n\n")
                  );
-
+            string parts = null;
+            string regular = "Regular - ";
+            string fs = "FS - ";
+            var regularregular = "regular regular - " + (MermaidsFortuneResolver.parts[regular + "regular"] / (double)totalDebit) * 100 + "\n";
+            var regularbn = "regular bn - " + (MermaidsFortuneResolver.parts[regular + "bn"] / (double)totalDebit) * 100 + "\n";
+            var regularfive = "regular five - " + (MermaidsFortuneResolver.parts[regular + "5ofakind"] / (double)totalDebit) * 100 + "\n";
+            var regularfour = "regular four - " + (MermaidsFortuneResolver.parts[regular + "4ofakind"] / (double)totalDebit) * 100 + "\n";
+            var regularthree = "regular three - " + (MermaidsFortuneResolver.parts[regular + "3ofakind"] / (double)totalDebit) * 100 + "\n";
+            var regulartotal = "regular total - " + ((MermaidsFortuneResolver.parts[regular + "bn"] +
+                                                     MermaidsFortuneResolver.parts[regular + "regular"] +
+                                                     MermaidsFortuneResolver.parts[regular + "5ofakind"] +
+                                                     MermaidsFortuneResolver.parts[regular + "4ofakind"] +
+                                                     MermaidsFortuneResolver.parts[regular + "3ofakind"]) / (double)totalDebit) * 100 + "\n\n\n";
+            var fsregular = "fs regular - " + (MermaidsFortuneResolver.parts[fs + "regular"] / (double)totalDebit) * 100 + "\n";
+            var fsbn = "fs bn - " + (MermaidsFortuneResolver.parts[fs + "bn"] / (double)totalDebit) * 100 + "\n";
+            var fsfive = "fs five - " + (MermaidsFortuneResolver.parts[fs + "5ofakind"] / (double)totalDebit) * 100 + "\n";
+            var fsfour = "fs four - " + (MermaidsFortuneResolver.parts[fs + "4ofakind"] / (double)totalDebit) * 100 + "\n";
+            var fsthree = "fs three - " + (MermaidsFortuneResolver.parts[fs + "3ofakind"] / (double)totalDebit) * 100 + "\n";
+            var fstotal = "fs total - " + ((MermaidsFortuneResolver.parts[fs + "bn"] +
+                                             MermaidsFortuneResolver.parts[fs + "regular"] +
+                                             MermaidsFortuneResolver.parts[fs + "5ofakind"] +
+                                             MermaidsFortuneResolver.parts[fs + "4ofakind"] +
+                                             MermaidsFortuneResolver.parts[fs + "3ofakind"]) / (double)totalDebit) * 100 + "\n\n\n";
+            var totalregular = "total regular - " + ((MermaidsFortuneResolver.parts[regular + "regular"] + MermaidsFortuneResolver.parts[fs + "regular"]) / (double)totalDebit) * 100 + "\n";
+            var totalbn = "total bn - " + ((MermaidsFortuneResolver.parts[regular + "bn"] + MermaidsFortuneResolver.parts[fs + "bn"]) / (double)totalDebit) * 100 + "\n";
+            var totalfive = "total five - " + ((MermaidsFortuneResolver.parts[regular + "5ofakind"] + MermaidsFortuneResolver.parts[fs + "5ofakind"]) / (double)totalDebit) * 100 + "\n";
+            var totalfour = "total four - " + ((MermaidsFortuneResolver.parts[regular + "4ofakind"] + MermaidsFortuneResolver.parts[fs + "4ofakind"]) / (double)totalDebit) * 100 + "\n";
+            var totalthree = "total three - " + ((MermaidsFortuneResolver.parts[regular + "4ofakind"] + MermaidsFortuneResolver.parts[fs + "3ofakind"]) / (double)totalDebit) * 100 + "\n";
+            var totaltotal = "total total - " + ((MermaidsFortuneResolver.parts[regular + "bn"] + MermaidsFortuneResolver.parts[fs + "bn"] +
+                                                  MermaidsFortuneResolver.parts[regular + "regular"] + MermaidsFortuneResolver.parts[fs + "regular"] +
+                                                  MermaidsFortuneResolver.parts[regular + "5ofakind"] + MermaidsFortuneResolver.parts[fs + "5ofakind"] +
+                                                  MermaidsFortuneResolver.parts[regular + "4ofakind"] + MermaidsFortuneResolver.parts[fs + "4ofakind"] +
+                                                  MermaidsFortuneResolver.parts[regular + "3ofakind"] + MermaidsFortuneResolver.parts[fs + "3ofakind"])
+                / (double)totalDebit) *100 + "\n\n\n";
+            parts += regularregular + regularbn + regularfive + regularfour + regularthree + regulartotal;
+            parts += fsregular + fsbn + fsfive + fsfour + fsthree + fstotal;
+            parts += totalregular + totalbn + totalfive + totalfour + totalthree + totaltotal;
+            ret += parts;
             return ret;
 
         }

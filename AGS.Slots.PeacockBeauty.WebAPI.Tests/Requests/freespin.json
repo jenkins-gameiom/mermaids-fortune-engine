@@ -61,7 +61,7 @@
     "mode": "real"
   },
   "config": {
-    "stakes": [ 88, 176, 264, 528, 880 ],
+    "stakes": [ 50,100, 150, 250, 500 ],
     "defaultStake": 176,
     "denominations": [ 1, 5, 10, 20 ],
     "defaultDenomination": 1,

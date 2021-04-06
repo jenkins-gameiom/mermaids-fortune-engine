@@ -2,7 +2,7 @@
   "publicState": {
     "action": "spin",
     "gameId": 29,
-    "betAmount": 88,
+    "betAmount": 50,
     "denom": 1
   },
   "privateState": {
@@ -1540,11 +1540,11 @@
   },
   "config": {
     "stakes": [
-      88,
+      50,
       176,
       264,
       528,
-      880
+      500
     ],
     "defaultStake": 150,
     "denominations": [

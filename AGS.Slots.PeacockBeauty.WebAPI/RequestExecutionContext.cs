@@ -119,7 +119,7 @@ namespace AGS.Slots.MermaidsFortune.WebAPI
 
         public int GetDenom()
         {
-            if (!(RequestItems.isFreeSpin || RequestItems.action == ActionType.pick.ToString() || RequestItems.action == ActionType.jackpotpick.ToString()) || State.lastState == null || State.lastState.denom == null || State.lastState.denom.Value == 0)
+            if (!RequestItems.isFreeSpin || State.lastState == null || State.lastState.denom == null || State.lastState.denom.Value == 0)
             {
                 return RequestItems.denom;
             }
@@ -131,7 +131,7 @@ namespace AGS.Slots.MermaidsFortune.WebAPI
 
         public int GetBetAmount()
         {
-            if (!(RequestItems.isFreeSpin || RequestItems.action == ActionType.pick.ToString() || RequestItems.action == ActionType.jackpotpick.ToString()) || State.lastState == null || State.lastState.betAmount == null || State.lastState.betAmount.Value == 0)
+            if (!RequestItems.isFreeSpin || State.lastState == null || State.lastState.betAmount == null || State.lastState.betAmount.Value == 0)
             {
                 return RequestItems.betAmount;
             }

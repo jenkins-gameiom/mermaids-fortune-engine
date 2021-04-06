@@ -20,11 +20,7 @@ namespace AGS.Slots.MermaidsFortune.Platform
 
             builder.RegisterType<Spins>().AsSelf();
             builder.RegisterType<Init>().AsSelf();
-            builder.RegisterType<BonusPick>().AsSelf();
-            builder.RegisterType<JackpotPick>().AsSelf();
             builder.RegisterType<Game>().AsSelf();
-            builder.RegisterType<BonusGameService>().AsImplementedInterfaces();
-            builder.RegisterType<JackpotService>().AsImplementedInterfaces();
 
 
 

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AGS.Slots.MermaidsFortune.Common;
 using AGS.Slots.MermaidsFortune.Common.Entities;
+using AGS.Slots.MermaidsFortune.Common.Enums;
 using AGS.Slots.MermaidsFortune.Common.Interfaces;
 using AGS.Slots.MermaidsFortune.Logic;
 using AGS.Slots.MermaidsFortune.Logic.Engine;
@@ -39,10 +40,12 @@ namespace TestSlotsConsole
             var iindexMock = new Mock<IIndex<RandomizerType, IRandom>>();
             iindexMock.Setup(i => i[It.IsAny<RandomizerType>()]).Returns(random);
             var configs = new Configs();
-            BonusGameService bonusGameService = new BonusGameService(context, configs, random);
-            JackpotService jackpotService = new JackpotService(context);
             for (int i = 0; i < totalSpinsRequest; i++)
             {
+                if (i == totalSpinsRequest - 1)
+                {
+
+                }
                 simLogic.AddSpin(stats);
                 spins++;
                 simLogic.AddTotalBetAmount(stats, betSum);
@@ -52,17 +55,42 @@ namespace TestSlotsConsole
 
                 GameEngine ge = new GameEngine(context, new MermaidsFortuneResolver(context, configs, random),
                     new MermaidsFortuneScanner(context, random, configs), configs, random);
+                if (context.State.holdAndSpin != HoldAndSpin.None)
+                {
+                }
                 Result res = ge.Spin(null);
-                CalculateWin(context, bonusGameService, jackpotService, stats, res);
+                if (context.State.holdAndSpin != HoldAndSpin.None)
+                {
+                }
+                CalculateWin(context, stats, res);
                 var initGe = true;
                 while (context.State.freeSpinsLeft > 0)
                 {
                     context.RequestItems.isFreeSpin = true;
                     ge = new GameEngine(context, new MermaidsFortuneResolver(context, configs, random),
                         new MermaidsFortuneScanner(context, random, configs), configs, random);
+                    var before = context.State.holdAndSpin;
+                    
                     Result resFreeSpin = ge.Spin(null);
-                    CalculateWin(context, bonusGameService, jackpotService, stats, resFreeSpin);
-                    context.State.freeSpinsLeft--;
+                    var after = context.State.holdAndSpin;
+                    var beenInPlus = false;
+                    if (before == HoldAndSpin.None)
+                    {
+                        context.State.freeSpinsLeft--;
+                    }
+                    if (after != HoldAndSpin.None)
+                    {
+                        context.State.freeSpinsLeft++;
+                        beenInPlus = true;
+                    }
+                    CalculateWin(context, stats, resFreeSpin);
+                    if (context.State.holdAndSpin != HoldAndSpin.None && context.State.freeSpinsLeft == 0)
+                    {
+                    }
+                    
+                    if (before != HoldAndSpin.None && after != HoldAndSpin.None)
+                    {
+                    }
                 }
                 if (spins % 10000 == 0)
                 {
@@ -92,7 +120,7 @@ namespace TestSlotsConsole
             {
                 stakes = new List<int>
                 {
-                    88, 176, 264, 528, 880
+                    50,100, 150, 250, 500
                 },
                 denominations = new List<int>
                 {
@@ -102,46 +130,84 @@ namespace TestSlotsConsole
             return context;
         }
 
-        private static void CalculateWin(RequestExecutionContext context, BonusGameService bonusGameService,
-            JackpotService jackpotService, Statistics stats, Result res)
+        private static void CalculateWin(RequestExecutionContext context, Statistics stats, Result res)
         {
-            if (context.State.BonusGame != null)
-            {
-                stats.Collector.TotalBonusGameWinTimes++;
-                while (!context.State.BonusGame.complete)
-                {
-                    bonusGameService.SpinAll();
-                }
-                stats.Collector.TotalBonusMoneyWonAmount += bonusGameService.GetCashWon();
-                bonusGameService.EndBonus();
-            }
-            if (context.State.JackpotGame != null)
-            {
-                stats.Collector.TotalJackpotWinTimes++;
-                while (!context.State.JackpotGame.complete)
-                {
-                    jackpotService.HandleJackpot();
-                }
-
-                stats.Collector.TotalJackpotMoneyWonAmount += jackpotService.GetCashWonAndEndJackpot();
-            }
-
-
             foreach (var win in res.Wins)
             {
-                if ((win.WinType == WinType.FreeSpin || win.WinType == WinType.Regular) &&
-                    context.RequestItems.isFreeSpin)
+                if (context.RequestItems.isFreeSpin)
                 {
                     stats.Collector.TotalFreeSpinsMoneyWonAmount += win.WinAmount;
                     stats.Collector.AmountOfFreeSpinsWon++;
                 }
-
-                if ((win.WinType == WinType.FreeSpin || win.WinType == WinType.Regular) &&
-                    !context.RequestItems.isFreeSpin)
+                else
                 {
                     stats.Collector.TotalRegularSpinsMoneyWonAmount += win.WinAmount;
                     stats.Collector.TotalWinTimesInBase++;
                 }
+                //
+                //
+                //
+                //
+                //
+                //
+                //
+                //
+                //
+                //
+                //if ((win.WinType == WinType.FreeSpin || win.WinType == WinType.Regular) &&
+                //    context.RequestItems.isFreeSpin)
+                //{
+                //    stats.Collector.TotalFreeSpinsMoneyWonAmount += win.WinAmount;
+                //    stats.Collector.AmountOfFreeSpinsWon++;
+                //}
+                //
+                //if ((win.WinType == WinType.FreeSpin || win.WinType == WinType.Regular) &&
+                //    !context.RequestItems.isFreeSpin)
+                //{
+                //    stats.Collector.TotalRegularSpinsMoneyWonAmount += win.WinAmount;
+                //    stats.Collector.TotalWinTimesInBase++;
+                //}
+                //
+                //if (win.WinType == WinType.FiveOfAKind)
+                //{
+                //    foreach (var mcSymbol in context.State.BonusGame.MCSymbols)
+                //    {
+                //        if (mcSymbol.symbol == 10)
+                //        {
+                //            stats.Collector.TotalMajorMoneyWonAmount += mcSymbol.winAmount;
+                //        }
+                //        if (mcSymbol.symbol == 11)
+                //        {
+                //            stats.Collector.TotalMinorMoneyWonAmount += mcSymbol.winAmount;
+                //        }
+                //        if (mcSymbol.symbol == 12)
+                //        {
+                //            stats.Collector.TotalNumberMoneyWonAmount += mcSymbol.winAmount;
+                //        }
+                //        if (mcSymbol.symbol == 13)
+                //        {
+                //            stats.Collector.TotalGrandMoneyWonAmount += mcSymbol.winAmount;
+                //        }
+                //
+                //        if (context.RequestItems.isFreeSpin)
+                //        {
+                //            if (mcSymbol.winAmount != 100)
+                //            {
+                //
+                //            }
+                //            stats.Collector.TotalFreeSpinsMoneyWonAmount += mcSymbol.winAmount;
+                //        }
+                //        else
+                //        {
+                //            stats.Collector.TotalRegularSpinsMoneyWonAmount += mcSymbol.winAmount;
+                //        }
+                //        //stats.Collector.TotalBonusMoneyWonAmount += mcSymbol.winAmount;
+                //    }
+                //}
+                //if (win.WinType == WinType.FiveOfAKind && !context.RequestItems.isFreeSpin)
+                //{
+                //
+                //}
             }
         }
 

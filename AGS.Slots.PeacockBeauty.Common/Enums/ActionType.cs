@@ -11,9 +11,7 @@ namespace AGS.Slots.MermaidsFortune.Common
     {
         init,
         spin,
-        freespin,
-        pick,
-        jackpotpick
+        freespin
         
     }
 

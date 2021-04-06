@@ -59,7 +59,7 @@ namespace AGS.Slots.MermaidsFortune.Platform
                         if (forceInString.Contains(","))
                         {
                             var selectedIndexes = Json.ConvertDynamic<List<int>>(force);
-                            var reels = _context.MathFile.GetReels();
+                            var reels = _context.MathFile.GetReels(_context, _random).reels;
                             for (int i = 0; i < reels.Count; i++)
                             {
                                 int sNum = 3;
@@ -105,16 +105,11 @@ namespace AGS.Slots.MermaidsFortune.Platform
                 _context.State.totalFreeSpins += res.Wins.First(x => x.WinType == WinType.FreeSpin).GrantedFreeSpins;
             }
             
-            if (res.Wins.Any(x => x.WinType == WinType.JackPot))
+            if (res.Wins.Any(x => x.WinType == WinType.FiveOfAKind))
             {
-                SetJackpotGame(res.JackpotGame);
+                //SetJackpotGame(res.JackpotGame);
             }
-            if (res.Wins.Any(x => x.WinType == WinType.BonusGames))
-            {
-                SetBonusGame(res.McSymbols);
-            }
-            _context.State.completed = _context.State.freeSpinsLeft <= 0 && _context.State.BonusGame == null && _context.State.JackpotGame == null;
-            _context.State.TreasureChestTurnOver += _context.GetBetAmount() * _context.GetDenom();
+            _context.State.completed = _context.State.freeSpinsLeft <= 0 && _context.State.BonusGame == null;
         }
 
         //Check the bet amount and chips perplay to make suere its correct.
@@ -132,35 +127,21 @@ namespace AGS.Slots.MermaidsFortune.Platform
                 throw new Exception("Error chipsPerPlay not valid " + chipsPerPlay);
         }
 
-        private void SetJackpotGame(JackpotGame jackpotGame)
-        {
-            _context.State.JackpotGame = new JackpotGame();
-            _context.State.JackpotGame.outcome = jackpotGame.outcome;
-            var listOfValues = _context.MathFile.GetRandomJackpotCombination(_context.State.JackpotGame.outcome, _random);
-            _context.State.JackpotGame.leftItems = listOfValues.Count;
-            foreach (var x in listOfValues)
-            {
-                _context.State.JackpotGame.selectedItems.Add(new JackpotItem()
-                {
-                    Symbol = x
-                });
-            }
-            _context.State.TreasureChestTurnOver = 0;
-        }
+        //private void SetJackpotGame(JackpotGame jackpotGame)
+        //{
+        //    _context.State.JackpotGame = new JackpotGame();
+        //    _context.State.JackpotGame.outcome = jackpotGame.outcome;
+        //    var listOfValues = _context.MathFile.GetRandomJackpotCombination(_context.State.JackpotGame.outcome, _random);
+        //    _context.State.JackpotGame.leftItems = listOfValues.Count;
+        //    foreach (var x in listOfValues)
+        //    {
+        //        _context.State.JackpotGame.selectedItems.Add(new JackpotItem()
+        //        {
+        //            Symbol = x
+        //        });
+        //    }
+        //}
         
-        private void SetBonusGame(List<ItemOnReel> mcSymbols)
-        {
-            _context.State.BonusGame = new BonusGame();
-            _context.State.BonusGame.bet = _context.GetBetAmount();
-            _context.State.BonusGame.denom = _context.GetDenom();
-            _context.State.BonusGame.MCSymbols = new List<MCSymbol>();
-            foreach (var x in mcSymbols)
-            {
-                MCSymbol mcSymbol = new MCSymbol(x.Index, x.Reel, x.Coordinate.Item2, 13, true, TableTypeEnum.Regular);
-                mcSymbol.winAmount = int.Parse(x.MCSymbol) * _context.GetDenom();
-                _context.State.BonusGame.MCSymbols.Add(mcSymbol);
-            }
-        }
 
         private Spin CreateSpinObject(bool isFreeSpin, List<Win> wins, Result result,
             IStateItems state, ref long freeSpinsTotalWin)
@@ -198,33 +179,19 @@ namespace AGS.Slots.MermaidsFortune.Platform
                             featureType = FeatureType.freeSpinWin.ToString(),
                             evaluationType = FeatureType.PowerXStream.ToString(),
                             freeSpinsAmount = win.GrantedFreeSpins,
-                            gate = !isFreeSpin && result.Scatter.Count() >= 3,
-                            wildLevel =
-                                0, //((Config)Game.CurrentGame.GetConfig(!string.IsNullOrEmpty(ConfigurationManager.AppSettings["rtp"]) ? ConfigurationManager.AppSettings["rtp"] : config.rtp.ToString())).GetWild(wildLevel),
                             winAmount = win.WinAmount,
                             winningSymbolsPositions = win.WinningLines.Select(x => new int[] { x.Coordinate.Item1, x.Coordinate.Item2 }).ToArray(),
                             symbolId = win.Symbol
                         };
                     }
                 }
-                else if (win.WinType == WinType.BonusGames)
-                {
-                    w = new Win()
-                    {
-                        featureType = FeatureType.pick.ToString(),
-                        evaluationType = EvaluationType.random.ToString(),
-                        gate = false
-                    };
-                    //SetBonusGame(result.McSymbols);
-                }
 
-                else if (win.WinType == WinType.JackPot)
+                else if (win.WinType == WinType.FiveOfAKind)
                 {
                     w = new Win()
                     {
-                        featureType = FeatureType.jackpot.ToString(),
-                        evaluationType = EvaluationType.random.ToString(),
-                        gate = false
+                        featureType = FeatureType.fiveofakind.ToString(),
+                        evaluationType = EvaluationType.random.ToString()
                     };
                     //SetJackpotGame();
                 }
@@ -247,16 +214,14 @@ namespace AGS.Slots.MermaidsFortune.Platform
             {
                 foreach (var item in result.McSymbols)
                 {
-                    spin.MCSymbols.Add(new MCSymbol(item.Index, item.Coordinate.Item1, item.Coordinate.Item2, item.Symbol,
-                        false, TableTypeEnum.Regular, int.Parse(item.MCSymbol)));
+                    spin.MCSymbols.Add(new MCSymbol(item.Index, item.Coordinate.Item1, item.Coordinate.Item2, item.Symbol, TableTypeEnum.Regular, int.Parse(item.MCSymbol)));
                 }
             }
             if (result.McSymbols.Count() > 0 && _context.State.BonusGame != null)
             {
                 foreach (var item in result.McSymbols)
                 {
-                    spin.MCSymbols.Add(new MCSymbol(item.Index, item.Coordinate.Item1, item.Coordinate.Item2, item.Symbol,
-                        true, TableTypeEnum.Regular, int.Parse(item.MCSymbol)));
+                    spin.MCSymbols.Add(new MCSymbol(item.Index, item.Coordinate.Item1, item.Coordinate.Item2, item.Symbol, TableTypeEnum.Regular, int.Parse(item.MCSymbol), item.MCSymbol));
                 }
             }
 
@@ -285,7 +250,7 @@ namespace AGS.Slots.MermaidsFortune.Platform
                     //obj.privateState = Json.ObjectToDynamic(spinPrivateStateRequest);
                 }
 
-                int betAmount = 0, chipsPerPlay = 0, betIndex, reelsSize = 4, wildLevel = -1; ;
+                int betAmount = 0, chipsPerPlay = 0;
 
                 bool isFreeSpin = _context.RequestItems.isFreeSpin;
                 var wins = new List<Win>();
@@ -296,7 +261,10 @@ namespace AGS.Slots.MermaidsFortune.Platform
                 _context.State.freeSpinsLeft = _context.State.freeSpinsLeft == null ? 0 : _context.State.freeSpinsLeft;
                 _context.State.totalFreeSpins = _context.State.totalFreeSpins == null ? 0 : _context.State.totalFreeSpins;
                 if (_context.State.completed == true)
+                {
                     _context.State.totalFreeSpins = 0;
+                    _context.State.sumWinsFreeSpins = null;
+                }
                 long sumWinsFreeSpins = _context.State.sumWinsFreeSpins ?? 0;
                 int freeSpinsExpandIndex = _context.State.totalFreeSpins.Value - _context.State.freeSpinsLeft.Value;
                 _gameEngine.ValidateSpins();
@@ -315,7 +283,7 @@ namespace AGS.Slots.MermaidsFortune.Platform
 
                 if (goToRegularSpin)
                 {
-                    result = _gameEngine.Spin(spinResult, reelsSize);
+                    result = _gameEngine.Spin(spinResult);
                 }
 
                 //Create spin object
@@ -338,7 +306,6 @@ namespace AGS.Slots.MermaidsFortune.Platform
                 spinPublicResponse.betAmount = betAmount;
                 spinPublicResponse.denom = chipsPerPlay;
                 spinPublicResponse.spin = rootSpin;
-                spinPublicResponse.spin.treasureChestLevel = _context.State.TreasureChestTurnState;
                 if (!isFreeSpin)
                 {
                     _context.State.transactionId = Guid.NewGuid();
@@ -355,7 +322,7 @@ namespace AGS.Slots.MermaidsFortune.Platform
 
 
                 //Debit user if goes into freeSpins or bonus win
-                if ((_context.State.completed.Value == false && isFreeSpin == false && _context.State.lastState.spin.wins.Any(x => x.featureType == FeatureType.freeSpinWin.ToString())) || _context.State.BonusGame != null || _context.State.JackpotGame != null)
+                if (_context.State.completed.Value == false && isFreeSpin == false && (_context.State.lastState.spin.wins.Any(x => x.featureType == FeatureType.freeSpinWin.ToString()) || _context.State.BonusGame != null))
                 {
                     obj.transactions = Json.ObjectToDynamic(new Transaction() { debits = new long[] { betAmount * chipsPerPlay } });
                 }
@@ -373,22 +340,6 @@ namespace AGS.Slots.MermaidsFortune.Platform
 
                 obj.config = null;
 
-                //Dont let json grow to much if many FS
-                if (spinPublicResponse.spin.childFeature != null && spinPublicResponse.spin.childFeature.Where(x => x.type != SpinType.pick.ToString()).Count() > 2)
-                {
-                    var a = spinPublicResponse.spin.childFeature.Where(x => x.type != SpinType.pick.ToString()).First();
-                    spinPublicResponse.spin.childFeature.Remove(a);
-                }
-                if (_context.State.lastState != null && _context.State.lastState.spin.childFeature != null && _context.State.lastState.spin.childFeature.Where(x => x.type != SpinType.pick.ToString()).Count() > 1)
-                {
-                    var a = _context.State.lastState.spin.childFeature.Where(x => x.type != SpinType.pick.ToString()).First();
-                    _context.State.lastState.spin.childFeature.Remove(a);
-                }
-                //if (spinPublicResponse != null && spinPublicResponse.spin.childFeature != null && spinPublicResponse.spin.childFeature.Where(x => x.type != SpinType.pick.ToString()).Count() > 2)
-                //{
-                //    var a = spinPublicResponse.spin.childFeature.Where(x => x.type != SpinType.pick.ToString()).First();
-                //    spinPublicResponse.spin.childFeature.Remove(a);
-                //}
 
                 obj.publicState = Json.ObjectToDynamic(spinPublicResponse);
                 obj.privateState = Json.ObjectToDynamic(_context.State);

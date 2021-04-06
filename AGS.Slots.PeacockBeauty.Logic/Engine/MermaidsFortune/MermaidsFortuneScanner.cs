@@ -10,14 +10,14 @@ using System.Text;
 
 namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
 {
-    public class MermaidsFortuneScanner 
+    public class MermaidsFortuneScanner
     {
         private List<List<ItemOnReel>> resultMatrix = new List<List<ItemOnReel>>();
 
-        
+
         private readonly IRequestContext _context;
-        private readonly IRandom _random ;
-        public MermaidsFortuneScanner(IRequestContext context, IIndex<RandomizerType, IRandom> random, Configs configs) 
+        private readonly IRandom _random;
+        public MermaidsFortuneScanner(IRequestContext context, IIndex<RandomizerType, IRandom> random, Configs configs)
         {
             _context = context;
             if (configs.IsTest)
@@ -58,9 +58,9 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                         Symbol = reels[reel][item]
                     };
                     resultMatrix[reel].Add(reelItem);
-                    if (reelItem.Symbol == 12)
+                    if (reelItem.Symbol == 14)
                         result.Scatter.Add(reelItem);
-                    if (reelItem.Symbol == 13)
+                    if (new int[] { 10, 11, 12, 13 }.Contains(reelItem.Symbol))
                     {
                         result.McSymbols.Add(reelItem);
                     }
@@ -79,12 +79,10 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
 
             return false;
         }
-        bool isBW(int winSymbol)
-        {
-            if (winSymbol == 11)
-                return true;
 
-            return false;
+        public bool IsWildOrMCSymbol(int winSymbol)
+        {
+            return winSymbol == 0 || winSymbol == 9;
         }
         //this function scans the second to the last reel, in order to check regular winnings (not scatter or bonus or fs)
         //(just regular 3 to 5 same symbols (or with wild) winning).
@@ -116,22 +114,17 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                     if (tempWays > 1)
                         ways[winningSymbol] *= tempWays;
                     HandleReel(winningSymbol, currentReelIndex, spinResultMatrix, resultDictionary, ways);
+
                 }
             }
 
         }
-
-        public static int AmountOfMoneyInJackpots;
-        public static int AmountOfWonJackpot;
-        public static HashSet<int> excludes = new HashSet<int>(new int[3] { 0, 1, 11 });
         //this function scan the matrix we got and checks whats going on.
         //note that we do have 3*5 matrix and now we want to analyze it.
-        public  void Scan(Result result)
+
+        public static Dictionary<string, int> dic = new Dictionary<string, int>();
+        public void Scan(Result result)
         {
-            if (_context.RequestItems.isFreeSpin)
-            {
-                MakeWholeReelWild();
-            }
 
             //this part is just to get the items in the first reel. note that wins (3 to 5 same symbols)
             //can start only from the first reel.
@@ -150,34 +143,36 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                     ways[resultMatrix[0][i].Symbol]++;
                 }
             }
-
             result.Wins = new List<Win>();
 
             //now after we got the first reel, lets check the others to see if it contains the same symbols as the first reel.
             foreach (var symbol in lines.Keys.Distinct())
             {
-                if (symbol == 0)
+                if (!dic.ContainsKey(symbol.ToString()))
                 {
-
+                    dic.Add(symbol.ToString(), 1);
                 }
-                if (symbol != 12 && symbol != 13)
+                else
+                {
+                    dic[symbol.ToString()]++;
+                }
+                if (symbol != 9 && symbol != 14)
                 {
                     HandleReel(symbol, 1, resultMatrix, lines, ways);
 
                 }
             }
 
-
-
             //now we have 3 options of winning:
+
+
             //1 - we get 3 or more same symbols starting from the left reel.
             foreach (var symbol in lines.Keys)
             {
-                if (symbol == 12)
+                if (symbol == 9)
                 {
 
                 }
-
                 var win = new Win()
                 {
                     Ways = ways[symbol],
@@ -185,85 +180,205 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                     Symbol = symbol,
                     WinType = WinType.Regular
                 };
+                if (win.Symbol >= 9 && win.Symbol <= 13)
+                {
+
+                }
                 if (win.LongestSequence > 2)
                 {
-                    if (win.Symbol == 12)
+
+                    if (win.Symbol == 0 || win.Symbol == 9 || win.Symbol == 14 || win.Symbol == 10 || win.Symbol == 11 || win.Symbol == 12 || win.Symbol == 13)
                     {
 
                     }
                     result.Wins.Add(win);
-
-                }
-                if (win.WinningLines.Count == 2)
-                {
-
-                }
-
-                if (win.LongestSequence == 2 && win.Symbol == 1)
-                {
-                    if (win.WinningLines.Any(x => x.Symbol != 1 && x.Symbol != 0))
-                    {
-
-                    }
-                    result.Wins.Add(win);
-
-                }
-            }
-            //2
-            if (resultMatrix.SelectMany(x => x).ToList().Any(y => y.Symbol == 0))
-            {
-                var betLevel = _context.MathFile.BetSteps.IndexOf(_context.GetBetAmount());
-                var isTrigger = _context.MathFile.WildTriggerJackpot(_context.RequestItems.isFreeSpin, betLevel, _random);
-                if (isTrigger)
-                {
-                    var win = new Win()
-                    {
-                        Ways = 0,
-                        Symbol = 0,
-                        WinType = WinType.JackPot
-                    };
-                    result.Wins.Add(win);
                 }
             }
 
-            //3 - if we got 3 or more scatter (12), we go to Gateway to chose Gateway-FS or gateway-MC.
+
+
+            //3 scatter wins a freespin
             if (result.Scatter.Count() > 2)
             {
                 var win = new Win()
                 {
                     Ways = 0,
                     WinningLines = new HashSet<ItemOnReel>(result.Scatter),
-                    Symbol = 12,
+                    Symbol = 14,
                     WinType = WinType.FreeSpin
                 };
                 result.Wins.Add(win);
             }
-            //3 - if we got 6+ mcsymbols we go to regular-MC.
-            if (result.McSymbols.Count() > 5)
+
+            var before = _context.State.holdAndSpin;
+            _context.State.isReSpin = false;
+            //3 scatter wins a freespin
+            //here we calculate the ReSpin feature
+            if (_context.RequestItems.isFreeSpin)
             {
+                AmountOfFS++;
+                //first reel is 0'd
+                if (resultMatrix[1].All(x => x.Symbol == 0) && !resultMatrix[3].All(x => x.Symbol == 0))
+                {
+                    if (_context.State.holdAndSpin != HoldAndSpin.None)
+                    {
+                        AmountOfFirst++;
+                        if (AmountOfFirst == 16500)
+                        {
+
+                        }
+                        _context.State.holdAndSpin = HoldAndSpin.None;
+                    }
+                    else
+                    {
+                        _context.State.holdAndSpin = HoldAndSpin.First;
+                        _context.State.isReSpin = true;
+                    }
+                }
+                //second reel is 0'd
+                if (resultMatrix[3].All(x => x.Symbol == 0) && !resultMatrix[1].All(x => x.Symbol == 0))
+                {
+                    if (_context.State.holdAndSpin != HoldAndSpin.None)
+                    {
+                        AmountOfSecond++;
+                        _context.State.holdAndSpin = HoldAndSpin.None;
+                    }
+                    else
+                    {
+                        _context.State.holdAndSpin = HoldAndSpin.Second;
+                        _context.State.isReSpin = true;
+                    }
+                }
+                //both reel are 0'd
+                if (resultMatrix[1].All(x => x.Symbol == 0) && resultMatrix[3].All(x => x.Symbol == 0))
+                {
+                    /*
+                     * in this scenario,
+                     * 1 - if I had first,second,both before and now I have both, it becomes none
+                     * 2 - if I had none before and now I have both, it becomes both
+                     */
+                    //if (_context.State.holdAndSpin != HoldAndSpin.None)
+                    //{
+                    //    _context.State.holdAndSpin = HoldAndSpin.None;
+                    //}
+                    //else
+                    //{
+                    //    _context.State.isReSpin = true;
+                    //    _context.State.holdAndSpin = HoldAndSpin.Both;
+                    //}
+
+
+
+                    /*
+                     * in this scenario,
+                     * 1 - if I had first before and now I have both, it becomes second (cause the first finished already)
+                     * 2 - if I had second before and now I have both, it becomes first (cause the second finished already)
+                     * 3 - if I had both before and now I have both, it becomes none (cause I just finished the both)
+                     * 4 - if I had none before and now I have both, it becomes both
+                     */
+                    if (_context.State.holdAndSpin == HoldAndSpin.None)
+                    {
+                        AmountOfBothFromNone++;
+                        
+                        AmountOfBothTotal++;
+                        _context.State.holdAndSpin = HoldAndSpin.Both;
+                        _context.State.isReSpin = true;
+                    }
+                    else if (_context.State.holdAndSpin == HoldAndSpin.First)
+                    {
+                        AmountOfBothTotal++;
+                        _context.State.holdAndSpin = HoldAndSpin.Both;
+                        _context.State.isReSpin = true;
+                    }
+                    else if (_context.State.holdAndSpin == HoldAndSpin.Second)
+                    {
+                        AmountOfBothTotal++;
+                        _context.State.holdAndSpin = HoldAndSpin.Both;
+                        _context.State.isReSpin = true;
+                    }
+                    else
+                    {
+
+                        _context.State.holdAndSpin = HoldAndSpin.None;
+                    }
+                }
+
+                if (!resultMatrix[1].All(x => x.Symbol == 0) && !resultMatrix[3].All(x => x.Symbol == 0))
+                {
+                }
+            }
+            var after = _context.State.holdAndSpin;
+            if (_context.RequestItems.isFreeSpin && before != HoldAndSpin.None && after != HoldAndSpin.None)
+            {
+
+            }
+            //3 - if we have 5 diamonds in a row
+            if (resultMatrix[0].Any(x => IsWildOrMCSymbol(x.Symbol)) &&
+                resultMatrix[1].Any(x => IsWildOrMCSymbol(x.Symbol)) &&
+                resultMatrix[2].Any(x => new int[] { 10, 11, 12, 13 }.Contains(x.Symbol)) &&
+                resultMatrix[3].Any(x => IsWildOrMCSymbol(x.Symbol)) &&
+                resultMatrix[4].Any(x => IsWildOrMCSymbol(x.Symbol)))
+            {
+                var fiveOfAkindWays =
+                    resultMatrix[0].Count(x => IsWildOrMCSymbol(x.Symbol)) *
+                    resultMatrix[1].Count(x => IsWildOrMCSymbol(x.Symbol)) *
+                    1 *
+                    resultMatrix[3].Count(x => IsWildOrMCSymbol(x.Symbol)) *
+                    resultMatrix[4].Count(x => IsWildOrMCSymbol(x.Symbol));
                 var win = new Win()
                 {
-                    Ways = 0,
-                    WinningLines = new HashSet<ItemOnReel>(result.McSymbols),
-                    Symbol = 13,
-                    WinType = WinType.BonusGames
+                    Ways = fiveOfAkindWays,
+                    WinningLines = new HashSet<ItemOnReel>(resultMatrix.SelectMany(x => x).
+                        Where(x => new int[] { 9, 10, 11, 12, 13, 0 }.Contains(x.Symbol)).ToList()),
+                    Symbol = 9,
+                    WinType = WinType.FiveOfAKind
                 };
                 result.Wins.Add(win);
             }
-
-
-
-        }
-        private void MakeWholeReelWild()
-        {
-            //CHECKED - WORKS WELL
-            for (int i = 0; i < resultMatrix.Count; i++)
+            //3 - get powerextream of diamonds (25 for 3, 50 for 4)
+            else if (resultMatrix[0].Any(x => IsWildOrMCSymbol(x.Symbol)) &&
+                               resultMatrix[1].Any(x => IsWildOrMCSymbol(x.Symbol)) &&
+                               resultMatrix[2].Any(x => new int[] { 10, 11, 12, 13, 0 }.Contains(x.Symbol)))
             {
-                if (resultMatrix[i].Any(item => item.Symbol == 0))
+                var reelsOfWinAmount = 3;
+                var wayss = resultMatrix[0].Count(x => IsWildOrMCSymbol(x.Symbol)) * resultMatrix[1].Count(x => IsWildOrMCSymbol(x.Symbol)) * resultMatrix[2].Count(x => new int[] { 10, 11, 12, 13, 0 }.Contains(x.Symbol));
+                if (resultMatrix[3].Any(x => IsWildOrMCSymbol(x.Symbol)))
                 {
-                    resultMatrix[i].ForEach(x => x.Symbol = 0);
+                    if (_context.RequestItems.isFreeSpin)
+                    {
+                        amountOf4inFS++;
+                    }
+                    wayss *= resultMatrix[3].Count(x => IsWildOrMCSymbol(x.Symbol));
+                    reelsOfWinAmount = 4;
                 }
+                else
+                {
+                    if (_context.RequestItems.isFreeSpin)
+                    {
+                        amountOf3inFS++;
+                    }
+                }
+                var win = new Win()
+                {
+                    Ways = wayss,
+                    WinningLines = new HashSet<ItemOnReel>(resultMatrix.SelectMany(x => x).
+                        Where(x => new int[] { 9, 10, 11, 12, 13, 0 }.Contains(x.Symbol) && x.Reel < reelsOfWinAmount).ToList()),
+                    Symbol = 9,
+                    WinType = WinType.Regular
+                };
+                if (reelsOfWinAmount != win.LongestSequence)
+                {
+
+                }
+                result.Wins.Add(win);
             }
         }
+        public static long amountOf3inFS = 0;
+        public static long amountOf4inFS = 0;
+        public static long AmountOfBothTotal = 0;
+        public static long AmountOfBothFromNone = 0;
+        public static long AmountOfFirst= 0;
+        public static long AmountOfSecond = 0;
+        public static long AmountOfFS = 0;
     }
 }

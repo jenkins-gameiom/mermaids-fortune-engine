@@ -75,7 +75,7 @@
             // 
             this.Bet_DropBox.FormattingEnabled = true;
             this.Bet_DropBox.Items.AddRange(new object[] {
-                "88", "176", "264", "528", "880"});
+                "50","100", "150", "250", "500"});
             this.Bet_DropBox.Location = new System.Drawing.Point(244, 99);
             this.Bet_DropBox.Name = "Bet_DropBox";
             this.Bet_DropBox.Size = new System.Drawing.Size(121, 21);

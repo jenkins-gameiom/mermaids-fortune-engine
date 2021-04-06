@@ -44,7 +44,7 @@ namespace TestSlots
 
     public enum ResponseType
     {
-        Spin, Pick, FSpin, Jackpot
+        Spin, FSpin
     }
     public class SimulatorLogic
     {
@@ -56,14 +56,8 @@ namespace TestSlots
                 case ResponseType.Spin:
                     stats.Collector.TotalRegularSpinsMoneyWonAmount += totalWinAmount;
                     break;
-                case ResponseType.Pick:
-                    stats.Collector.TotalBonusMoneyWonAmount += totalWinAmount;
-                    break;
                 case ResponseType.FSpin:
                     stats.Collector.TotalFreeSpinsMoneyWonAmount += totalWinAmount;
-                    break;
-                case ResponseType.Jackpot:
-                    stats.Collector.TotalJackpotMoneyWonAmount += totalWinAmount;
                     break;
                 default:
                     break;
