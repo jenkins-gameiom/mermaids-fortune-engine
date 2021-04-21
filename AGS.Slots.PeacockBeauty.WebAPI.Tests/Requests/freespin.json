@@ -4,7 +4,7 @@
     "gameId": 31
   },
   "privateState": {
-    "TreasureChestTurnOver": 176,
+    "TreasureChestTurnOver": 50,
     "completed": true,
     "freeSpinsLeft": 8,
     "totalFreeSpins": 8,
@@ -14,7 +14,7 @@
     "mode": "",
     "lastState": {
       "action": "spin",
-      "betAmount": 176,
+      "betAmount": 50,
       "denom": 1,
       "spin": {
         "reels": [
@@ -62,9 +62,9 @@
   },
   "config": {
     "stakes": [ 50,100, 150, 250, 500 ],
-    "defaultStake": 176,
+    "defaultStake": 50,
     "denominations": [ 1, 5, 10, 20 ],
     "defaultDenomination": 1,
-    "rtp": 96
+    "rtp": 95.76
   }
 }

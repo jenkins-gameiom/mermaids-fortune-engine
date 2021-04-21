@@ -47,6 +47,8 @@ namespace AGS.Slots.MermaidsFortune.Platform.Tests
             _contextInstance.Setup(a => a.GetDenom()).Returns(1);
         }
 
+
+
         [Fact]
         public void Spin_Basic_TransactionsValid()
         {
@@ -75,8 +77,8 @@ namespace AGS.Slots.MermaidsFortune.Platform.Tests
                 new RandomNumber() {Min=0,Max=104,Quantity=1,Values=new List<int>(new int[]{12 })} })); ;
             var result  = _spinsInstance.Spin(dynamicRequest);
 
-            Assert.Equal(result.transactions.credits[0].Value, 28);
-            Assert.Equal(result.transactions.debits[0].Value, 88);
+            Assert.Equal(result.transactions.credits[0].Value, 20);
+            Assert.Equal(result.transactions.debits[0].Value, 50);
         }
 
         [Fact]
@@ -104,8 +106,7 @@ namespace AGS.Slots.MermaidsFortune.Platform.Tests
                 }));
             var result = _spinsInstance.Spin(dynamicRequest);
 
-            Assert.NotEqual(result.transactions.credits[0].Value, 48);
-            Assert.Equal(result.transactions.debits[0].Value, 88);
+            Assert.NotEqual(result.transactions.credits[0].Value, 40);
         }
         [Fact]
         public void Spin_Basic_TransactionsDebitsInvalid()
@@ -132,8 +133,8 @@ namespace AGS.Slots.MermaidsFortune.Platform.Tests
                 }));
             var result = _spinsInstance.Spin(dynamicRequest);
 
-            Assert.Equal(result.transactions.credits[0].Value, 28);
-            Assert.NotEqual(result.transactions.debits[0].Value, 176);
+            Assert.NotEqual(result.transactions.debits[0].Value, 60);
+            Assert.NotEqual(result.transactions.debits[0].Value, 100);
         }
         [Fact]
         public void Spin_Basic_BetAmountInvalid()

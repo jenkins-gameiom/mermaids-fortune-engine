@@ -26,118 +26,93 @@ namespace AGS.Slots.MermaidsFortune.WebAPI.Tests
             _logger = new Logger<RequestManager>(new LoggerFactory());
         }
 
+        [Theory]
+        [InlineData("freespins")]
+        public async Task Test_Force_bn(string forceName)
+        {
+            // Arrange
+            var client = _factory.CreateClient();
+
+            // Act
+            var response = await PostRequest(client, forceName, false);
+            var res = response.ToString();
+            PlatformResponse resultObject = JsonConvert.DeserializeObject<PlatformResponse>(res);
+            Assert.True(resultObject.PublicState.spin.wins.Any(x => x.featureType == "freeSpinWin"));
+        }
 
         [Theory]
-        [InlineData("3bnandnowin")]
-        [InlineData("4bnandnowin")]
-        [InlineData("5bnandnowin")]
-        public async Task Test_Force_bn_regular(string forceName)
+        [InlineData("freespins")]
+        public async Task Test_Force_retrigger(string forceName)
         {
             // Arrange
             var client = _factory.CreateClient();
 
             // Act
-            try
-            {
-                var response = await PostRequest(client, forceName);
-                var res = response.ToString();
-                PlatformResponse resultObject = JsonConvert.DeserializeObject<PlatformResponse>(res);
-                var zz = resultObject.PublicState.spin.reels.SelectMany(x => x).ToList().Count(x => x == 12);
-                if (zz.ToString() == forceName[0].ToString())
-                {
-
-                }
-                //if (resultObject.PublicState.spin.reels.ToList())
-            }
-            catch (Exception e)
-            {
-                Assert.False(true);
-            }
-            // Assert
+            var response = await PostRequest(client, forceName, true);
+            var res = response.ToString();
+            PlatformResponse resultObject = JsonConvert.DeserializeObject<PlatformResponse>(res);
+            Assert.True(resultObject.PrivateState.freeSpinsLeft == 15);
         }
-
-        [Fact]
-        public async Task Test_Force_3bnandwin()
-        {
-            // Arrange
-            var client = _factory.CreateClient();
-
-            // Act
-            try
-            {
-                var response = await PostRequest(client, "3bnandwin");
-                var res = response.ToString();
-                PlatformResponse resultObject = JsonConvert.DeserializeObject<PlatformResponse>(res);
-                var zz = resultObject.PublicState.spin.reels.SelectMany(x => x).ToList().Count(x => x == 12);
-
-            }
-            catch (Exception e)
-            {
-                Assert.False(true);
-            }
-            // Assert
-        }
-
 
         [Theory]
-        [InlineData("3bnretrigger")]
-        [InlineData("4bnretrigger")]
-        [InlineData("5bnretrigger")]
-        public async Task Test_Force_bn_retrigger(string forceName)
+        [InlineData("bigwin")]
+        public async Task RequestManager_RtpValid(string force)
         {
-            // Arrange
             var client = _factory.CreateClient();
+            var response = await PostRequest(client, force, false);
+            Assert.True(true);
+        }
 
-            // Act
+        [Theory]
+        [InlineData("bigwin")]
+        public async Task RequestManager_RtpInvalid(string force)
+        {
             try
             {
-                var response = await PostRequest(client, forceName, true);
-                var res = response.ToString();
-                PlatformResponse resultObject = JsonConvert.DeserializeObject<PlatformResponse>(res);
-                var zz = resultObject.PublicState.spin.childFeature.First().reels.ToList().SelectMany(x => x).ToList().Count(x => x == 12);
-                Assert.True(zz.ToString() == forceName[0].ToString() && resultObject.PublicState.action == "freespin");
-
+                var client = _factory.CreateClient();
+                var response = await PostRequest(client, force, false, "spininvalidrtp");
             }
             catch (Exception e)
             {
-                Assert.False(true);
+                Assert.True(e.ToString().Contains("is not valid"));
             }
-            // Assert
         }
 
-        [Fact]
-        public async Task Test_Force_holdandwininbase6symbols()
+        [Theory]
+        [InlineData("bigwin")]
+        public async Task RequestManager_RtpEmpty(string force)
         {
-            // Arrange
-            var client = _factory.CreateClient();
-
-            // Act
             try
             {
-                var response = await PostRequest(client, "holdandwininbase6symbols", false);
-                var res = response.ToString();
-                PlatformResponse resultObject = JsonConvert.DeserializeObject<PlatformResponse>(res);
-                Assert.True(resultObject.PublicState.spin.MCSymbols.Count == 6);
+                var client = _factory.CreateClient();
+                var response = await PostRequest(client, force, false, "spinemptyrtp");
             }
             catch (Exception e)
             {
-                Assert.False(true);
+                Assert.True(e.ToString().Contains("empty"));
             }
-            // Assert
         }
 
-        private async Task<dynamic> PostRequest(HttpClient client, [CallerMemberName] string callerMethodName = null, bool isFreeSpin = false)
+        private async Task<dynamic> PostRequest(HttpClient client, [CallerMemberName] string callerMethodName = null, bool isFreeSpin = false, string fileName = null)
         {
             //var json = await File.ReadAllTextAsync(System.IO.Directory.GetCurrentDirectory() + "\\Engine\\MermaidsFortune\\Forces\\" + callerMethodName + ".json");
             string json = null;
-            if (isFreeSpin)
+            if (fileName == null)
             {
-                json = await File.ReadAllTextAsync($"Requests/freespin.json");
+                if (isFreeSpin)
+                {
+                    json = await File.ReadAllTextAsync($"Requests/freespin.json");
+                }
+                else
+                {
+                    json = await File.ReadAllTextAsync($"Requests/spin.json");
+                }
             }
             else
             {
-                json = await File.ReadAllTextAsync($"Requests/spin.json");
+                json = await File.ReadAllTextAsync($"Requests/" + fileName + ".json");
             }
+
 
             var resultObject = JsonConvert.DeserializeObject<PlatformRequest>(json);
             resultObject.PublicState.force = callerMethodName;

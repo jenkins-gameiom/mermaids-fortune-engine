@@ -120,43 +120,9 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
             fg_reelset_weights = config.fg_reelset_weights.ToObject<int[]>();
             AggregateArray(base_reelset_weights);
             AggregateArray(fg_reelset_weights);
-
-
-            //From here its old
-
-            //lookup_table_symbols = config.lookup_table_symbols.ToObject<List<List<int>>>();
-            //prize_reel_strip = config.prize_reel_strip.ToObject<List<List<int>>>();
-            //special_reel_strip = config.special_reel_strip.ToObject<List<List<int>>>();
-            //base_prize = config.base_prize.ToObject<List<ReelItemJackpot>>();
-            //foreach (var reelItems in base_prize)
-            //{
-            //    AggregateArray(reelItems.weights);
-            //}
-            //prize_spin_prize = config.prize_spin_prize.ToObject<List<ReelItemJackpot>>();
-            //foreach (var reelItems in prize_spin_prize)
-            //{
-            //    AggregateArray(reelItems.weights);
-            //}
             progressive_information = config.progressive_information.ToObject<List<List<int>>>();
-            //base_jackpot_bonus_trigger = config.base_jackpot_bonus_trigger.ToObject<List<int[]>>();
-            //foreach (var reelItems in base_jackpot_bonus_trigger)
-            //{
-            //    AggregateArray(reelItems);
-            //}
-            //jackpot_bonus_outcome = config.jackpot_bonus_outcome.ToObject<List<ReelItemJackpotString>>();
-            //foreach (var reelItems in jackpot_bonus_outcome)
-            //{
-            //    AggregateArray(reelItems.weights);
-            //}
-            //jackpot_bonus_reveal = config.jackpot_bonus_reveal.ToObject<List<Dictionary<string, List<string>>>>();
-            //fg_jackpot_bonus_trigger = config.fg_jackpot_bonus_trigger.ToObject<List<int[]>>();
-            //foreach (var reelItems in fg_jackpot_bonus_trigger)
-            //{
-            //    AggregateArray(reelItems);
-            //}
             betsteps = config.betsteps.ToObject<List<int>>();
             denoms = config.denoms.ToObject<List<int>>();
-            //long_term_persistence = config.long_term_persistence.ToObject<List<int>>();
 
         }
         private static void AggregateArray(int[] arr)

@@ -57,48 +57,56 @@ namespace AGS.Slots.MermaidsFortune.Logic.Tests
                 stakes = new List<int> { 50, 100, 150, 250, 500 },
                 denominations = new List<int> { 1 }
             });
+            _contextInstance.Setup(x => x.GetBetAmount()).Returns(50);
+            _contextInstance.Setup(x => x.GetDenom()).Returns(1);
             _contextInstance.Setup(x => x.MathFile).Returns(new Config("Math96"));
             _configsInstance = new Configs() { IsTest = true };
             _resolver = new MermaidsFortuneResolver(_contextInstance.Object, _configsInstance, _random.Object);
 
         }
 
-        [Fact]
-        public void EvaluateResult_Regular()
+        [Theory]
+        [InlineData(1, 50)]
+        [InlineData(2, 10)]
+        public void EvaluateResult_Regular(int symbol, int winAmount)
         {
             Result res = new Result();
             res.Wins = new List<Win>();
             var xx = new ItemOnReel
             {
-                Symbol = 1,
-                Reel = 0
+                Symbol = symbol,
+                Reel = 0,
+                Index = 1
             };
             var yy = new ItemOnReel
             {
-                Symbol = 1,
-                Reel = 1
+                Symbol = symbol,
+                Reel = 1,
+                Index = 2
             };
             var zz = new ItemOnReel
             {
-                Symbol = 1,
-                Reel = 2
+                Symbol = 4,
+                Reel = 2,
+                Index = 3
             };
             res.Wins.Add(new Win
             {
                 WinType = WinType.Regular,
-                Symbol = 1,
+                Symbol = symbol,
                 Ways = 1,
-                WinningLines = new HashSet<ItemOnReel>()
+                WinningLines = new HashSet<ItemOnReel>( new List<ItemOnReel>{xx, yy, zz})
             });
-            res.Wins.First().WinningLines.Add(xx);
-            res.Wins.First().WinningLines.Add(yy);
-            res.Wins.First().WinningLines.Add(zz);
+            var x = new HashSet<int>(new List<int> {1, 2, 3});
             _resolver.EvaluateResult(res);
-            Assert.Equal(50000, res.WonAmount);
+            Assert.Equal(winAmount, res.WonAmount);
         }
 
-        [Fact]
-        public void EvaluateResult_FiveOfAKind()
+        [Theory]
+        [InlineData(10, 50000)]
+        [InlineData(11, 10000)]
+        [InlineData(13, 300000)]
+        public void EvaluateResult_FiveOfAKind(int symbol, int winAmount)
         {
             Result res = new Result();
             res.Wins = new List<Win>();
@@ -110,10 +118,28 @@ namespace AGS.Slots.MermaidsFortune.Logic.Tests
             });
             res.McSymbols.Add(new ItemOnReel
             {
-                Symbol = 10
+                Symbol = symbol
             });
             _resolver.EvaluateResult(res);
-            Assert.Equal(50000, res.WonAmount);
+            Assert.Equal(winAmount, res.WonAmount);
+        }
+
+        [Fact]
+        public void EvaluateResult_FreeSpin()
+        {
+            Result res = new Result();
+            res.Wins = new List<Win>();
+            res.Wins.Add(new Win
+            {
+                WinType = WinType.FreeSpin,
+                Symbol = MermaidsFortuneResolver.SCATTER,
+                Ways = 1
+            });
+            res.Scatter.Add(new ItemOnReel());
+            res.Scatter.Add(new ItemOnReel());
+            res.Scatter.Add(new ItemOnReel());
+            _resolver.EvaluateResult(res);
+            Assert.Equal(_contextInstance.Object.State.freeSpinsLeft, 8);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using AGS.Slots.MermaidsFortune.Common.Entities;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -23,46 +24,78 @@ namespace AGS.Slots.MermaidsFortune.WebAPI.Tests
             _logger = new Logger<RequestManager>(new LoggerFactory());
         }
 
-
-        [Fact(DisplayName = "Deal -> Object reference not set to an instance of an object")]
-        public async Task InitOk()
+        [Fact]
+        public async Task RequestManager_Valid()
         {
-            // Arrange
             var client = _factory.CreateClient();
+            var response = await PostRequest(client, "initok");
+            Assert.True(true);
+        }
 
-            // Act
+        [Fact]
+        public async Task RequestManager_RtpInvalid()
+        {
             try
             {
-                var response = await PostRequest(client);
-
+                var client = _factory.CreateClient();
+                var response = await PostRequest(client, "initinvalidrtp");
             }
             catch (Exception e)
             {
-                Assert.True(e.Message.Contains("Rtp shouldn't be empty"));
+                Assert.True(e.ToString().Contains("is not valid"));
             }
-            // Assert
         }
 
-        [Fact(DisplayName = "Deal -> Object reference not set to an instance of an object")]
-        public async Task Problem()
+        [Fact]
+        public async Task RequestManager_RtpEmpty()
         {
-            // Arrange
-            var client = _factory.CreateClient();
-
-            // Act
             try
             {
-                var response = await PostRequest(client);
-
+                var client = _factory.CreateClient();
+                var response = await PostRequest(client, "initemptyrtp");
             }
             catch (Exception e)
             {
-                Assert.True(e.Message.Contains("Rtp shouldn't be empty"));
+                Assert.True(e.ToString().Contains("empty"));
             }
-            // Assert
         }
 
+        private async Task<dynamic> PostRequest(HttpClient client, [CallerMemberName] string callerMethodName = null, bool isFreeSpin = false, string fileName = null)
+        {
+            //var json = await File.ReadAllTextAsync(System.IO.Directory.GetCurrentDirectory() + "\\Engine\\MermaidsFortune\\Forces\\" + callerMethodName + ".json");
+            string json = null;
+            if (fileName == null)
+            {
+                if (isFreeSpin)
+                {
+                    json = await File.ReadAllTextAsync($"Requests/freespin.json");
+                }
+                else
+                {
+                    json = await File.ReadAllTextAsync($"Requests/spin.json");
+                }
+            }
+            else
+            {
+                json = await File.ReadAllTextAsync($"Requests/" + fileName + ".json");
+            }
 
+
+            var resultObject = JsonConvert.DeserializeObject<PlatformRequest>(json);
+            resultObject.PublicState.force = callerMethodName;
+            json = JsonConvert.SerializeObject(resultObject);
+            var request = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("/request", request);
+            var responseJson = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<dynamic>(responseJson);
+
+            if (result.error != null)
+            {
+                throw new Exception("Error received: " + result.error.message.Value);
+            }
+
+            return result;
+        }
 
 
         private async Task<dynamic> PostRequest(HttpClient client, [CallerMemberName] string callerMethodName = null)

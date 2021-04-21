@@ -133,7 +133,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                     _context.State.freeSpinsLeft += win.GrantedFreeSpins;
                     _context.State.totalFreeSpins += win.GrantedFreeSpins;
                     var multiPlier = mutliPliers[win.Symbol];
-                    var currentLineWinAmount = (long)multiPlier[result.Scatter.Count() - 3] * _context.GetBetAmount() * _context.GetDenom() / betSteps[0];
+                    var currentLineWinAmount = (long)multiPlier[result.Scatter.Count() - 3] * _context.GetBetAmount() * _context.GetDenom() / _context.MathFile.BetStepsDevider;
                     win.WinAmount = currentLineWinAmount;
                     result.WonAmount += currentLineWinAmount;
                     if (!parts.ContainsKey(stringToChoose +"bn"))
@@ -159,8 +159,16 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                             {
 
                             }
-                            mcSymbolToAdd.winAmount = _context.MathFile.GetProgressiveInformation()[1] * win.Ways; ;
+                            mcSymbolToAdd.winAmount = _context.MathFile.GetProgressiveInformation()[1] * win.Ways * _context.GetDenom();
                             mcSymbolToAdd.JPSymbolIfString = "major";
+                            if (!JackpotDistributionDictionary5oak.ContainsKey("major"))
+                            {
+                                JackpotDistributionDictionary5oak.Add("major", mcSymbolToAdd.winAmount);
+                            }
+                            else
+                            {
+                                JackpotDistributionDictionary5oak["major"]+= mcSymbolToAdd.winAmount;
+                            }
                         }
                         if (mcSymbol.Symbol == 11)//JP2 Minor
                         {
@@ -168,8 +176,16 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                             {
 
                             }
-                            mcSymbolToAdd.winAmount = _context.MathFile.GetProgressiveInformation()[0] * win.Ways; ;
+                            mcSymbolToAdd.winAmount = _context.MathFile.GetProgressiveInformation()[0] * win.Ways * _context.GetDenom();
                             mcSymbolToAdd.JPSymbolIfString = "minor";
+                            if (!JackpotDistributionDictionary5oak.ContainsKey("minor"))
+                            {
+                                JackpotDistributionDictionary5oak.Add("minor", mcSymbolToAdd.winAmount);
+                            }
+                            else
+                            {
+                                JackpotDistributionDictionary5oak["minor"] += mcSymbolToAdd.winAmount;
+                            }
                         }
                         if (mcSymbol.Symbol == 13)//JP4 Grand
                         {
@@ -177,21 +193,34 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                             {
 
                             }
-                            mcSymbolToAdd.winAmount = _context.MathFile.GetProgressiveInformation()[2] * win.Ways; ;
+                            mcSymbolToAdd.winAmount = _context.MathFile.GetProgressiveInformation()[2] * win.Ways * _context.GetDenom();
                             mcSymbolToAdd.JPSymbolIfString = "grand";
+                            if (!JackpotDistributionDictionary5oak.ContainsKey("grand"))
+                            {
+                                JackpotDistributionDictionary5oak.Add("grand", mcSymbolToAdd.winAmount);
+                            }
+                            else
+                            {
+                                JackpotDistributionDictionary5oak["grand"]+= mcSymbolToAdd.winAmount;
+                                if (JackpotDistributionDictionary5oak["grand"] == 3000000)
+                                {
+
+                                }
+                            }
+
                         }
                         if (mcSymbol.Symbol == 12)//JP3 Number
                         {
-                            if (_context.RequestItems.isFreeSpin)
-                            {
-
-                            }
-                            if (win.Ways > 3 && int.Parse(mcSymbol.MCSymbol) > 49000 && result.McSymbols.Count(x => x.Symbol == 12) == 4)
-                            {
-
-                            }
-                            mcSymbolToAdd.winAmount = int.Parse(mcSymbol.MCSymbol) * win.Ways;
+                            mcSymbolToAdd.winAmount = int.Parse(mcSymbol.MCSymbol) * win.Ways * _context.GetDenom();
                             mcSymbolToAdd.JPSymbolIfString = mcSymbol.MCSymbol;
+                            if (!JackpotDistributionDictionary5oak.ContainsKey("money"))
+                            {
+                                JackpotDistributionDictionary5oak.Add("money", mcSymbolToAdd.winAmount);
+                            }
+                            else
+                            {
+                                JackpotDistributionDictionary5oak["money"]+= mcSymbolToAdd.winAmount;
+                            }
                         }
                         
                         mcSymbolToAdd.coordinate = mcSymbol.Coordinate;
@@ -216,13 +245,24 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                     //Regular win
 
                     var multiPlier = mutliPliers[win.Symbol];
-                    var currentLineWinAmount = (long)multiPlier[win.LongestSequence - 3] * win.Ways * _context.GetBetAmount() * _context.GetDenom() / betSteps[0];
+                    var currentLineWinAmount = (long)multiPlier[win.LongestSequence - 3] * win.Ways * _context.GetBetAmount() * _context.GetDenom() / _context.MathFile.BetStepsDevider;
                     win.WinAmount += currentLineWinAmount;
                     result.WonAmount += currentLineWinAmount;
-                    if (win.Symbol == 8 && win.Ways == 2 && win.LongestSequence == 3)
+                    if (win.LongestSequence == 3)
                     {
+                        if (!win.WinningLines.All(y => y.Reel == 0 || y.Reel == 2 || y.Reel == 1))
+                        {
 
+                        }
                     }
+                    if (win.LongestSequence == 4)
+                    {
+                        if (!win.WinningLines.All(y => y.Reel == 3 || y.Reel == 0 || y.Reel == 2 || y.Reel == 1))
+                        {
+
+                        }
+                    }
+
                     if (win.Symbol == 9)
                     {
                         if (win.LongestSequence == 3)
@@ -246,6 +286,10 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                         }
                         else if (win.LongestSequence == 4)
                         {
+                            if (!win.WinningLines.All(z => z.Reel == 0 || z.Reel == 3 || z.Reel == 2 || z.Reel == 1))
+                            {
+
+                            }
                             if (_context.RequestItems.isFreeSpin)
                             {
                                 TimesInFourFS++;
@@ -288,7 +332,10 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
 
                     foreach (var k in parts.Keys)
                     {
-                        partsPercentage[k] = (parts[k] / parts.Values.Sum()) * 100;
+                        if (parts.Values.Sum() > 0)
+                        {
+                            partsPercentage[k] = (parts[k] / parts.Values.Sum()) * 100;
+                        }
                     }
 
                     var x = partsPercentage.Values.Sum();
@@ -314,7 +361,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                     RTPFromBase += win.WinAmount;
                 }
             }
-            _context.State.completed = _context.State.freeSpinsLeft <= 0 && _context.State.BonusGame == null && result.Wins.All(x => x.GrantedFreeSpins == 0);
+            _context.State.completed = _context.State.freeSpinsLeft <= 0  && result.Wins.All(x => x.GrantedFreeSpins == 0);
         }
 
         public static long RTPFromBase;
@@ -324,11 +371,15 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
         public static long TimesInThreeBase;
         public static long TimesInFourBase;
         public static Dictionary<string, double> reelSetDictionary = null;
-        public static Dictionary<string, double> prizesDictionary = new Dictionary<string, double>();
+        public static Dictionary<int, Dictionary<int, double>> prizesDictionary = new Dictionary<int, Dictionary<int, double>>();
+        public static Dictionary<int, Dictionary<int, double>> prizesDictionaryFS = new Dictionary<int, Dictionary<int, double>>();
         public static Dictionary<string, long> parts = new Dictionary<string, long>();
         public static Dictionary<string, double> partsPercentage = new Dictionary<string, double>();
         public static Dictionary<string, double> myDictionaryTotalSpinsPerSet = new Dictionary<string, double>();
+        public static Dictionary<string, double> JackpotDistributionDictionary5oak = new Dictionary<string, double>();
+        public static Dictionary<string, double> JackpotDistributionDictionary = new Dictionary<string, double>();
         public static Dictionary<string, double> myDictionaryTotalSpinsResultedInFG = new Dictionary<string, double>();
+        
 
         //this method assign value (500, "MINI" etc) to all the mcsymbols (items with value 13)
         private void AssignMCSymbolsToExisting(Result result)
@@ -338,52 +389,212 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                 if (item.Symbol == 10)//MAJOR JP1
                 {
                     item.MCSymbol = "major";
+                    if (!JackpotDistributionDictionary.ContainsKey("major"))
+                    {
+                        JackpotDistributionDictionary.Add("major", 1);
+                    }
+                    else
+                    {
+                        JackpotDistributionDictionary["major"]++;
+                    }
+
                 }
                 if (item.Symbol == 11)//MINOR JP2
                 {
                     item.MCSymbol = "minor";
+                    if (!JackpotDistributionDictionary.ContainsKey("minor"))
+                    {
+                        JackpotDistributionDictionary.Add("minor", 1);
+                    }
+                    else
+                    {
+                        JackpotDistributionDictionary["minor"]++;
+                    }
+
                 }
                 if (item.Symbol == 12)//NUMBER JP3
                 {
-                    item.MCSymbol = (_context.MathFile.MoneyChargeSymbol(_context.RequestItems.isFreeSpin, _context.State.reelSet, _random) * _context.GetBetAmount() * _context.GetDenom() / 50).ToString();// * _context.GetBetAmount()).ToString();
-                    if (!_context.RequestItems.isFreeSpin && _context.State.reelSet == 0)
-                    {
-                        if (!prizesDictionary.ContainsKey(item.MCSymbol))
-                        {
-                            prizesDictionary.Add(item.MCSymbol, 1);
-                        }
-                        else
-                        {
-                            prizesDictionary[item.MCSymbol]++;
-                        }
+                    
+                    item.MCSymbol = (_context.MathFile.MoneyChargeSymbol(_context.RequestItems.isFreeSpin, _context.State.reelSet, _random) * _context.GetBetAmount()  / _context.MathFile.BetStepsDevider).ToString();// * _context.GetBetAmount()).ToString();
+                    SetPrizeStatisticsByBet(_context, item);
 
-                        if (prizesDictionary.ContainsKey("100") && prizesDictionary["100"] == 17310)
-                        {
-                            var x = prizesDictionary.OrderByDescending(x => x.Value)
-                                .ToDictionary(x => x.Key, x => x.Value);
-                        }
-                    }
-                    if (_context.RequestItems.isFreeSpin && _context.State.reelSet == 0)
-                    {
-                        if (!prizesDictionary.ContainsKey(item.MCSymbol))
-                        {
-                            prizesDictionary.Add(item.MCSymbol, 1);
-                        }
-                        else
-                        {
-                            prizesDictionary[item.MCSymbol]++;
-                        }
+                    
 
-                        if (prizesDictionary.ContainsKey("100") && prizesDictionary["100"] == 17310)
-                        {
-                            var x = prizesDictionary.OrderByDescending(x => x.Value)
-                                .ToDictionary(x => x.Key, x => x.Value);
-                        }
-                    }
                 }
                 if (item.Symbol == 13)//GRAND JP4
                 {
                     item.MCSymbol = "grand";
+                    if (!JackpotDistributionDictionary.ContainsKey("grand"))
+                    {
+                        JackpotDistributionDictionary.Add("grand", 1);
+                    }
+                    else
+                    {
+                        JackpotDistributionDictionary["grand"]++;
+                        if (JackpotDistributionDictionary["grand"] == 30)
+                        {
+
+                        }
+                    }
+
+                }
+            }
+        }
+
+        private void SetPrizeStatisticsByBet(IRequestContext context, ItemOnReel item)
+        {
+            var reelSet = _context.State.reelSet;
+            var mcSymbolInt = int.Parse(item.MCSymbol);
+            if (!_context.RequestItems.isFreeSpin)
+            {
+                if (!prizesDictionary.ContainsKey(reelSet))
+                {
+                    prizesDictionary.Add(reelSet, new Dictionary<int, double>());
+                }
+                if (!prizesDictionary[reelSet].ContainsKey(mcSymbolInt))
+                {
+                    prizesDictionary[reelSet].Add(mcSymbolInt, 1);
+                }
+                else
+                {
+                    prizesDictionary[reelSet][mcSymbolInt]++;
+                }
+
+                if (reelSet == 0 && item.MCSymbol == "100" && prizesDictionary[reelSet][mcSymbolInt] == 173100)
+                {
+                    //foreach (var keyValuePair in prizesDictionary)
+                    //{
+                    //    prizesDictionary[keyValuePair.Key] =  keyValuePair.Value.OrderBy(x => x.Key)
+                    //        .ToDictionary(x => x.Key, x => x.Value);
+                    //}
+
+                    prizesDictionary = prizesDictionary.OrderBy(x => x.Key)
+                        .ToDictionary(x => x.Key, x => x.Value);
+
+                }
+                if (reelSet == 1 && item.MCSymbol == "100" && prizesDictionary[reelSet][mcSymbolInt] == 120000)
+                {
+                    //foreach (var keyValuePair in prizesDictionary)
+                    //{
+                    //    keyValuePair.Value.OrderBy(x => x.Key)
+                    //        .ToDictionary(x => x.Key, x => x.Value);
+                    //}
+
+                    prizesDictionary = prizesDictionary.OrderBy(x => x.Key)
+                        .ToDictionary(x => x.Key, x => x.Value);
+
+                }
+                if (reelSet == 2 && item.MCSymbol == "100" && prizesDictionary[reelSet][mcSymbolInt] == 20000)
+                {
+                    //foreach (var keyValuePair in prizesDictionary)
+                    //{
+                    //    keyValuePair.Value.OrderBy(x => x.Key)
+                    //        .ToDictionary(x => x.Key, x => x.Value);
+                    //}
+
+                    prizesDictionary = prizesDictionary.OrderBy(x => x.Key)
+                        .ToDictionary(x => x.Key, x => x.Value);
+
+                }
+                if (reelSet == 3 && item.MCSymbol == "100" && prizesDictionary[reelSet][mcSymbolInt] == 30000)
+                {
+                    //foreach (var keyValuePair in prizesDictionary)
+                    //{
+                    //    keyValuePair.Value.OrderBy(x => x.Key)
+                    //        .ToDictionary(x => x.Key, x => x.Value);
+                    //}
+
+                    prizesDictionary = prizesDictionary.OrderBy(x => x.Key)
+                        .ToDictionary(x => x.Key, x => x.Value);
+
+                }
+                if (reelSet == 4 && item.MCSymbol == "100" && prizesDictionary[reelSet][mcSymbolInt] == 34500)
+                {
+                    //foreach (var keyValuePair in prizesDictionary)
+                    //{
+                    //    keyValuePair.Value.OrderBy(x => x.Key)
+                    //        .ToDictionary(x => x.Key, x => x.Value);
+                    //}
+
+                    prizesDictionary = prizesDictionary.OrderBy(x => x.Key)
+                        .ToDictionary(x => x.Key, x => x.Value);
+
+                }
+            }
+            if (_context.RequestItems.isFreeSpin)
+            {
+                if (!prizesDictionaryFS.ContainsKey(reelSet))
+                {
+                    prizesDictionaryFS.Add(reelSet, new Dictionary<int, double>());
+                }
+                if (!prizesDictionaryFS[reelSet].ContainsKey(mcSymbolInt))
+                {
+                    prizesDictionaryFS[reelSet].Add(mcSymbolInt, 1);
+                }
+                else
+                {
+                    prizesDictionaryFS[reelSet][mcSymbolInt]++;
+                }
+
+                if (reelSet == 0 && item.MCSymbol == "100" && prizesDictionaryFS[reelSet][mcSymbolInt] == 173100)
+                {
+                    //foreach (var keyValuePair in prizesDictionaryFS)
+                    //{
+                    //    keyValuePair.Value.OrderBy(x => x.Key)
+                    //        .ToDictionary(x => x.Key, x => x.Value);
+                    //}
+
+                    prizesDictionaryFS = prizesDictionaryFS.OrderBy(x => x.Key)
+                        .ToDictionary(x => x.Key, x => x.Value);
+
+                }
+                if (reelSet == 1 && item.MCSymbol == "100" && prizesDictionaryFS[reelSet][mcSymbolInt] == 120000)
+                {
+                    //foreach (var keyValuePair in prizesDictionaryFS)
+                    //{
+                    //    keyValuePair.Value.OrderBy(x => x.Key)
+                    //        .ToDictionary(x => x.Key, x => x.Value);
+                    //}
+
+                    prizesDictionaryFS = prizesDictionaryFS.OrderBy(x => x.Key)
+                        .ToDictionary(x => x.Key, x => x.Value);
+
+                }
+                if (reelSet == 2 && item.MCSymbol == "100" && prizesDictionaryFS[reelSet][mcSymbolInt] == 20000)
+                {
+                    //foreach (var keyValuePair in prizesDictionaryFS)
+                    //{
+                    //    keyValuePair.Value.OrderBy(x => x.Key)
+                    //        .ToDictionary(x => x.Key, x => x.Value);
+                    //}
+
+                    prizesDictionaryFS = prizesDictionaryFS.OrderBy(x => x.Key)
+                        .ToDictionary(x => x.Key, x => x.Value);
+
+                }
+                if (reelSet == 3 && item.MCSymbol == "100" && prizesDictionaryFS[reelSet][mcSymbolInt] == 30000)
+                {
+                    //foreach (var keyValuePair in prizesDictionaryFS)
+                    //{
+                    //    keyValuePair.Value.OrderBy(x => x.Key)
+                    //        .ToDictionary(x => x.Key, x => x.Value);
+                    //}
+
+                    prizesDictionaryFS = prizesDictionaryFS.OrderBy(x => x.Key)
+                        .ToDictionary(x => x.Key, x => x.Value);
+
+                }
+                if (reelSet == 4 && item.MCSymbol == "100" && prizesDictionaryFS[reelSet][mcSymbolInt] == 34500)
+                {
+                    //foreach (var keyValuePair in prizesDictionaryFS)
+                    //{
+                    //    keyValuePair.Value.OrderBy(x => x.Key)
+                    //        .ToDictionary(x => x.Key, x => x.Value);
+                    //}
+
+                    prizesDictionaryFS = prizesDictionaryFS.OrderBy(x => x.Key)
+                        .ToDictionary(x => x.Key, x => x.Value);
+
                 }
             }
         }

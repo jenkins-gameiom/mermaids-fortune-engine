@@ -26,7 +26,6 @@
     "defaultStake": 176,
     "denominations": [ 1, 5, 10, 20 ],
     "defaultDenomination": 1,
-    "rtp": 95.76
+    "rtp": 95.44
   }
 }
-

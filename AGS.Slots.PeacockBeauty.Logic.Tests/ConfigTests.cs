@@ -38,11 +38,6 @@ namespace AGS.Slots.MermaidsFortune.Logic.Tests
 
         }
 
-        [Fact]
-        public void TestTest()
-        {
-            var sdss = _config.GetReels(_contextInstance.Object, _random.Object);
-        }
 
 
     }

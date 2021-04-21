@@ -12,34 +12,58 @@
 
   <ItemGroup>
     <None Remove="Inits\init.json" />
+    <None Remove="Math94.json" />
+    <None Remove="Math96.json" />
     <None Remove="Requests\freespin.json" />
-    <None Remove="Requests\init1.json" />
+    <None Remove="Requests\init.json" />
+    <None Remove="Requests\initemptyrtp.json" />
+    <None Remove="Requests\initinvalidrtp.json" />
     <None Remove="Requests\InitOk.json" />
-    <None Remove="Requests\InitRtpValidation.json" />
     <None Remove="Requests\problem.json" />
     <None Remove="Requests\spin.json" />
+    <None Remove="Requests\spinemptyrtp.json" />
+    <None Remove="Requests\spininvalidrtp.json" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Inits\init.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Math94.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Math96.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <Content Include="Requests\freespin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Requests\init1.json">
+    <Content Include="Requests\init.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Requests\initinvalidrtp.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Requests\InitOk.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Requests\InitRtpValidation.json">
+    <Content Include="Requests\initemptyrtp.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Requests\problem.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Requests\spin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Requests\spinemptyrtp.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Requests\spininvalidrtp.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

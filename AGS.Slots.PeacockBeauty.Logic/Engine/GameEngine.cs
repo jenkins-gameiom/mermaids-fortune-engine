@@ -47,7 +47,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine
 
                 if (_context.State.freeSpinsLeft <= 0)
                     throw new Exception("Error in validating freeSpins (freeSpinsLeft<=0)");
-                else if(_context.State.holdAndSpin == HoldAndSpin.None)
+                else if(_context.State.isReSpin == null || !_context.State.isReSpin.Value)
                     _context.State.freeSpinsLeft--;
             }
             else
@@ -57,6 +57,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine
             }
         }
 
+        public static bool enteredInRespin = false;
         public Result Spin(List<List<int>> spinResult = null)
         {
             //ValidateSpins();
@@ -68,6 +69,18 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine
             if (_context.State.isReSpin == null || !_context.State.isReSpin.Value)
             {
                 _context.MathFile.AssignReelSet(_context, _random);
+                enteredInRespin = false;
+            }
+            else
+            {
+                if (enteredInRespin)
+                {
+                    if (_context.State.holdAndSpin != HoldAndSpin.Both)
+                    {
+
+                    }
+                }
+                enteredInRespin = true;
             }
             _context.State.BonusGame = null;
             //here, from the 5 whole reels, we get the actual matrix that will say if we won and what we won (5*3)
@@ -84,18 +97,18 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine
             ApplyResultion(spinResult, result);
             Scan(result);
             CalculateResult(spinResult, result);//freespinandregular - 
-            if (result.Wins.Count == 1 && result.Wins.Any(x => x.WinType == WinType.FiveOfAKind)
-                && _context.State.holdAndSpin != HoldAndSpin.First)
-            {
-                //3 scatters yes regular win "3 BN SYMBOLS + win"
-                SerializeObjectAndWriteToFile(result, "fiveofakindwithfirstreelrespin");
-            }
-            if (result.Wins.Count == 1 && result.Wins.Any(x => x.WinType == WinType.FiveOfAKind)
-                                       && _context.State.holdAndSpin != HoldAndSpin.Both)
-            {
-                //3 scatters yes regular win "3 BN SYMBOLS + win"
-                SerializeObjectAndWriteToFile(result, "fiveofakindwithbothreelrespin");
-            }
+            //if (result.Wins.Count == 1 && result.Wins.Any(x => x.WinType == WinType.FiveOfAKind)
+            //    && _context.State.holdAndSpin != HoldAndSpin.First)
+            //{
+            //    //3 scatters yes regular win "3 BN SYMBOLS + win"
+            //    SerializeObjectAndWriteToFile(result, "fiveofakindwithfirstreelrespin");
+            //}
+            //if (result.Wins.Count == 1 && result.Wins.Any(x => x.WinType == WinType.FiveOfAKind)
+            //                           && _context.State.holdAndSpin != HoldAndSpin.Both)
+            //{
+            //    //3 scatters yes regular win "3 BN SYMBOLS + win"
+            //    SerializeObjectAndWriteToFile(result, "fiveofakindwithbothreelrespin");
+            //}
 
 
             //FROM NOW THOSE CANT HAPPEN, no combination of JP1,JP2,JP4 exists

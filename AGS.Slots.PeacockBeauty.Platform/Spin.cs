@@ -104,7 +104,7 @@ namespace AGS.Slots.MermaidsFortune.Platform
                 _context.State.freeSpinsLeft += res.Wins.First(x => x.WinType == WinType.FreeSpin).GrantedFreeSpins;
                 _context.State.totalFreeSpins += res.Wins.First(x => x.WinType == WinType.FreeSpin).GrantedFreeSpins;
             }
-            
+                
             if (res.Wins.Any(x => x.WinType == WinType.FiveOfAKind))
             {
                 //SetJackpotGame(res.JackpotGame);
