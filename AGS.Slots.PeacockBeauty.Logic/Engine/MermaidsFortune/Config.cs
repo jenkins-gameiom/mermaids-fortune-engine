@@ -143,9 +143,9 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                     if (config == null)
                     {
 
-                        string currentDirectory = Directory.GetCurrentDirectory();
-                        string filePath = currentDirectory + "\\" + mathName + ".json";
-                        config = JObject.Parse(File.ReadAllText(filePath));
+                        var dir = AppDomain.CurrentDomain.BaseDirectory;
+                        var path = dir + mathName + ".json";
+                        config = JObject.Parse(File.ReadAllText(path));
 
                     }
                 }
@@ -278,6 +278,20 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
         public void AssignReelSet(IRequestContext _context, IRandom random)
         {
             _context.State.reelSet = GetReelSet(_context.RequestItems.isFreeSpin, random);
+        }
+
+        public SpinBagResult GetFullReels(IRequestContext _context, List<int> chosenIndexes)
+        {
+            //int reelSet = _context.State.reelSet;
+            SpinBagResult res = new SpinBagResult();
+            List<List<int>> reels = null;
+            //List<int> weightedIndexes = null;
+            BaseTable reelsWithWeights = null;
+            reelsWithWeights = base_reel_set[0][_context.MathFile.BetSteps.IndexOf(_context.GetBetAmount())];
+            reels = reelsWithWeights.outcome;
+            //res.indexRes = weightedIndexes;
+            res.reels = reels.RandomizeReels(new List<int>(new int[] { 3, 3, 4, 3, 3 }), chosenIndexes);
+            return res;
         }
 
         public SpinBagResult GetReels(IRequestContext _context, IRandom random)

@@ -20,6 +20,7 @@ namespace TestSlotsConsole
                 Console.WriteLine("for 50 million spins press 6");
                 Console.WriteLine("for 100 million spins press 7");
                 Console.WriteLine("for 500 million spins press 8");
+                Console.WriteLine("for 500 thousands spins press 9");
                 choice = int.Parse(Console.ReadLine());
                 int spinsAmount = 0;
                 switch (choice)
@@ -47,6 +48,9 @@ namespace TestSlotsConsole
                         break;
                     case 8:
                         spinsAmount = 500000000;
+                        break;
+                    case 9:
+                        spinsAmount = 500000;
                         break;
                     default:
                         break;

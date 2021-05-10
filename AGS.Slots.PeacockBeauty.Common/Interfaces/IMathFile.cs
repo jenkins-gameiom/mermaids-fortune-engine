@@ -8,7 +8,7 @@ namespace AGS.Slots.MermaidsFortune.Common.Interfaces
 {
     public interface IMathFile
     {
-
+        SpinBagResult GetFullReels(IRequestContext _context, List<int> chosenIndexes);
         SpinBagResult GetReels(IRequestContext _context ,IRandom random);
         int BetStepsDevider { get; }
         List<List<int>> GetLookupPaytable();

@@ -196,6 +196,8 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                     {
 
                     }
+
+                    
                     result.Wins.Add(win);
                 }
             }
@@ -235,7 +237,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                 resultMatrix[3].Any(x => IsWildOrMCSymbol(x.Symbol)) &&
                 resultMatrix[4].Any(x => IsWildOrMCSymbol(x.Symbol)) /* && !_context.State.isReSpin.Value*/)
             {
-                if (_context.RequestItems.isFreeSpin && _context.State.isReSpin.Value)
+                if (_context.RequestItems.isFreeSpin && _context.State.isReSpin)
                 {
                 }
 
@@ -314,9 +316,6 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                     Symbol = 9,
                     WinType = WinType.Regular
                 };
-                if (reelsOfWinAmount != win.LongestSequence)
-                {
-                }
 
                 result.Wins.Add(win);
             }
@@ -335,10 +334,6 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                 {
                     if (_context.State.holdAndSpin != HoldAndSpin.None)
                     {
-                        if (!_context.State.isReSpin.Value)
-                        {
-                        }
-
                         AmountOfFirst++;
                         _context.State.holdAndSpin = HoldAndSpin.None;
                     }
@@ -354,10 +349,6 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                 {
                     if (_context.State.holdAndSpin != HoldAndSpin.None)
                     {
-                        if (!_context.State.isReSpin.Value)
-                        {
-                        }
-
                         AmountOfSecond++;
                         _context.State.holdAndSpin = HoldAndSpin.None;
                     }
@@ -424,10 +415,6 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                     {
                         _context.State.holdAndSpin = HoldAndSpin.None;
                     }
-                }
-
-                if (!resultMatrix[1].All(x => x.Symbol == 0) && !resultMatrix[3].All(x => x.Symbol == 0))
-                {
                 }
             }
         }

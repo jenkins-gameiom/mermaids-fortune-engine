@@ -18,11 +18,11 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine
     public class GameEngine
     {
         private readonly IPayoutResolver _resolver;
-        private  MermaidsFortuneScanner _scanner;
+        private MermaidsFortuneScanner _scanner;
         private readonly IRandom _random;
         private readonly IRequestContext _context;
 
-        public GameEngine(IRequestContext context, IPayoutResolver resolver, MermaidsFortuneScanner scanner,Configs applicationConfig, IIndex<RandomizerType, IRandom> random = null)
+        public GameEngine(IRequestContext context, IPayoutResolver resolver, MermaidsFortuneScanner scanner, Configs applicationConfig, IIndex<RandomizerType, IRandom> random = null)
         {
             _context = context;
             _resolver = resolver;
@@ -47,7 +47,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine
 
                 if (_context.State.freeSpinsLeft <= 0)
                     throw new Exception("Error in validating freeSpins (freeSpinsLeft<=0)");
-                else if(_context.State.isReSpin == null || !_context.State.isReSpin.Value)
+                else if (!_context.State.isReSpin)
                     _context.State.freeSpinsLeft--;
             }
             else
@@ -61,12 +61,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine
         public Result Spin(List<List<int>> spinResult = null)
         {
             //ValidateSpins();
-            //this line is straight forward - we have in capital gains 5 different combinations for the reels.
-            //4 for FS, and 1 for regular spin. why we have 5? cause we want different amount of wilds for different spins.
-            //so here we just get the reels from the config.
-            //**notice we dont get the reels result (3 number for each reel), but the WHOLE reels ( about 65 numbers for each reel)
-            //List<List<int>> reels = _context.MathFile.GetReels();
-            if (_context.State.isReSpin == null || !_context.State.isReSpin.Value)
+            if (!_context.State.isReSpin)
             {
                 _context.MathFile.AssignReelSet(_context, _random);
                 enteredInRespin = false;
@@ -83,33 +78,38 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine
                 enteredInRespin = true;
             }
             _context.State.BonusGame = null;
-            //here, from the 5 whole reels, we get the actual matrix that will say if we won and what we won (5*3)
-            //this is where the randomize functions kicks (Gamiume, C# Random etc.).
             if (spinResult == null)
                 spinResult = _context.MathFile.GetReels(_context, _random).reels;
-            //here is actually the analysis of our result (3*5), we iterate the reels and see if we won something. options to win:
-            //1 - scatter, we got 3 scatters (index 12) so we go to gateway-FS OR TO Gateway-MC
-            //2 - regular line wins, 3 or more same symbols including wilds etc.
-            //3 - we got 6+ MC (index 13) so we got into MC
             List<int> reesStops = new List<int>();
             Result result = new Result();
-            
             ApplyResultion(spinResult, result);
             Scan(result);
-            CalculateResult(spinResult, result);//freespinandregular - 
-            //if (result.Wins.Count == 1 && result.Wins.Any(x => x.WinType == WinType.FiveOfAKind)
-            //    && _context.State.holdAndSpin != HoldAndSpin.First)
+            CalculateResult(spinResult, result);
+
+            //if (!_context.RequestItems.isFreeSpin && result.Wins.Count == 1 && result.Wins.Any(x => x.WinType == WinType.Regular)
+            //    && result.Wins[0].WinAmount > 2500)
+            //{
+            //    //3 scatters yes regular win "3 BN SYMBOLS + win"
+            //    SerializeObjectAndWriteToFile(result, "hugewin");
+            //}
+            //if (!_context.RequestItems.isFreeSpin && result.Wins.Count == 1 && result.Wins.Any(x => x.WinType == WinType.Regular)
+            //    && result.Wins[0].Symbol == 9 && result.Wins[0].LongestSequence == 3 && result.Wins[0].Ways == 1)
+            //{
+            //    //3 scatters yes regular win "3 BN SYMBOLS + win"
+            //    SerializeObjectAndWriteToFile(result, "threeofakind");
+            //}
+            //if (!_context.RequestItems.isFreeSpin && result.Wins.Count == 1 && result.Wins.Any(x => x.WinType == WinType.FiveOfAKind)
+            //     && result.Wins[0].Ways == 2)
+            //{
+            //    //3 scatters yes regular win "3 BN SYMBOLS + win"
+            //    SerializeObjectAndWriteToFile(result, "fiveofakindtwoways");
+            //}
+            //if (_context.RequestItems.isFreeSpin && result.Wins.Count == 1 && result.Wins.Any(x => x.WinType == WinType.FiveOfAKind)
+            //    && _context.State.holdAndSpin == HoldAndSpin.First)
             //{
             //    //3 scatters yes regular win "3 BN SYMBOLS + win"
             //    SerializeObjectAndWriteToFile(result, "fiveofakindwithfirstreelrespin");
             //}
-            //if (result.Wins.Count == 1 && result.Wins.Any(x => x.WinType == WinType.FiveOfAKind)
-            //                           && _context.State.holdAndSpin != HoldAndSpin.Both)
-            //{
-            //    //3 scatters yes regular win "3 BN SYMBOLS + win"
-            //    SerializeObjectAndWriteToFile(result, "fiveofakindwithbothreelrespin");
-            //}
-
 
             //FROM NOW THOSE CANT HAPPEN, no combination of JP1,JP2,JP4 exists
             //if (!_context.RequestItems.isFreeSpin && result.Wins.Count == 1 && result.Wins.Any(x => x.WinType == WinType.FiveOfAKind)
@@ -149,7 +149,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine
         }
 
 
-        private void ApplyResultion(List<List<int>> reels,Result result)
+        private void ApplyResultion(List<List<int>> reels, Result result)
         {
             _scanner.ApplyResultion(reels, result);
         }
@@ -159,7 +159,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine
             _scanner.Scan(result);
         }
 
-        private void  CalculateResult(List<List<int>> resultedReels, Result result)
+        private void CalculateResult(List<List<int>> resultedReels, Result result)
         {
             result.Reels = resultedReels;
             _resolver.EvaluateResult(result);

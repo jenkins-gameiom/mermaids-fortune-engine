@@ -106,6 +106,7 @@ namespace AGS.Slots.MermaidsFortune.Common.Entities
         public int? totalFreeSpins { get; set; }
         public long? sumWinsFreeSpins { get; set; }
         public int treasureChestLevel { get; set; }
+        public HoldAndSpin holdAndSpin { get; set; }
 
     }
 
@@ -198,7 +199,7 @@ namespace AGS.Slots.MermaidsFortune.Common.Entities
         public int animationState { get; set; }
         public int TreasureChestTurnOver { get; set; }
         public int TreasureChestTurnState { get; set; }
-        public bool? isReSpin { get; set; }
+        public bool isReSpin { get; set; }
         public BonusGame BonusGame { get; set; }
         public string state { get; set; }
         public bool? completed { get; set; }
@@ -220,7 +221,7 @@ namespace AGS.Slots.MermaidsFortune.Common.Entities
         public string state { get; set; }
         public int animationState { get; set; }
         public bool? completed { get; set; }
-        public bool? isReSpin { get; set; }
+        public bool isReSpin { get; set; }
         public int? freeSpinsLeft { get; set; }
         public HoldAndSpin holdAndSpin { get; set; }
         public int reelSet { get; set; }

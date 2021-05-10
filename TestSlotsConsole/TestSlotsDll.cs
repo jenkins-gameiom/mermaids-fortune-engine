@@ -50,29 +50,22 @@ namespace TestSlotsConsole
                 simLogic.AddTotalBetAmount(stats, betSum);
 
                 context.RequestItems.isFreeSpin = false;
-
-
+                if (context.State.totalFreeSpins != null && context.State.totalFreeSpins != 0)
+                {
+                    context.State.totalFreeSpins = 0;
+                }
                 GameEngine ge = new GameEngine(context, new MermaidsFortuneResolver(context, configs, random),
                     new MermaidsFortuneScanner(context, random, configs), configs, random);
                 Result res = ge.Spin(null);
-                if (context.State != null && context.State.isReSpin.Value)
-                {
-
-                }
                 CalculateWin(context, stats, res);
                 var initGe = true;
                 while (context.State.freeSpinsLeft > 0)
                 {
                     context.RequestItems.isFreeSpin = true;
-                    
                     ge = new GameEngine(context, new MermaidsFortuneResolver(context, configs, random),
                         new MermaidsFortuneScanner(context, random, configs), configs, random);
                     Result resFreeSpin = ge.Spin(null);
-                    if (context.State != null && context.State.isReSpin.Value)
-                    {
-
-                    }
-                    else
+                    if (!context.State.isReSpin)
                     {
                         context.State.freeSpinsLeft--;
                     }

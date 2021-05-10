@@ -82,11 +82,15 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                 reelSetDictionary[_context.State.reelSet.ToString()]++;
             }
 
-            var percentage0 = reelSetDictionary["0"] / reelSetDictionary.Values.Sum();
-            var percentage1 = reelSetDictionary["1"] / reelSetDictionary.Values.Sum();
-            var percentage2 = reelSetDictionary["2"] / reelSetDictionary.Values.Sum();
-            var percentage3 = reelSetDictionary["3"] / reelSetDictionary.Values.Sum();
-            var percentage4 = reelSetDictionary["4"] / reelSetDictionary.Values.Sum();
+            if (reelSetDictionary != null && reelSetDictionary.Values.Sum() > 0)
+            {
+                var percentage0 = reelSetDictionary["0"] / reelSetDictionary.Values.Sum();
+                var percentage1 = reelSetDictionary["1"] / reelSetDictionary.Values.Sum();
+                var percentage2 = reelSetDictionary["2"] / reelSetDictionary.Values.Sum();
+                var percentage3 = reelSetDictionary["3"] / reelSetDictionary.Values.Sum();
+                var percentage4 = reelSetDictionary["4"] / reelSetDictionary.Values.Sum();
+            }
+            
 
 
             if (!_context.RequestItems.isFreeSpin)
@@ -131,6 +135,10 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                         _context.State.freeSpinsLeft = 0;
                     }
                     _context.State.freeSpinsLeft += win.GrantedFreeSpins;
+                    if (_context.State.totalFreeSpins == null)
+                    {
+                        _context.State.totalFreeSpins = 0;
+                    }
                     _context.State.totalFreeSpins += win.GrantedFreeSpins;
                     var multiPlier = mutliPliers[win.Symbol];
                     var currentLineWinAmount = (long)multiPlier[result.Scatter.Count() - 3] * _context.GetBetAmount() * _context.GetDenom() / _context.MathFile.BetStepsDevider;
@@ -343,7 +351,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
 
                 if (_context.RequestItems.isFreeSpin)
                 {
-                    if (_context.State.isReSpin != null && _context.State.isReSpin.Value)
+                    if (_context.State.isReSpin)
                     {
                         MoneyEarnedFromFSBinary += result.WonAmount;
                     }

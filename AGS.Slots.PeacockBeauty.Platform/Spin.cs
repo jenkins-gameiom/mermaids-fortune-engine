@@ -58,8 +58,8 @@ namespace AGS.Slots.MermaidsFortune.Platform
                         string jsonToGive = "";
                         if (forceInString.Contains(","))
                         {
-                            var selectedIndexes = Json.ConvertDynamic<List<int>>(force);
-                            var reels = _context.MathFile.GetReels(_context, _random).reels;
+                            var selectedIndexes = (List<int>)Json.ConvertDynamic<List<int>>(force);
+                            var reels = _context.MathFile.GetFullReels(_context, selectedIndexes).reels;
                             for (int i = 0; i < reels.Count; i++)
                             {
                                 int sNum = 3;
@@ -95,26 +95,169 @@ namespace AGS.Slots.MermaidsFortune.Platform
 
         private void SetState(Result res)
         {
+            SetFreeSpin(res);
+            SetHoldAndSpin(res);
+            if (res.Wins.Any(x => x.WinType == WinType.FiveOfAKind))
+            {
+                SetFiveOfAKind(res);
+            }
+            _context.State.completed = !_context.State.isReSpin && _context.State.freeSpinsLeft <= 0;
+        }
+
+        private void SetFreeSpin(Result res)
+        {
             if (res.Wins.Any(x => x.WinType == WinType.FreeSpin))
             {
                 if (_context.State.freeSpinsLeft == null)
                 {
                     _context.State.freeSpinsLeft = 0;
                 }
+
                 _context.State.freeSpinsLeft += res.Wins.First(x => x.WinType == WinType.FreeSpin).GrantedFreeSpins;
                 _context.State.totalFreeSpins += res.Wins.First(x => x.WinType == WinType.FreeSpin).GrantedFreeSpins;
             }
-                
-            if (res.Wins.Any(x => x.WinType == WinType.FiveOfAKind))
+        }
+
+        private void SetHoldAndSpin(Result res)
+        {
+            if (_context.RequestItems.isFreeSpin)
             {
-                //SetJackpotGame(res.JackpotGame);
+                if (_context.State.holdAndSpin == HoldAndSpin.First && !res.Reels[1].All(x => x == 0))
+                {
+                    for (int i = 0; i < res.Reels[1].Count; i++)
+                    {
+                        res.Reels[1][i] = 0;
+                    }
+                }
+                if (_context.State.holdAndSpin == HoldAndSpin.Second && !res.Reels[3].All(x => x == 0))
+                {
+                    for (int i = 0; i < res.Reels[3].Count; i++)
+                    {
+                        res.Reels[3][i] = 0;
+                    }
+                }
+
+
+                //first reel is 0'd
+                if (res.Reels[1].All(x => x == 0) && !res.Reels[3].All(x => x == 0))
+                {
+                    if (_context.State.holdAndSpin != HoldAndSpin.None)
+                    {
+                        _context.State.holdAndSpin = HoldAndSpin.None;
+                    }
+                    else
+                    {
+                        _context.State.holdAndSpin = HoldAndSpin.First;
+                        _context.State.isReSpin = true;
+                    }
+                }
+
+                //second reel is 0'd
+                if (res.Reels[3].All(x => x == 0) && !res.Reels[1].All(x => x == 0))
+                {
+                    if (_context.State.holdAndSpin != HoldAndSpin.None)
+                    {
+                        if (!_context.State.isReSpin)
+                        {
+                        }
+
+                        _context.State.holdAndSpin = HoldAndSpin.None;
+                    }
+                    else
+                    {
+                        if (_context.State.freeSpinsLeft == 1)
+                        {
+
+                        }
+                        _context.State.holdAndSpin = HoldAndSpin.Second;
+                        _context.State.isReSpin = true;
+                    }
+                }
+
+                //both reel are 0'd
+                if (res.Reels[1].All(x => x == 0) && res.Reels[3].All(x => x == 0))
+                {
+                    if (_context.State.holdAndSpin == HoldAndSpin.None)
+                    {
+                        _context.State.holdAndSpin = HoldAndSpin.Both;
+                        _context.State.isReSpin = true;
+                    }
+                    else if (_context.State.holdAndSpin == HoldAndSpin.First)
+                    {
+                        _context.State.holdAndSpin = HoldAndSpin.Both;
+                        _context.State.isReSpin = true;
+                    }
+                    else if (_context.State.holdAndSpin == HoldAndSpin.Second)
+                    {
+                        _context.State.holdAndSpin = HoldAndSpin.Both;
+                        _context.State.isReSpin = true;
+                    }
+                    else
+                    {
+                        _context.State.holdAndSpin = HoldAndSpin.None;
+                    }
+                }
             }
-            _context.State.completed = _context.State.freeSpinsLeft <= 0 && _context.State.BonusGame == null;
+
+        }
+
+        private void SetFiveOfAKind(Result res)
+        {
+            var win = res.Wins.First(x => x.WinType == WinType.FiveOfAKind);
+            _context.State.BonusGame = new BonusGame();
+            _context.State.BonusGame.MCSymbols = new List<MCSymbol>();
+            foreach (var mcSymbol in res.McSymbols)
+            {
+                MCSymbol mcSymbolToAdd = new MCSymbol();
+                mcSymbolToAdd.symbol = mcSymbol.Symbol;
+                if (mcSymbol.Symbol == 10) //JP1 Major
+                {
+                    mcSymbolToAdd.winAmount = _context.MathFile.GetProgressiveInformation()[1] * win.Ways *
+                                              _context.GetDenom();
+                    mcSymbolToAdd.JPSymbolIfString = "major";
+                }
+
+                if (mcSymbol.Symbol == 11) //JP2 Minor
+                {
+                    if (_context.RequestItems.isFreeSpin)
+                    {
+
+                    }
+
+                    mcSymbolToAdd.winAmount = _context.MathFile.GetProgressiveInformation()[0] * win.Ways *
+                                              _context.GetDenom();
+                    mcSymbolToAdd.JPSymbolIfString = "minor";
+                }
+
+                if (mcSymbol.Symbol == 13) //JP4 Grand
+                {
+                    if (_context.RequestItems.isFreeSpin)
+                    {
+
+                    }
+
+                    mcSymbolToAdd.winAmount = _context.MathFile.GetProgressiveInformation()[2] * win.Ways *
+                                              _context.GetDenom();
+                    mcSymbolToAdd.JPSymbolIfString = "grand";
+
+                }
+
+                if (mcSymbol.Symbol == 12) //JP3 Number
+                {
+                    mcSymbolToAdd.winAmount = int.Parse(mcSymbol.MCSymbol) * win.Ways * _context.GetDenom();
+                    mcSymbolToAdd.JPSymbolIfString = mcSymbol.MCSymbol;
+                }
+
+                mcSymbolToAdd.coordinate = mcSymbol.Coordinate;
+                mcSymbolToAdd.index = mcSymbol.Index;
+                
+                _context.State.BonusGame.MCSymbols.Add(mcSymbolToAdd);
+                _context.State.BonusGame.winAmount += mcSymbolToAdd.winAmount;
+            }
         }
 
         //Check the bet amount and chips perplay to make suere its correct.
-        private void CheckBetsAndChipsPerPlay
-            (List<int> stacksFromPlatform, List<int> denominationsFromPlatform, ref int betAmount, ref int chipsPerPlay)
+        private void CheckBetsAndChipsPerPlay (List<int> stacksFromPlatform, List<int> denominationsFromPlatform, ref int betAmount, ref int chipsPerPlay)
         {
             betAmount = _context.GetBetAmount();
             chipsPerPlay = _context.GetDenom();
@@ -141,7 +284,7 @@ namespace AGS.Slots.MermaidsFortune.Platform
         //        });
         //    }
         //}
-        
+
 
         private Spin CreateSpinObject(bool isFreeSpin, List<Win> wins, Result result,
             IStateItems state, ref long freeSpinsTotalWin)
@@ -191,7 +334,11 @@ namespace AGS.Slots.MermaidsFortune.Platform
                     w = new Win()
                     {
                         featureType = FeatureType.fiveofakind.ToString(),
-                        evaluationType = EvaluationType.random.ToString()
+                        evaluationType = EvaluationType.random.ToString(),
+                        ways = win.Ways,
+                        symbolId = win.Symbol,
+                        winAmount = win.WinAmount,
+                        winningSymbolsPositions = win.WinningLines.Select(x => new int[] { x.Coordinate.Item1, x.Coordinate.Item2 }).ToArray()
                     };
                     //SetJackpotGame();
                 }
@@ -207,6 +354,7 @@ namespace AGS.Slots.MermaidsFortune.Platform
                 type = isFreeSpin ? "freeSpin" : "spin",
                 childFeature = new List<Spin>(),
                 events = new List<Event>(),
+                holdAndSpin = _context.State.holdAndSpin
 
             };
             spin.MCSymbols = new List<MCSymbol>();
@@ -214,14 +362,14 @@ namespace AGS.Slots.MermaidsFortune.Platform
             {
                 foreach (var item in result.McSymbols)
                 {
-                    spin.MCSymbols.Add(new MCSymbol(item.Index, item.Coordinate.Item1, item.Coordinate.Item2, item.Symbol, TableTypeEnum.Regular, int.Parse(item.MCSymbol)));
+                    spin.MCSymbols.Add(new MCSymbol(item.Index, item.Coordinate.Item1, item.Coordinate.Item2, item.Symbol, TableTypeEnum.Regular, 0, item.MCSymbol));
                 }
             }
-            if (result.McSymbols.Count() > 0 && _context.State.BonusGame != null)
+            if (_context.State.BonusGame != null && _context.State.BonusGame.MCSymbols.Count > 0)
             {
-                foreach (var item in result.McSymbols)
+                foreach (var item in _context.State.BonusGame.MCSymbols)
                 {
-                    spin.MCSymbols.Add(new MCSymbol(item.Index, item.Coordinate.Item1, item.Coordinate.Item2, item.Symbol, TableTypeEnum.Regular, int.Parse(item.MCSymbol), item.MCSymbol));
+                    spin.MCSymbols.Add(new MCSymbol(item.index, item.coordinate.Item1, item.coordinate.Item2, item.symbol, TableTypeEnum.Regular, item.winAmount, item.JPSymbolIfString));
                 }
             }
 
