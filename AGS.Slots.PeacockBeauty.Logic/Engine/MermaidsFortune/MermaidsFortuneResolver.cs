@@ -11,6 +11,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using AGS.Slots.MermaidsFortune.Common;
+using Microsoft.VisualBasic;
 
 namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
 {
@@ -40,6 +41,16 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
         public static float FSWinRate = 0;
         public static long MoneyEarnedFromFS = 0;
         public static long MoneyEarnedFromFSBinary = 0;
+
+        public static long TotalRegularSpins = 0;
+        public static long TotalFSSpins = 0;
+        public static long TotaBinaryFirstSpins = 0;
+        public static long TotaBinarySecondSpins = 0;
+        public static long TotaBinaryBothSpins = 0;
+        public static bool isRespinNext = false;
+        public static HoldAndSpin respinType = HoldAndSpin.None;
+        public static long TotalRegularSpinsResultedInH1 = 0;
+        public static long TotalRegularSpins3Oak = 0;
         //after we got the results and the wins, 
         public void EvaluateResult(Result result)
         {
@@ -59,7 +70,37 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                     SpinsWithoutFSWin++;
                 }
             }
-            
+
+            if (!_context.RequestItems.isFreeSpin)
+            {
+                TotalRegularSpins++;
+            }
+            else
+            {
+                if (isRespinNext)
+                {
+                    if (respinType == HoldAndSpin.First)
+                    {
+                        TotaBinaryFirstSpins++;
+                    }
+                    if (respinType == HoldAndSpin.Second)
+                    {
+                        TotaBinarySecondSpins++;
+                    }
+                    if (respinType == HoldAndSpin.Both)
+                    {
+                        TotaBinaryBothSpins++;
+                    }
+                    if (respinType == HoldAndSpin.None)
+                    {
+
+                    }
+                }
+                else
+                {
+                    TotalFSSpins++;
+                }
+            }
             string regular = "Regular - ";
             string fs = "FS - ";
             string stringToChoose = _context.RequestItems.isFreeSpin ? fs : regular;
@@ -68,6 +109,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
             //TODO - check thats how you calculate treasurechestlevel
             var betLevel = betSteps.IndexOf(_context.GetBetAmount());
             AssignMCSymbolsToExisting(result);
+            
             if (!_context.RequestItems.isFreeSpin)
             {
                 if (reelSetDictionary == null)
@@ -113,6 +155,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                 //if we got 3 scatters 
                 if (win.Symbol == SCATTER)
                 {
+                    
                     if (!_context.RequestItems.isFreeSpin)
                     {
                         if (!myDictionaryTotalSpinsResultedInFG.ContainsKey(_context.State.reelSet.ToString()))
@@ -152,11 +195,89 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                     {
                         parts[stringToChoose + "bn"] += win.WinAmount;
                     }
+                    if (!_context.RequestItems.isFreeSpin)
+                    {
+                        var key = win.Symbol.ToString() + " : " + win.LongestSequence;
+                        if (!RegularWinDictionary.ContainsKey(key))
+                        {
+                            RegularWinDictionary.Add(key, win.WinAmount);
+                        }
+                        else
+                        {
+                            RegularWinDictionary[key] += win.WinAmount;
+                        }
+                    }
+                    if (!_context.RequestItems.isFreeSpin)
+                    {
+
+                        var key = win.Symbol.ToString() + " : " + win.LongestSequence;
+                        if (!RegularWinDictionaryHitRate.ContainsKey(key))
+                        {
+                            RegularWinDictionaryHitRate.Add(key, 1);
+                        }
+                        else
+                        {
+                            RegularWinDictionaryHitRate[key] += 1;
+                        }
+                    }
+                    else
+                    {
+                        var key = win.Symbol.ToString() + " : " + win.LongestSequence;
+                        if (!isRespinNext)
+                        {
+                            if (!FSWinDictionaryHitRate.ContainsKey(key))
+                            {
+                                FSWinDictionaryHitRate.Add(key, 1);
+                            }
+                            else
+                            {
+                                FSWinDictionaryHitRate[key] += 1;
+                            }
+                        }
+                        else
+                        {
+                            if (respinType == HoldAndSpin.First)
+                            {
+                                if (!BinaryFirstWinDictionaryHitRate.ContainsKey(key))
+                                {
+                                    BinaryFirstWinDictionaryHitRate.Add(key, 1);
+                                }
+                                else
+                                {
+                                    BinaryFirstWinDictionaryHitRate[key] += 1;
+                                }
+                            }
+                            if (respinType == HoldAndSpin.Second)
+                            {
+                                if (!BinarySecondWinDictionaryHitRate.ContainsKey(key))
+                                {
+                                    BinarySecondWinDictionaryHitRate.Add(key, 1);
+                                }
+                                else
+                                {
+                                    BinarySecondWinDictionaryHitRate[key] += 1;
+                                }
+                            }
+                            if (respinType == HoldAndSpin.Both)
+                            {
+                                if (!BinaryBothWinDictionaryHitRate.ContainsKey(key))
+                                {
+                                    BinaryBothWinDictionaryHitRate.Add(key, 1);
+                                }
+                                else
+                                {
+                                    BinaryBothWinDictionaryHitRate[key] += 1;
+                                }
+                            }
+                        }
+                        
+                    }
                 }
                 else if (win.WinType == WinType.FiveOfAKind)
                 {
                     _context.State.BonusGame = new BonusGame();
                     _context.State.BonusGame.MCSymbols = new List<MCSymbol>();
+                    win.MCSymbols = new List<MCSymbol>();
                     foreach (var mcSymbol in result.McSymbols)
                     {
                         MCSymbol mcSymbolToAdd = new MCSymbol();
@@ -235,10 +356,91 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                         mcSymbolToAdd.index = mcSymbol.Index;
                         win.WinAmount += mcSymbolToAdd.winAmount;
                         result.WonAmount += mcSymbolToAdd.winAmount;
+                        win.MCSymbols.Add(mcSymbolToAdd);
                         _context.State.BonusGame.MCSymbols.Add(mcSymbolToAdd);
                         _context.State.BonusGame.winAmount += mcSymbolToAdd.winAmount;
-                        
+                        if (!_context.RequestItems.isFreeSpin)
+                        {
+                            var key = mcSymbol.Symbol.ToString() + " : " + win.LongestSequence;
+                            if (!RegularWinDictionary.ContainsKey(key))
+                            {
+                                RegularWinDictionary.Add(key, mcSymbolToAdd.winAmount);
+                            }
+                            else
+                            {
+                                RegularWinDictionary[key] += mcSymbolToAdd.winAmount;
+                            }
+                        }
+                        if (!_context.RequestItems.isFreeSpin)
+                        {
+
+                            var key = mcSymbol.Symbol.ToString() + " : " + win.LongestSequence;
+                            if (!RegularWinDictionaryHitRate.ContainsKey(key))
+                            {
+                                RegularWinDictionaryHitRate.Add(key, win.Ways);
+                            }
+                            else
+                            {
+                                RegularWinDictionaryHitRate[key] += win.Ways;
+                            }
+                        }
+
+                        else
+                        {
+
+                            var key = mcSymbol.Symbol.ToString() + " : " + win.LongestSequence;
+                            if (!isRespinNext)
+                            {
+                                if (!FSWinDictionaryHitRate.ContainsKey(key))
+                                {
+                                    FSWinDictionaryHitRate.Add(key, win.Ways);
+                                }
+                                else
+                                {
+                                    FSWinDictionaryHitRate[key] += win.Ways;
+                                }
+                            }
+                            else
+                            {
+                                if (respinType == HoldAndSpin.First)
+                                {
+                                    if (!BinaryFirstWinDictionaryHitRate.ContainsKey(key))
+                                    {
+                                        BinaryFirstWinDictionaryHitRate.Add(key, win.Ways);
+                                    }
+                                    else
+                                    {
+                                        BinaryFirstWinDictionaryHitRate[key] += win.Ways;
+                                    }
+                                }
+                                if (respinType == HoldAndSpin.Second)
+                                {
+                                    if (!BinarySecondWinDictionaryHitRate.ContainsKey(key))
+                                    {
+                                        BinarySecondWinDictionaryHitRate.Add(key, win.Ways);
+                                    }
+                                    else
+                                    {
+                                        BinarySecondWinDictionaryHitRate[key] += win.Ways;
+                                    }
+                                }
+                                if (respinType == HoldAndSpin.Both)
+                                {
+                                    if (!BinaryBothWinDictionaryHitRate.ContainsKey(key))
+                                    {
+                                        BinaryBothWinDictionaryHitRate.Add(key, win.Ways);
+                                    }
+                                    else
+                                    {
+                                        BinaryBothWinDictionaryHitRate[key] += win.Ways;
+                                    }
+                                }
+                            }
+                        }
                     }
+
+                    
+
                     if (!parts.ContainsKey(stringToChoose + "5ofakind"))
                     {
                         parts.Add(stringToChoose + "5ofakind", win.WinAmount);
@@ -247,6 +449,11 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                     {
                         parts[stringToChoose + "5ofakind"] += win.WinAmount;
                     }
+                    if (win.Ways == 2 && _context.State.BonusGame != null && _context.State.BonusGame.MCSymbols.Any(x => x.JPSymbolIfString == "minor"))
+                    {
+
+                    }
+
                 }
                 else
                 {
@@ -254,33 +461,123 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
 
                     var multiPlier = mutliPliers[win.Symbol];
                     var currentLineWinAmount = (long)multiPlier[win.LongestSequence - 3] * win.Ways * _context.GetBetAmount() * _context.GetDenom() / _context.MathFile.BetStepsDevider;
+
                     win.WinAmount += currentLineWinAmount;
                     result.WonAmount += currentLineWinAmount;
-                    if (win.LongestSequence == 3)
+                    if (!_context.RequestItems.isFreeSpin)
                     {
-                        if (!win.WinningLines.All(y => y.Reel == 0 || y.Reel == 2 || y.Reel == 1))
+                        var key = win.Symbol.ToString()  + " : "+ win.LongestSequence;
+                        if (!RegularWinDictionary.ContainsKey(key))
+                        {
+                            RegularWinDictionary.Add(key, win.WinAmount);
+                        }
+                        else
+                        {
+                            RegularWinDictionary[key] += win.WinAmount;
+                        }
+                    }
+
+                    if (!_context.RequestItems.isFreeSpin)
+                    {
+
+                        var key = win.Symbol.ToString() + " : " + win.LongestSequence;
+                        if (!RegularWinDictionaryHitRate.ContainsKey(key))
+                        {
+                            RegularWinDictionaryHitRate.Add(key, win.Ways);
+                        }
+                        else
+                        {
+                            RegularWinDictionaryHitRate[key] += win.Ways;
+                        }
+
+                        if (TotalRegularSpins == 300000000)
                         {
 
                         }
-                    }
-                    if (win.LongestSequence == 4)
-                    {
-                        if (!win.WinningLines.All(y => y.Reel == 3 || y.Reel == 0 || y.Reel == 2 || y.Reel == 1))
+                        if (TotalRegularSpins == 40000000)
                         {
 
                         }
-                    }
 
+                        
+                        var sx = RegularWinDictionaryHitRate
+                            .Select(kvp => new {kvp.Key, kvp = (double) TotalRegularSpins / (double) kvp.Value})
+                            .OrderBy(x => x.Key).ToList();
+                        var xx = (double)TotalRegularSpins / (double)TotalRegularSpinsResultedInH1;
+                    }
+                    else
+                    {
+                        var key = win.Symbol.ToString() + " : " + win.LongestSequence;
+                        if (!isRespinNext)
+                        {
+                            if (!FSWinDictionaryHitRate.ContainsKey(key))
+                            {
+                                FSWinDictionaryHitRate.Add(key, win.Ways);
+                            }
+                            else
+                            {
+                                FSWinDictionaryHitRate[key] += win.Ways;
+                            }
+                        }
+                        else
+                        {
+                            if (respinType == HoldAndSpin.First)
+                            {
+                                if (!BinaryFirstWinDictionaryHitRate.ContainsKey(key))
+                                {
+                                    BinaryFirstWinDictionaryHitRate.Add(key, win.Ways);
+                                }
+                                else
+                                {
+                                    BinaryFirstWinDictionaryHitRate[key] += win.Ways;
+                                }
+                            }
+                            if (respinType == HoldAndSpin.Second)
+                            {
+                                if (!BinarySecondWinDictionaryHitRate.ContainsKey(key))
+                                {
+                                    BinarySecondWinDictionaryHitRate.Add(key, win.Ways);
+                                }
+                                else
+                                {
+                                    BinarySecondWinDictionaryHitRate[key] += win.Ways;
+                                }
+                            }
+                            if (respinType == HoldAndSpin.Both)
+                            {
+                                if (!BinaryBothWinDictionaryHitRate.ContainsKey(key))
+                                {
+                                    BinaryBothWinDictionaryHitRate.Add(key, win.Ways);
+                                }
+                                else
+                                {
+                                    BinaryBothWinDictionaryHitRate[key] += win.Ways;
+                                }
+                            }
+                            if (!FSWinDictionaryHitRate.ContainsKey(key))
+                            {
+                                FSWinDictionaryHitRate.Add(key, win.Ways);
+                            }
+                            else
+                            {
+                                FSWinDictionaryHitRate[key] += win.Ways;
+                            }
+                        }
+
+                        
+                    }
                     if (win.Symbol == 9)
                     {
                         if (win.LongestSequence == 3)
                         {
+                            
                             if (_context.RequestItems.isFreeSpin)
                             {
                                 TimesInThreeFS++;
                             }
                             else
                             {
+                                TotalRegularSpins3Oak++;
                                 TimesInThreeBase++;
                             }
                             if (!parts.ContainsKey(stringToChoose + "3ofakind"))
@@ -316,9 +613,24 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                             }
                         }
 
+                        if (win.LongestSequence == 4 && !(result.Reels[0].Any(x => x == win.Symbol || x == 0) &&
+                                                          result.Reels[1].Any(x => x == win.Symbol || x == 0) &&
+                                                          result.Reels[2].Any(x => x == win.Symbol || new int[] { 0,10,11,12,13}.Contains(x)) && 
+                                                          result.Reels[3].Any(x => x == win.Symbol || x == 0)))
+                        {
+
+                        }
+                        if (win.LongestSequence == 3 && !(result.Reels[0].Any(x => x == win.Symbol || x == 0) &&
+                                                          result.Reels[1].Any(x => x == win.Symbol || x == 0) &&
+                                                          result.Reels[2].Any(x => x == win.Symbol || new int[] { 0, 10, 11, 12, 13 }.Contains(x)) ))
+                        {
+
+                        }
+
                     }
                     else
                     {
+                        RegularRegular += win.WinAmount;
                         if (!parts.ContainsKey(stringToChoose + "regular"))
                         {
                             parts.Add(stringToChoose + "regular", win.WinAmount);
@@ -369,7 +681,16 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                     RTPFromBase += win.WinAmount;
                 }
             }
-            _context.State.completed = _context.State.freeSpinsLeft <= 0  && result.Wins.All(x => x.GrantedFreeSpins == 0);
+            if (_context.State.isReSpin)
+            {
+                isRespinNext = true;
+                respinType = _context.State.holdAndSpin;
+            }
+            else
+            {
+                isRespinNext = false;
+            }
+            _context.State.completed = _context.State.freeSpinsLeft <= 0  && !_context.State.isReSpin && result.Wins.All(x => x.GrantedFreeSpins == 0);
         }
 
         public static long RTPFromBase;
@@ -385,6 +706,14 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
         public static Dictionary<string, double> partsPercentage = new Dictionary<string, double>();
         public static Dictionary<string, double> myDictionaryTotalSpinsPerSet = new Dictionary<string, double>();
         public static Dictionary<string, double> JackpotDistributionDictionary5oak = new Dictionary<string, double>();
+        public static Dictionary<string, double> RegularWinDictionary = new Dictionary<string, double>();
+        public static Dictionary<string, double> RegularWinDictionaryHitRate = new Dictionary<string, double>();
+        public static Dictionary<string, double> FSWinDictionaryHitRate = new Dictionary<string, double>();
+        public static Dictionary<string, double> BinaryFirstWinDictionaryHitRate = new Dictionary<string, double>();
+        public static Dictionary<string, double> BinarySecondWinDictionaryHitRate = new Dictionary<string, double>();
+        public static Dictionary<string, double> BinaryBothWinDictionaryHitRate = new Dictionary<string, double>();
+        public static Dictionary<string, double> RegularWinDictionaryHitRate2 = new Dictionary<string, double>();
+        public static long RegularRegular = 0;
         public static Dictionary<string, double> JackpotDistributionDictionary = new Dictionary<string, double>();
         public static Dictionary<string, double> myDictionaryTotalSpinsResultedInFG = new Dictionary<string, double>();
         

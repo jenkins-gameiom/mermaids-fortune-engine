@@ -45,7 +45,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine
             if (_context.RequestItems.isFreeSpin)
             {
 
-                if (_context.State.freeSpinsLeft <= 0)
+                if (_context.State.freeSpinsLeft < 0 || (_context.State.freeSpinsLeft == 0 && !_context.State.isReSpin))
                     throw new Exception("Error in validating freeSpins (freeSpinsLeft<=0)");
                 else if (!_context.State.isReSpin)
                     _context.State.freeSpinsLeft--;
@@ -57,7 +57,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine
             }
         }
 
-        public static bool enteredInRespin = false;
+        public static bool enteredInRespin = false; 
         public Result Spin(List<List<int>> spinResult = null)
         {
             //ValidateSpins();
@@ -80,37 +80,27 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine
             _context.State.BonusGame = null;
             if (spinResult == null)
                 spinResult = _context.MathFile.GetReels(_context, _random).reels;
+            if (!_context.RequestItems.isFreeSpin)
+            {
+                //var count1 = _context.MathFile.GetFullReels(1);
+                //var count2 = _context.MathFile.GetFullReels()[1].Count;
+                //var count3 = _context.MathFile.GetFullReels()[2].Count;
+                //var count4 = _context.MathFile.GetFullReels()[3].Count;
+                //var count5 = _context.MathFile.GetFullReels()[4].Count;
+
+            }
             List<int> reesStops = new List<int>();
             Result result = new Result();
             ApplyResultion(spinResult, result);
             Scan(result);
             CalculateResult(spinResult, result);
 
-            //if (!_context.RequestItems.isFreeSpin && result.Wins.Count == 1 && result.Wins.Any(x => x.WinType == WinType.Regular)
-            //    && result.Wins[0].WinAmount > 2500)
+            //if (!_context.RequestItems.isFreeSpin && result.Wins.Count == 1 && result.Wins[0].WinType == WinType.FiveOfAKind && _context.State.BonusGame.MCSymbols.Any(x => x.JPSymbolIfString == "minor")
+            //    && result.Wins[0].Ways == 2)
             //{
             //    //3 scatters yes regular win "3 BN SYMBOLS + win"
-            //    SerializeObjectAndWriteToFile(result, "hugewin");
+            //    SerializeObjectAndWriteToFile(result, "fiveofakindminor");
             //}
-            //if (!_context.RequestItems.isFreeSpin && result.Wins.Count == 1 && result.Wins.Any(x => x.WinType == WinType.Regular)
-            //    && result.Wins[0].Symbol == 9 && result.Wins[0].LongestSequence == 3 && result.Wins[0].Ways == 1)
-            //{
-            //    //3 scatters yes regular win "3 BN SYMBOLS + win"
-            //    SerializeObjectAndWriteToFile(result, "threeofakind");
-            //}
-            //if (!_context.RequestItems.isFreeSpin && result.Wins.Count == 1 && result.Wins.Any(x => x.WinType == WinType.FiveOfAKind)
-            //     && result.Wins[0].Ways == 2)
-            //{
-            //    //3 scatters yes regular win "3 BN SYMBOLS + win"
-            //    SerializeObjectAndWriteToFile(result, "fiveofakindtwoways");
-            //}
-            //if (_context.RequestItems.isFreeSpin && result.Wins.Count == 1 && result.Wins.Any(x => x.WinType == WinType.FiveOfAKind)
-            //    && _context.State.holdAndSpin == HoldAndSpin.First)
-            //{
-            //    //3 scatters yes regular win "3 BN SYMBOLS + win"
-            //    SerializeObjectAndWriteToFile(result, "fiveofakindwithfirstreelrespin");
-            //}
-
             //FROM NOW THOSE CANT HAPPEN, no combination of JP1,JP2,JP4 exists
             //if (!_context.RequestItems.isFreeSpin && result.Wins.Count == 1 && result.Wins.Any(x => x.WinType == WinType.FiveOfAKind)
             //    && !_context.State.BonusGame.MCSymbols.Any(x => x.JPSymbolIfString == "grand")

@@ -198,6 +198,10 @@ namespace AGS.Slots.MermaidsFortune.Platform
                     }
                 }
             }
+            else
+            {
+                _context.State.holdAndSpin = HoldAndSpin.None;
+            }
 
         }
 
@@ -338,7 +342,9 @@ namespace AGS.Slots.MermaidsFortune.Platform
                         ways = win.Ways,
                         symbolId = win.Symbol,
                         winAmount = win.WinAmount,
-                        winningSymbolsPositions = win.WinningLines.Select(x => new int[] { x.Coordinate.Item1, x.Coordinate.Item2 }).ToArray()
+                        winningSymbolsPositions = win.WinningLines.Select(x => new int[] { x.Coordinate.Item1, x.Coordinate.Item2 }).ToArray(),
+                        MCSymbols = win.MCSymbols.ToList()
+                        
                     };
                     //SetJackpotGame();
                 }
@@ -433,7 +439,6 @@ namespace AGS.Slots.MermaidsFortune.Platform
                 {
                     result = _gameEngine.Spin(spinResult);
                 }
-
                 //Create spin object
                 Spin spin, rootSpin;
                 var fsToSave = 0;
@@ -487,9 +492,27 @@ namespace AGS.Slots.MermaidsFortune.Platform
                 }
 
                 obj.config = null;
-
+                //Dont let json grow to much if many FS
+                if (spinPublicResponse.spin.childFeature != null && spinPublicResponse.spin.childFeature.Where(x => x.type != "pick").Count() > 2)
+                {
+                    var a = spinPublicResponse.spin.childFeature.Where(x => x.type != "pick").First();
+                    spinPublicResponse.spin.childFeature.Remove(a);
+                }
+                if (_context.State.lastState != null && _context.State.lastState.spin.childFeature != null && _context.State.lastState.spin.childFeature.Where(x => x.type != "pick").Count() > 2)
+                {
+                    var a = _context.State.lastState.spin.childFeature.Where(x => x.type != "pick").First();
+                    _context.State.lastState.spin.childFeature.Remove(a);
+                }
 
                 obj.publicState = Json.ObjectToDynamic(spinPublicResponse);
+                if (spinPublicResponse.spin.holdAndSpin != HoldAndSpin.None)
+                {
+
+                }
+                if (_context.State.holdAndSpin != HoldAndSpin.None)
+                {
+
+                }
                 obj.privateState = Json.ObjectToDynamic(_context.State);
             }
             catch (Exception ex)

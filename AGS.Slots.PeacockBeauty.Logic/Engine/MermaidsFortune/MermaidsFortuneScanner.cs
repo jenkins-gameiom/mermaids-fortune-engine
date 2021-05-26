@@ -162,6 +162,10 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                 }
                 if (symbol != 9 && symbol != 14)
                 {
+                    if (new int[] {9, 10, 11, 12, 13, 14, 0}.Contains(symbol))
+                    {
+
+                    }
                     HandleReel(symbol, 1, resultMatrix, lines, ways);
 
                 }
@@ -279,6 +283,10 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                     Symbol = 9,
                     WinType = WinType.FiveOfAKind
                 };
+                if (fiveOfAkindWays == 2 && _context.State.BonusGame != null && _context.State.BonusGame.MCSymbols.Any(x => x.JPSymbolIfString == "minor"))
+                {
+
+                }
                 result.Wins.Add(win);
             }
             //3 - get powerextream of diamonds (25 for 3, 50 for 4)
@@ -354,10 +362,6 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                     }
                     else
                     {
-                        if (_context.State.freeSpinsLeft == 1)
-                        {
-
-                        }
                         _context.State.holdAndSpin = HoldAndSpin.Second;
                         _context.State.isReSpin = true;
                     }
@@ -416,6 +420,10 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                         _context.State.holdAndSpin = HoldAndSpin.None;
                     }
                 }
+            }
+            else
+            {
+                _context.State.holdAndSpin = HoldAndSpin.None;
             }
         }
 

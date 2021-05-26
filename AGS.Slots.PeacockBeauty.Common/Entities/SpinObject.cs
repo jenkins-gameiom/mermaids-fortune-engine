@@ -66,6 +66,7 @@ namespace AGS.Slots.MermaidsFortune.Common.Entities
         public int[][] winningSymbolsPositions { get; set; }
         public int? lineNumber { get; set; }
         public int? symbolId { get; set; }
+        public List<MCSymbol> MCSymbols { get; set; }
         public long multiplier { get; set; }
         public int? ways { get; set; }
         public int freeSpinsAmount { get; set; }

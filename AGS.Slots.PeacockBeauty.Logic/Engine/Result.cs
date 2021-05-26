@@ -135,6 +135,8 @@ namespace AGS.Slots.MermaidsFortune.Logic
         public WinType WinType { get; set; }
         public long WinAmount { get; set; }
         public int Ways { get; set; }
+
+        public List<MCSymbol> MCSymbols { get; set; }
         public HashSet<ItemOnReel> WinningLines { get; set; }
         public int GrantedFreeSpins { get; set; }
         public int Symbol { get; set; }
