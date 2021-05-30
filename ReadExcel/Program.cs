@@ -98,6 +98,6 @@ namespace ReadExcel
                     totalWeights += "]";
                     totalWeights += "\n";
                 }
-            } }
+            }  }
     }
 }

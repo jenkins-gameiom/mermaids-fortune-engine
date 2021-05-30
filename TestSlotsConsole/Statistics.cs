@@ -124,108 +124,37 @@ namespace TestSlotsConsole
             parts += regularregular + regularbn + regularfive + regularfour + regularthree + regulartotal;
             parts += fsregular + fsbn + fsfive + fsfour + fsthree + fstotal;
             parts += totalregular + totalbn + totalfive + totalfour + totalthree + totaltotal;
-            var kvpString = "";
-            //foreach (var kvp in MermaidsFortuneResolver.RegularWinDictionary)
-            //{
-            //    kvpString = kvp.Key + " - " + (kvp.Value / totalDebit) + "\n";
-            //    parts += kvpString;
-            //}
-
-            for (int i = 1; i < 15; i++)
+            parts += "FS Break Down:\n";
+            parts += "Respin 01000  First- " + MermaidsFortuneResolver.RespinBreakDown01000 / (double)totalDebit * 100 + "\n";
+            parts += "Respin 00010  Second - " + MermaidsFortuneResolver.RespinBreakDown00010 / (double)totalDebit * 100 + "\n";
+            parts += "Respin 01010 - Both " + MermaidsFortuneResolver.RespinBreakDown01010 / (double)totalDebit * 100 + "\n";
+            parts += "No respin " + MermaidsFortuneResolver.RespinBreakDownNoRespin / (double)totalDebit * 100 + "\n";
+            parts += "All respin sum = " + (MermaidsFortuneResolver.RespinBreakDown01000 / (double) totalDebit +
+                                            MermaidsFortuneResolver.RespinBreakDown00010 / (double) totalDebit +
+                                            MermaidsFortuneResolver.RespinBreakDown01010 / (double) totalDebit +
+                                            MermaidsFortuneResolver.RespinBreakDownNoRespin / (double) totalDebit) * 100 + "\n";
+            parts += "FG_BONUS_WEIGHTS_1:" + "\n";
+            float z = (float)1731 / (float)MermaidsFortuneResolver.fsMCSymbolsWeightsRS1["100"];
+            var y = MermaidsFortuneResolver.fsMCSymbolsWeightsRS1.Select(x => new { ArgKey = int.Parse(x.Key), ArgValue = x.Value * z }).OrderBy(x => x.ArgKey).ToDictionary(x => x.ArgKey);
+            foreach (var xx in y)
             {
-                for (int j = 5; j > 2; j--)
-                {
-                    var key = i.ToString() + " : " + j.ToString();
-                    if (MermaidsFortuneResolver.RegularWinDictionary.ContainsKey(key))
-                    {
-                        kvpString = key + " - " + MermaidsFortuneResolver.RegularWinDictionary[key]  / totalDebit + "\n";
-                        parts += kvpString;
-                    }
-                }
+                parts += xx.Key + " : " + xx.Value.ArgValue + "\n";
             }
-            var regreg = "RegReg - " + MermaidsFortuneResolver.RegularRegular / totalDebit + "\n\n\n";
-            parts += regreg;
-            var hitRateString = "Regular Hit rate is: \n";
-            parts += hitRateString;
-            var dic = MermaidsFortuneResolver.RegularWinDictionaryHitRate;
-            for (int i = 1; i < 15; i++)
+            parts += "FG_BONUS_WEIGHTS_2:" + "\n";
+            z = (float)1200 / (float)MermaidsFortuneResolver.fsMCSymbolsWeightsRS2["100"];
+            y = MermaidsFortuneResolver.fsMCSymbolsWeightsRS2.Select(x => new { ArgKey = int.Parse(x.Key), ArgValue = x.Value * z }).OrderBy(x => x.ArgKey).ToDictionary(x => x.ArgKey);
+            foreach (var xx in y)
             {
-                for (int j = 5; j > 2; j--)
-                {
-                    var key = i.ToString() + " : " + j.ToString();
-                    if (dic.ContainsKey(key))
-                    {
-                        kvpString = key + " - " + MermaidsFortuneResolver.TotalRegularSpins / dic[key] + "\n";
-                        parts += kvpString;
-                    }
-                }
+                parts += xx.Key + " : " + xx.Value.ArgValue + "\n";
             }
-            var hitRateStringFS = "FS Hit rate is: \n";
-            parts += hitRateStringFS;
-            var dic2 = MermaidsFortuneResolver.FSWinDictionaryHitRate;
-            for (int i = 1; i < 15; i++)
+            parts += "FG_BONUS_WEIGHTS_3:" + "\n";
+            z = (float)200 / (float)MermaidsFortuneResolver.fsMCSymbolsWeightsRS3["100"];
+            y = MermaidsFortuneResolver.fsMCSymbolsWeightsRS3.Select(x => new { ArgKey = int.Parse(x.Key), ArgValue = x.Value * z }).OrderBy(x => x.ArgKey).ToDictionary(x => x.ArgKey);
+            foreach (var xx in y)
             {
-                for (int j = 5; j > 2; j--)
-                {
-                    var key = i.ToString() + " : " + j.ToString();
-                    if (dic2.ContainsKey(key))
-                    {
-                        kvpString = key + " - " + MermaidsFortuneResolver.TotalFSSpins / dic2[key] + "\n";
-                        parts += kvpString;
-                    }
-                }
-            }
-            hitRateStringFS = "Binary first Hit rate is: \n";
-            parts += hitRateStringFS;
-            dic2 = MermaidsFortuneResolver.BinaryFirstWinDictionaryHitRate;
-            for (int i = 1; i < 15; i++)
-            {
-                for (int j = 5; j > 2; j--)
-                {
-                    var key = i.ToString() + " : " + j.ToString();
-                    if (dic2.ContainsKey(key))
-                    {
-                        kvpString = key + " - " + MermaidsFortuneResolver.TotaBinaryFirstSpins / dic2[key] + "\n";
-                        parts += kvpString;
-                    }
-                }
-            }
-            hitRateStringFS = "Binary Second Hit rate is: \n";
-            parts += hitRateStringFS;
-            dic2 = MermaidsFortuneResolver.BinarySecondWinDictionaryHitRate;
-            for (int i = 1; i < 15; i++)
-            {
-                for (int j = 5; j > 2; j--)
-                {
-                    var key = i.ToString() + " : " + j.ToString();
-                    if (dic2.ContainsKey(key))
-                    {
-                        kvpString = key + " - " + MermaidsFortuneResolver.TotaBinarySecondSpins/ dic2[key] + "\n";
-                        parts += kvpString;
-                    }
-                }
-            }
-            hitRateStringFS = "Binary Both Hit rate is: \n";
-            parts += hitRateStringFS;
-            dic2 = MermaidsFortuneResolver.BinaryBothWinDictionaryHitRate;
-            for (int i = 1; i < 15; i++)
-            {
-                for (int j = 5; j > 2; j--)
-                {
-                    var key = i.ToString() + " : " + j.ToString();
-                    if (dic2.ContainsKey(key))
-                    {
-                        kvpString = key + " - " + MermaidsFortuneResolver.TotaBinaryBothSpins / dic2[key] + "\n";
-                        parts += kvpString;
-                    }
-                }
+                parts += xx.Key + " : " + xx.Value.ArgValue + "\n";
             }
             ret += parts;
-            //foreach (var kvp in MermaidsFortuneResolver.RegularWinDictionaryHitRate)
-            //{
-            //    parts += kvp.Key + " " + (double) MermaidsFortuneResolver.TotalRegularSpins / (double) kvp.Value + "\n";
-            //}
-            //ret += parts;
             return ret;
 
         }

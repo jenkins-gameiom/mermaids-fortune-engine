@@ -118,7 +118,6 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                     if (tempWays > 1)
                         ways[winningSymbol] *= tempWays;
                     HandleReel(winningSymbol, currentReelIndex, spinResultMatrix, resultDictionary, ways);
-
                 }
             }
 
@@ -129,7 +128,6 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
         public static Dictionary<string, int> dic = new Dictionary<string, int>();
         public void Scan(Result result)
         {
-
             //this part is just to get the items in the first reel. note that wins (3 to 5 same symbols)
             //can start only from the first reel.
             Dictionary<int, List<ItemOnReel>> lines = new Dictionary<int, List<ItemOnReel>>();
@@ -152,32 +150,16 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
             //now after we got the first reel, lets check the others to see if it contains the same symbols as the first reel.
             foreach (var symbol in lines.Keys.Distinct())
             {
-                if (!dic.ContainsKey(symbol.ToString()))
-                {
-                    dic.Add(symbol.ToString(), 1);
-                }
-                else
-                {
-                    dic[symbol.ToString()]++;
-                }
                 if (symbol != 9 && symbol != 14)
                 {
-                    if (new int[] {9, 10, 11, 12, 13, 14, 0}.Contains(symbol))
-                    {
-
-                    }
                     HandleReel(symbol, 1, resultMatrix, lines, ways);
-
                 }
             }
 
             //now we have 3 options of winning:
-
-
             //1 - we get 3 or more same symbols starting from the left reel.
             foreach (var symbol in lines.Keys)
             {
-                
                 var win = new Win()
                 {
                     Ways = ways[symbol],
@@ -185,28 +167,11 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                     Symbol = symbol,
                     WinType = WinType.Regular
                 };
-                if (win.Symbol >= 9 && win.Symbol <= 13)
-                {
-
-                }
                 if (win.LongestSequence > 2)
                 {
-                    if (new int[] { 9, 10, 11, 12, 13, 14, 0 }.Contains(symbol))
-                    {
-
-                    }
-
-                    if (win.Symbol == 0 || win.Symbol == 9 || win.Symbol == 14 || win.Symbol == 10 || win.Symbol == 11 || win.Symbol == 12 || win.Symbol == 13)
-                    {
-
-                    }
-
-                    
                     result.Wins.Add(win);
                 }
             }
-
-
 
             //3 scatter wins a freespin
             if (result.Scatter.Count() > 2)
@@ -220,14 +185,6 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                 };
                 result.Wins.Add(win);
             }
-            if (resultMatrix[2].Any(x => x.Symbol == 0))
-            {
-            }
-
-            if (_context.RequestItems.isFreeSpin && _context.State.holdAndSpin != HoldAndSpin.None)
-            {
-
-            }
             HandleRespin();
             HandleOak(result);
         }
@@ -237,94 +194,49 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
             //3 - if we have 5 diamonds in a row
             if (resultMatrix[0].Any(x => IsWildOrMCSymbol(x.Symbol)) &&
                 resultMatrix[1].Any(x => IsWildOrMCSymbol(x.Symbol)) &&
-                resultMatrix[2].Any(x => new int[] {10, 11, 12, 13}.Contains(x.Symbol)) &&
+                resultMatrix[2].Any(x => new int[] { 10, 11, 12, 13 }.Contains(x.Symbol)) &&
                 resultMatrix[3].Any(x => IsWildOrMCSymbol(x.Symbol)) &&
-                resultMatrix[4].Any(x => IsWildOrMCSymbol(x.Symbol)) /* && !_context.State.isReSpin.Value*/)
+                resultMatrix[4].Any(x => IsWildOrMCSymbol(x.Symbol)))
             {
-                if (_context.RequestItems.isFreeSpin && _context.State.isReSpin)
-                {
-                }
-
-                if (resultMatrix[2].Any(x => x.Symbol == 0))
-                {
-
-                }
                 var fiveOfAkindWays =
                     resultMatrix[0].Count(x => IsWildOrMCSymbol(x.Symbol)) *
                     resultMatrix[1].Count(x => IsWildOrMCSymbol(x.Symbol)) *
                     1 *
                     resultMatrix[3].Count(x => IsWildOrMCSymbol(x.Symbol)) *
                     resultMatrix[4].Count(x => IsWildOrMCSymbol(x.Symbol));
-                if (fiveOfAkindWays == 0)
-                {
-
-                }
-                if (resultMatrix[2].Any(x => x.Symbol == 11 || x.Symbol == 12) && resultMatrix[2].Any(x => x.Symbol == 13))
-                {
-
-                }
-                if (fiveOfAkindWays > 1 )
-                {
-
-                }
-                if (fiveOfAkindWays > 1 && resultMatrix[2].Count(x => new int[]{11,12,13,14}.Contains(x.Symbol)) > 1);
-                {
-
-                }
-                if (fiveOfAkindWays > 1 && resultMatrix[2].Any(x => x.Symbol == 11 || x.Symbol == 12) && resultMatrix[2].Any(x => x.Symbol == 13))
-                {
-
-                }
                 var win = new Win()
                 {
                     Ways = fiveOfAkindWays,
                     WinningLines = new HashSet<ItemOnReel>(resultMatrix.SelectMany(x => x)
-                        .Where(x => new int[] {9, 10, 11, 12, 13, 0}.Contains(x.Symbol)).ToList()),
+                        .Where(x => new int[] { 9, 10, 11, 12, 13, 0 }.Contains(x.Symbol)).ToList()),
                     Symbol = 9,
                     WinType = WinType.FiveOfAKind
                 };
-                if (fiveOfAkindWays == 2 && _context.State.BonusGame != null && _context.State.BonusGame.MCSymbols.Any(x => x.JPSymbolIfString == "minor"))
-                {
-
-                }
                 result.Wins.Add(win);
             }
             //3 - get powerextream of diamonds (25 for 3, 50 for 4)
             else if (resultMatrix[0].Any(x => IsWildOrMCSymbol(x.Symbol)) &&
                      resultMatrix[1].Any(x => IsWildOrMCSymbol(x.Symbol)) &&
-                     resultMatrix[2].Any(x => new int[] {10, 11, 12, 13, 0}.Contains(x.Symbol)))
+                     resultMatrix[2].Any(x => new int[] { 10, 11, 12, 13, 0 }.Contains(x.Symbol)))
             {
                 var reelsOfWinAmount = 3;
-                var wayss = resultMatrix[0].Count(x => IsWildOrMCSymbol(x.Symbol)) *
+                var threeOrFourOAKWays = resultMatrix[0].Count(x => IsWildOrMCSymbol(x.Symbol)) *
                             resultMatrix[1].Count(x => IsWildOrMCSymbol(x.Symbol)) *
-                            resultMatrix[2].Count(x => new int[] {10, 11, 12, 13, 0}.Contains(x.Symbol));
+                            resultMatrix[2].Count(x => new int[] { 10, 11, 12, 13, 0 }.Contains(x.Symbol));
                 if (resultMatrix[3].Any(x => IsWildOrMCSymbol(x.Symbol)))
                 {
-                    if (_context.RequestItems.isFreeSpin)
-                    {
-                        amountOf4inFS++;
-                    }
-
-                    wayss *= resultMatrix[3].Count(x => IsWildOrMCSymbol(x.Symbol));
+                    threeOrFourOAKWays *= resultMatrix[3].Count(x => IsWildOrMCSymbol(x.Symbol));
                     reelsOfWinAmount = 4;
-                }
-                else
-                {
-                    if (_context.RequestItems.isFreeSpin)
-                    {
-                        amountOf3inFS++;
-                    }
                 }
 
                 var win = new Win()
                 {
-                    Ways = wayss,
+                    Ways = threeOrFourOAKWays,
                     WinningLines = new HashSet<ItemOnReel>(resultMatrix.SelectMany(x => x).Where(x =>
-                        new int[] {9, 10, 11, 12, 13, 0}.Contains(x.Symbol) && x.Reel < reelsOfWinAmount).ToList()),
+                        new int[] { 9, 10, 11, 12, 13, 0 }.Contains(x.Symbol) && x.Reel < reelsOfWinAmount).ToList()),
                     Symbol = 9,
                     WinType = WinType.Regular
                 };
-
                 result.Wins.Add(win);
             }
         }
@@ -336,13 +248,11 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
             //here we calculate the ReSpin feature
             if (_context.RequestItems.isFreeSpin)
             {
-                AmountOfFS++;
                 //first reel is 0'd
                 if (resultMatrix[1].All(x => x.Symbol == 0) && !resultMatrix[3].All(x => x.Symbol == 0))
                 {
                     if (_context.State.holdAndSpin != HoldAndSpin.None)
                     {
-                        AmountOfFirst++;
                         _context.State.holdAndSpin = HoldAndSpin.None;
                     }
                     else
@@ -357,7 +267,6 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                 {
                     if (_context.State.holdAndSpin != HoldAndSpin.None)
                     {
-                        AmountOfSecond++;
                         _context.State.holdAndSpin = HoldAndSpin.None;
                     }
                     else
@@ -370,48 +279,18 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                 //both reel are 0'd
                 if (resultMatrix[1].All(x => x.Symbol == 0) && resultMatrix[3].All(x => x.Symbol == 0))
                 {
-                    /*
-                     * in this scenario,
-                     * 1 - if I had first,second,both before and now I have both, it becomes none
-                     * 2 - if I had none before and now I have both, it becomes both
-                     */
-                    //if (_context.State.holdAndSpin != HoldAndSpin.None)
-                    //{
-                    //    _context.State.holdAndSpin = HoldAndSpin.None;
-                    //}
-                    //else
-                    //{
-                    //    _context.State.isReSpin = true;
-                    //    _context.State.holdAndSpin = HoldAndSpin.Both;
-                    //}
-
-
-                    /*
-                     * in this scenario,
-                     * 1 - if I had first before and now I have both, it becomes second (cause the first finished already)
-                     * 2 - if I had second before and now I have both, it becomes first (cause the second finished already)
-                     * 3 - if I had both before and now I have both, it becomes none (cause I just finished the both)
-                     * 4 - if I had none before and now I have both, it becomes both
-                     *
-                     */
-
                     if (_context.State.holdAndSpin == HoldAndSpin.None)
                     {
-                        AmountOfBothFromNone++;
-
-                        AmountOfBothTotal++;
                         _context.State.holdAndSpin = HoldAndSpin.Both;
                         _context.State.isReSpin = true;
                     }
                     else if (_context.State.holdAndSpin == HoldAndSpin.First)
                     {
-                        AmountOfBothTotal++;
                         _context.State.holdAndSpin = HoldAndSpin.Both;
                         _context.State.isReSpin = true;
                     }
                     else if (_context.State.holdAndSpin == HoldAndSpin.Second)
                     {
-                        AmountOfBothTotal++;
                         _context.State.holdAndSpin = HoldAndSpin.Both;
                         _context.State.isReSpin = true;
                     }
@@ -426,13 +305,5 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                 _context.State.holdAndSpin = HoldAndSpin.None;
             }
         }
-
-        public static long amountOf3inFS = 0;
-        public static long amountOf4inFS = 0;
-        public static long AmountOfBothTotal = 0;
-        public static long AmountOfBothFromNone = 0;
-        public static long AmountOfFirst= 0;
-        public static long AmountOfSecond = 0;
-        public static long AmountOfFS = 0;
     }
 }

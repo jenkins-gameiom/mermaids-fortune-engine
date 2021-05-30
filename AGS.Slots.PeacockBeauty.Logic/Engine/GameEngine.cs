@@ -95,12 +95,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine
             Scan(result);
             CalculateResult(spinResult, result);
 
-            //if (!_context.RequestItems.isFreeSpin && result.Wins.Count == 1 && result.Wins[0].WinType == WinType.FiveOfAKind && _context.State.BonusGame.MCSymbols.Any(x => x.JPSymbolIfString == "minor")
-            //    && result.Wins[0].Ways == 2)
-            //{
-            //    //3 scatters yes regular win "3 BN SYMBOLS + win"
-            //    SerializeObjectAndWriteToFile(result, "fiveofakindminor");
-            //}
+
             //FROM NOW THOSE CANT HAPPEN, no combination of JP1,JP2,JP4 exists
             //if (!_context.RequestItems.isFreeSpin && result.Wins.Count == 1 && result.Wins.Any(x => x.WinType == WinType.FiveOfAKind)
             //    && !_context.State.BonusGame.MCSymbols.Any(x => x.JPSymbolIfString == "grand")
