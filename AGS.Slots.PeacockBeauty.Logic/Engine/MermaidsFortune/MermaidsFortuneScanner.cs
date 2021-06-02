@@ -248,7 +248,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
             //here we calculate the ReSpin feature
             if (_context.RequestItems.isFreeSpin)
             {
-                //first reel is 0'd
+                //first reel is 0'd 01000 => 01000 01010
                 if (resultMatrix[1].All(x => x.Symbol == 0) && !resultMatrix[3].All(x => x.Symbol == 0))
                 {
                     if (_context.State.holdAndSpin != HoldAndSpin.None)
@@ -262,7 +262,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                     }
                 }
 
-                //second reel is 0'd
+                //second reel is 0'd 00010
                 if (resultMatrix[3].All(x => x.Symbol == 0) && !resultMatrix[1].All(x => x.Symbol == 0))
                 {
                     if (_context.State.holdAndSpin != HoldAndSpin.None)
@@ -276,7 +276,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                     }
                 }
 
-                //both reel are 0'd
+                //both reel are 0'd 01010
                 if (resultMatrix[1].All(x => x.Symbol == 0) && resultMatrix[3].All(x => x.Symbol == 0))
                 {
                     if (_context.State.holdAndSpin == HoldAndSpin.None)

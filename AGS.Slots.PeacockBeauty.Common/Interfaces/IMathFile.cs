@@ -27,7 +27,7 @@ namespace AGS.Slots.MermaidsFortune.Common.Interfaces
         /// <returns></returns>
         //int ResolveBonusType(int selectedNumber);
         //gold_symbols_machine_bonus_game_jackpot_table
-        int MoneyChargeSymbol(bool isFreeSpin, int reelSet, IRandom random);
+        int MoneyChargeSymbol(bool isFreeSpin, int reelSet, IRandom random, HoldAndSpin holdAndSpinType = HoldAndSpin.None);
 
         List<int> JackpotTableValues { get; }
 

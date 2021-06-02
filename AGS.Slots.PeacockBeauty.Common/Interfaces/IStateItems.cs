@@ -12,6 +12,8 @@ namespace AGS.Slots.MermaidsFortune.Common.Interfaces
         public string state { get; set; }
         public bool? completed { get; set; }
         public bool isReSpin { get; set; }
+        public HoldAndSpin respinTypeResolver { get; set; }
+        public bool isRespinResolver { get; set; }
         public int animationState { get; set; }
         public int? freeSpinsLeft { get; set; }
         public HoldAndSpin holdAndSpin { get; set; }

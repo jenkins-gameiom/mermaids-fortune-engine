@@ -133,27 +133,53 @@ namespace TestSlotsConsole
                                             MermaidsFortuneResolver.RespinBreakDown00010 / (double) totalDebit +
                                             MermaidsFortuneResolver.RespinBreakDown01010 / (double) totalDebit +
                                             MermaidsFortuneResolver.RespinBreakDownNoRespin / (double) totalDebit) * 100 + "\n";
+            parts += "FS Hits :\n";
+            parts += "Respin Hits 01000  First- " + MermaidsFortuneResolver.HitRateRespinBreakDown01000 + "\n";
+            parts += "Respin Hits 00010  Second - " + MermaidsFortuneResolver.HitRateRespinBreakDown00010 + "\n";    
+            parts += "Respin Hits 01010 - Both " + MermaidsFortuneResolver.HitRateRespinBreakDown01010 + "\n";
+            parts += "FS Hit rate:\n";
+            parts += "Respin HitRate 01000  First- " + MermaidsFortuneResolver.TotalFS / (double)MermaidsFortuneResolver.HitRateRespinBreakDown01000 + "\n";
+            parts += "Respin HitRate 00010  Second - " + MermaidsFortuneResolver.TotalFS / (double)MermaidsFortuneResolver.HitRateRespinBreakDown00010 + "\n";
+            parts += "Respin HitRate 01010 - Both " + MermaidsFortuneResolver.TotalFS / (double)MermaidsFortuneResolver.HitRateRespinBreakDown01010 + "\n";
+            parts += "FS wins:\n";
+            parts += "Total left respin win- " + MermaidsFortuneResolver.RespinBreakDown01000 * 50 + "\n";
+            parts += "Total right respin win - " + MermaidsFortuneResolver.RespinBreakDown00010 * 50 + "\n";
+            parts += "Total both respin win " + MermaidsFortuneResolver.RespinBreakDown01010 * 50 + "\n";
             parts += "FG_BONUS_WEIGHTS_1:" + "\n";
-            float z = (float)1731 / (float)MermaidsFortuneResolver.fsMCSymbolsWeightsRS1["100"];
-            var y = MermaidsFortuneResolver.fsMCSymbolsWeightsRS1.Select(x => new { ArgKey = int.Parse(x.Key), ArgValue = x.Value * z }).OrderBy(x => x.ArgKey).ToDictionary(x => x.ArgKey);
-            foreach (var xx in y)
+            float z;
+            if (MermaidsFortuneResolver.fsMCSymbolsWeightsRS1.ContainsKey("100"))
             {
-                parts += xx.Key + " : " + xx.Value.ArgValue + "\n";
+                z = (float)1731 / (float)MermaidsFortuneResolver.fsMCSymbolsWeightsRS1["100"];
+                var y = MermaidsFortuneResolver.fsMCSymbolsWeightsRS1.Select(x => new { ArgKey = int.Parse(x.Key), ArgValue = x.Value * z }).OrderBy(x => x.ArgKey).ToDictionary(x => x.ArgKey);
+                foreach (var xx in y)
+                {
+                    parts += xx.Key + " : " + xx.Value.ArgValue + "\n";
+                }
             }
+
+            
             parts += "FG_BONUS_WEIGHTS_2:" + "\n";
-            z = (float)1200 / (float)MermaidsFortuneResolver.fsMCSymbolsWeightsRS2["100"];
-            y = MermaidsFortuneResolver.fsMCSymbolsWeightsRS2.Select(x => new { ArgKey = int.Parse(x.Key), ArgValue = x.Value * z }).OrderBy(x => x.ArgKey).ToDictionary(x => x.ArgKey);
-            foreach (var xx in y)
+            if (MermaidsFortuneResolver.fsMCSymbolsWeightsRS2.ContainsKey("100"))
             {
-                parts += xx.Key + " : " + xx.Value.ArgValue + "\n";
+                z = (float)1200 / (float)MermaidsFortuneResolver.fsMCSymbolsWeightsRS2["100"];
+                var y = MermaidsFortuneResolver.fsMCSymbolsWeightsRS2.Select(x => new { ArgKey = int.Parse(x.Key), ArgValue = x.Value * z }).OrderBy(x => x.ArgKey).ToDictionary(x => x.ArgKey);
+                foreach (var xx in y)
+                {
+                    parts += xx.Key + " : " + xx.Value.ArgValue + "\n";
+                }
             }
-            parts += "FG_BONUS_WEIGHTS_3:" + "\n";
-            z = (float)200 / (float)MermaidsFortuneResolver.fsMCSymbolsWeightsRS3["100"];
-            y = MermaidsFortuneResolver.fsMCSymbolsWeightsRS3.Select(x => new { ArgKey = int.Parse(x.Key), ArgValue = x.Value * z }).OrderBy(x => x.ArgKey).ToDictionary(x => x.ArgKey);
-            foreach (var xx in y)
+            if (MermaidsFortuneResolver.fsMCSymbolsWeightsRS3.ContainsKey("100"))
             {
-                parts += xx.Key + " : " + xx.Value.ArgValue + "\n";
+                parts += "FG_BONUS_WEIGHTS_3:" + "\n";
+                z = (float)200 / (float)MermaidsFortuneResolver.fsMCSymbolsWeightsRS3["100"];
+                var y = MermaidsFortuneResolver.fsMCSymbolsWeightsRS3.Select(x => new { ArgKey = int.Parse(x.Key), ArgValue = x.Value * z }).OrderBy(x => x.ArgKey).ToDictionary(x => x.ArgKey);
+                foreach (var xx in y)
+                {
+                    parts += xx.Key + " : " + xx.Value.ArgValue + "\n";
+                }
             }
+
+            
             ret += parts;
             return ret;
 

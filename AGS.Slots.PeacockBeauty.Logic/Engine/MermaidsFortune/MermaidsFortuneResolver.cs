@@ -34,12 +34,16 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
             _random = random;
             _context = context;
         }
-        public static bool isRespinNext = false;
-        public static HoldAndSpin respinType = HoldAndSpin.None;
+        //public static bool isRespinNext = false;
+        //public static HoldAndSpin respinType = HoldAndSpin.None;
 
         public static long RespinBreakDown01000 = 0;
         public static long RespinBreakDown00010 = 0;
         public static long RespinBreakDown01010 = 0;
+        public static long HitRateRespinBreakDown01000 = 0;
+        public static long HitRateRespinBreakDown00010 = 0;
+        public static long HitRateRespinBreakDown01010 = 0;
+        public static long TotalFS = 0;
         public static long RespinBreakDownNoRespin = 0;
         public static Dictionary<string, long> parts = new Dictionary<string, long>();
         public static Dictionary<string, long> fsMCSymbolsWeightsRS1 = new Dictionary<string, long>();
@@ -54,8 +58,23 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
             List<int> betSteps = _context.Config.stakes;
             var mutliPliers = _context.MathFile.GetLookupPaytable();
             //TODO - check thats how you calculate treasurechestlevel
-            var betLevel = betSteps.IndexOf(_context.GetBetAmount());
             AssignMCSymbolsToExisting(result);
+            if (_context.RequestItems.isFreeSpin && _context.State.isRespinResolver)
+            {
+                TotalFS++;
+                if (_context.State.respinTypeResolver == HoldAndSpin.First)
+                {
+                    HitRateRespinBreakDown01000++;
+                }
+                if (_context.State.respinTypeResolver == HoldAndSpin.Second)
+                {
+                    HitRateRespinBreakDown00010++;
+                }
+                if (_context.State.respinTypeResolver == HoldAndSpin.Both)
+                {
+                    HitRateRespinBreakDown01010++;
+                }
+            }
             foreach (var win in result.Wins)
             {
                 //if we got 3 scatters 
@@ -77,17 +96,17 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                     win.WinAmount = currentLineWinAmount;
                     if (_context.RequestItems.isFreeSpin)
                     {
-                        if (isRespinNext)
+                        if (_context.State.isRespinResolver)
                         {
-                            if (respinType == HoldAndSpin.First)
+                            if (_context.State.respinTypeResolver == HoldAndSpin.First)
                             {
                                 RespinBreakDown01000 += win.WinAmount;
                             }
-                            if (respinType == HoldAndSpin.Second)
+                            if (_context.State.respinTypeResolver == HoldAndSpin.Second)
                             {
                                 RespinBreakDown00010 += win.WinAmount;
                             }
-                            if (respinType == HoldAndSpin.Both)
+                            if (_context.State.respinTypeResolver == HoldAndSpin.Both)
                             {
                                 RespinBreakDown01010 += win.WinAmount;
                             }
@@ -143,17 +162,17 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                         win.WinAmount += mcSymbolToAdd.winAmount;
                         if (_context.RequestItems.isFreeSpin)
                         {
-                            if (isRespinNext)
+                            if (_context.State.isRespinResolver)
                             {
-                                if (respinType == HoldAndSpin.First)
+                                if (_context.State.respinTypeResolver == HoldAndSpin.First)
                                 {
                                     RespinBreakDown01000 += mcSymbolToAdd.winAmount;
                                 }
-                                if (respinType == HoldAndSpin.Second)
+                                if (_context.State.respinTypeResolver == HoldAndSpin.Second)
                                 {
                                     RespinBreakDown00010 += mcSymbolToAdd.winAmount;
                                 }
-                                if (respinType == HoldAndSpin.Both)
+                                if (_context.State.respinTypeResolver == HoldAndSpin.Both)
                                 {
                                     RespinBreakDown01010 += mcSymbolToAdd.winAmount;
                                 }
@@ -231,17 +250,17 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                     result.WonAmount += currentLineWinAmount;
                     if (_context.RequestItems.isFreeSpin)
                     {
-                        if (isRespinNext)
+                        if (_context.State.isRespinResolver)
                         {
-                            if (respinType == HoldAndSpin.First)
+                            if (_context.State.respinTypeResolver == HoldAndSpin.First)
                             {
                                 RespinBreakDown01000 += win.WinAmount;
                             }
-                            if (respinType == HoldAndSpin.Second)
+                            if (_context.State.respinTypeResolver == HoldAndSpin.Second)
                             {
                                 RespinBreakDown00010 += win.WinAmount;
                             }
-                            if (respinType == HoldAndSpin.Both)
+                            if (_context.State.respinTypeResolver == HoldAndSpin.Both)
                             {
                                 RespinBreakDown01010 += win.WinAmount;
                             }
@@ -289,15 +308,21 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                     }
                 }
             }
-            if (_context.State.isReSpin)
+
+            _context.State.respinTypeResolver = HoldAndSpin.None;
+            _context.State.isRespinResolver = false;
+            if (_context.RequestItems.isFreeSpin)
             {
-                isRespinNext = true;
-                respinType = _context.State.holdAndSpin;
-            }
-            else
-            {
-                isRespinNext = false;
-                respinType = HoldAndSpin.None;
+                if (_context.State.isReSpin)
+                {
+                    _context.State.isRespinResolver = true;
+                    _context.State.respinTypeResolver = _context.State.holdAndSpin;
+                }
+                else
+                {
+                    _context.State.isRespinResolver = false;
+                    _context.State.respinTypeResolver = HoldAndSpin.None;
+                }
             }
             _context.State.completed = _context.State.freeSpinsLeft <= 0  && !_context.State.isReSpin && result.Wins.All(x => x.GrantedFreeSpins == 0);
         }
@@ -319,7 +344,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                 if (item.Symbol == 12)//NUMBER JP3
                 {
                     
-                    item.MCSymbol = (_context.MathFile.MoneyChargeSymbol(_context.RequestItems.isFreeSpin, _context.State.reelSet, _random) * _context.GetBetAmount()  / _context.MathFile.BetStepsDevider).ToString();// * _context.GetBetAmount()).ToString();
+                    item.MCSymbol = (_context.MathFile.MoneyChargeSymbol(_context.RequestItems.isFreeSpin, _context.State.reelSet, _random, _context.State.respinTypeResolver) * _context.GetBetAmount()  / _context.MathFile.BetStepsDevider).ToString();// * _context.GetBetAmount()).ToString();
                 }
                 if (item.Symbol == 13)//GRAND JP4
                 {

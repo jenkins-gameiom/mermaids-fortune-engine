@@ -32,6 +32,7 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
         private List<List<BaseTable>> fg_binary_reel_set = null;
         private List<ReelItemJackpot> base_bonus_weights = null;
         private List<ReelItemJackpot> fg_bonus_weights = null;
+        private List<ReelItemJackpot> fg_binary_bonus_weights = null;
         private int[] base_reelset_weights = null;
         private int[] fg_reelset_weights = null;
 
@@ -97,6 +98,11 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
             foreach (var fg_bonus in fg_bonus_weights)
             {
                 AggregateArray(fg_bonus.weights);
+            }
+            fg_binary_bonus_weights = config.fg_binary_bonus_weights.ToObject<List<ReelItemJackpot>>();
+            foreach (var fg_binary_bonus in fg_binary_bonus_weights)
+            {
+                AggregateArray(fg_binary_bonus.weights);
             }
             base_reelset_weights = config.base_reelset_weights.ToObject<int[]>();
             fg_reelset_weights = config.fg_reelset_weights.ToObject<int[]>();
@@ -355,15 +361,26 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
         }
 
         //this method assign mcsymbol value to one item of the matrix
-        public int MoneyChargeSymbol(bool isFreeSpin, int reelSet, IRandom random)
+        public int MoneyChargeSymbol(bool isFreeSpin, int reelSet, IRandom random, HoldAndSpin holdAndSpinType = HoldAndSpin.None)
         {
             int valueToFind = 0;
             if (isFreeSpin)
             {
-                valueToFind = random.Next(0,
-                    fg_bonus_weights[reelSet].weights[fg_bonus_weights[reelSet].weights.Length - 1]);
-                var selected = RandomWeightedIndex(fg_bonus_weights[reelSet].weights, valueToFind);
-                return fg_bonus_weights[reelSet].outcome[selected];
+                if (holdAndSpinType == HoldAndSpin.None)
+                {
+                    valueToFind = random.Next(0,
+                        fg_bonus_weights[reelSet].weights[fg_bonus_weights[reelSet].weights.Length - 1]);
+                    var selected = RandomWeightedIndex(fg_bonus_weights[reelSet].weights, valueToFind);
+                    return fg_bonus_weights[reelSet].outcome[selected];
+                }
+                else
+                {
+                    var holdAndSpinInt = (int) (holdAndSpinType - 1);
+                    valueToFind = random.Next(0,
+                        fg_binary_bonus_weights[holdAndSpinInt].weights[fg_binary_bonus_weights[holdAndSpinInt].weights.Length - 1]);
+                    var selected = RandomWeightedIndex(fg_binary_bonus_weights[holdAndSpinInt].weights, valueToFind);
+                    return fg_binary_bonus_weights[holdAndSpinInt].outcome[selected];
+                }
             }
             else
             {
@@ -379,12 +396,6 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
             {
                 return progressive_information[0];
             }
-        }
-        
-        public class ReelItemJackpotString
-        {
-            public List<string> outcome { get; set; }
-            public int[] weights { get; set; }
         }
     }
 }
