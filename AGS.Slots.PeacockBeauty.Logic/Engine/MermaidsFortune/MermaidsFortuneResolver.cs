@@ -37,44 +37,44 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
         //public static bool isRespinNext = false;
         //public static HoldAndSpin respinType = HoldAndSpin.None;
 
-        public static long RespinBreakDown01000 = 0;
-        public static long RespinBreakDown00010 = 0;
-        public static long RespinBreakDown01010 = 0;
-        public static long HitRateRespinBreakDown01000 = 0;
-        public static long HitRateRespinBreakDown00010 = 0;
-        public static long HitRateRespinBreakDown01010 = 0;
-        public static long TotalFS = 0;
-        public static long RespinBreakDownNoRespin = 0;
-        public static Dictionary<string, long> parts = new Dictionary<string, long>();
-        public static Dictionary<string, long> fsMCSymbolsWeightsRS1 = new Dictionary<string, long>();
-        public static Dictionary<string, long> fsMCSymbolsWeightsRS2 = new Dictionary<string, long>();
-        public static Dictionary<string, long> fsMCSymbolsWeightsRS3 = new Dictionary<string, long>();
+        //public static long RespinBreakDown01000 = 0;
+        //public static long RespinBreakDown00010 = 0;
+        //public static long RespinBreakDown01010 = 0;
+        //public static long HitRateRespinBreakDown01000 = 0;
+        //public static long HitRateRespinBreakDown00010 = 0;
+        //public static long HitRateRespinBreakDown01010 = 0;
+        //public static long TotalFS = 0;
+        //public static long RespinBreakDownNoRespin = 0;
+        //public static Dictionary<string, long> parts = new Dictionary<string, long>();
+        //public static Dictionary<string, long> fsMCSymbolsWeightsRS1 = new Dictionary<string, long>();
+        //public static Dictionary<string, long> fsMCSymbolsWeightsRS2 = new Dictionary<string, long>();
+        //public static Dictionary<string, long> fsMCSymbolsWeightsRS3 = new Dictionary<string, long>();
         //after we got the results and the wins, 
         public void EvaluateResult(Result result)
         {
-            string regular = "Regular - ";
-            string fs = "FS - ";
-            string stringToChoose = _context.RequestItems.isFreeSpin ? fs : regular;
-            List<int> betSteps = _context.Config.stakes;
+            //string regular = "Regular - ";
+            //string fs = "FS - ";
+            //string stringToChoose = _context.RequestItems.isFreeSpin ? fs : regular;
+            //List<int> betSteps = _context.Config.stakes;
             var mutliPliers = _context.MathFile.GetLookupPaytable();
-            //TODO - check thats how you calculate treasurechestlevel
+            ////TODO - check thats how you calculate treasurechestlevel
             AssignMCSymbolsToExisting(result);
-            if (_context.RequestItems.isFreeSpin && _context.State.isRespinResolver)
-            {
-                TotalFS++;
-                if (_context.State.respinTypeResolver == HoldAndSpin.First)
-                {
-                    HitRateRespinBreakDown01000++;
-                }
-                if (_context.State.respinTypeResolver == HoldAndSpin.Second)
-                {
-                    HitRateRespinBreakDown00010++;
-                }
-                if (_context.State.respinTypeResolver == HoldAndSpin.Both)
-                {
-                    HitRateRespinBreakDown01010++;
-                }
-            }
+            //if (_context.RequestItems.isFreeSpin && _context.State.isRespinResolver)
+            //{
+            //    TotalFS++;
+            //    if (_context.State.respinTypeResolver == HoldAndSpin.First)
+            //    {
+            //        HitRateRespinBreakDown01000++;
+            //    }
+            //    if (_context.State.respinTypeResolver == HoldAndSpin.Second)
+            //    {
+            //        HitRateRespinBreakDown00010++;
+            //    }
+            //    if (_context.State.respinTypeResolver == HoldAndSpin.Both)
+            //    {
+            //        HitRateRespinBreakDown01010++;
+            //    }
+            //}
             foreach (var win in result.Wins)
             {
                 //if we got 3 scatters 
@@ -94,37 +94,37 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                     var multiPlier = mutliPliers[win.Symbol];
                     var currentLineWinAmount = (long)multiPlier[result.Scatter.Count() - 3] * _context.GetBetAmount() * _context.GetDenom() / _context.MathFile.BetStepsDevider;
                     win.WinAmount = currentLineWinAmount;
-                    if (_context.RequestItems.isFreeSpin)
-                    {
-                        if (_context.State.isRespinResolver)
-                        {
-                            if (_context.State.respinTypeResolver == HoldAndSpin.First)
-                            {
-                                RespinBreakDown01000 += win.WinAmount;
-                            }
-                            if (_context.State.respinTypeResolver == HoldAndSpin.Second)
-                            {
-                                RespinBreakDown00010 += win.WinAmount;
-                            }
-                            if (_context.State.respinTypeResolver == HoldAndSpin.Both)
-                            {
-                                RespinBreakDown01010 += win.WinAmount;
-                            }
-                        }
-                        else
-                        {
-                            RespinBreakDownNoRespin += win.WinAmount;
-                        }
-                    }
+                    //if (_context.RequestItems.isFreeSpin)
+                    //{
+                    //    if (_context.State.isRespinResolver)
+                    //    {
+                    //        if (_context.State.respinTypeResolver == HoldAndSpin.First)
+                    //        {
+                    //            RespinBreakDown01000 += win.WinAmount;
+                    //        }
+                    //        if (_context.State.respinTypeResolver == HoldAndSpin.Second)
+                    //        {
+                    //            RespinBreakDown00010 += win.WinAmount;
+                    //        }
+                    //        if (_context.State.respinTypeResolver == HoldAndSpin.Both)
+                    //        {
+                    //            RespinBreakDown01010 += win.WinAmount;
+                    //        }
+                    //    }
+                    //    else
+                    //    {
+                    //        RespinBreakDownNoRespin += win.WinAmount;
+                    //    }
+                    //}
                     result.WonAmount += currentLineWinAmount;
-                    if (!parts.ContainsKey(stringToChoose +"bn"))
-                    {
-                        parts.Add(stringToChoose + "bn", win.WinAmount);
-                    }
-                    else
-                    {
-                        parts[stringToChoose + "bn"] += win.WinAmount;
-                    }
+                    //if (!parts.ContainsKey(stringToChoose +"bn"))
+                    //{
+                    //    parts.Add(stringToChoose + "bn", win.WinAmount);
+                    //}
+                    //else
+                    //{
+                    //    parts[stringToChoose + "bn"] += win.WinAmount;
+                    //}
                 }
                 else if (win.WinType == WinType.FiveOfAKind)
                 {
@@ -160,69 +160,69 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
                         mcSymbolToAdd.coordinate = mcSymbol.Coordinate;
                         mcSymbolToAdd.index = mcSymbol.Index;
                         win.WinAmount += mcSymbolToAdd.winAmount;
-                        if (_context.RequestItems.isFreeSpin)
-                        {
-                            if (_context.State.isRespinResolver)
-                            {
-                                if (_context.State.respinTypeResolver == HoldAndSpin.First)
-                                {
-                                    RespinBreakDown01000 += mcSymbolToAdd.winAmount;
-                                }
-                                if (_context.State.respinTypeResolver == HoldAndSpin.Second)
-                                {
-                                    RespinBreakDown00010 += mcSymbolToAdd.winAmount;
-                                }
-                                if (_context.State.respinTypeResolver == HoldAndSpin.Both)
-                                {
-                                    RespinBreakDown01010 += mcSymbolToAdd.winAmount;
-                                }
-                            }
-                            else
-                            {
-                                RespinBreakDownNoRespin += mcSymbolToAdd.winAmount;
-                            }
-                            var dic = fsMCSymbolsWeightsRS1;
-
-                            if (_context.State.reelSet == 0)
-                            {
-                                dic = fsMCSymbolsWeightsRS1;
-                                if (dic.ContainsKey("100") && dic["100"] == 1731)
-                                {
-
-                                }
-                            }
-                            if (_context.State.reelSet == 1)
-                            {
-                                dic = fsMCSymbolsWeightsRS2;
-                                if (dic.ContainsKey("100"))
-                                {
-                                    float z = (float)1200 / (float)dic["100"];
-                                    var y = dic.Select(x => new { ArgKey = int.Parse(x.Key), ArgValue = x.Value * z }).OrderBy(x => x.ArgKey);
-                                }
-                                if (dic.ContainsKey("100") && dic["100"] == 1200)
-                                {
-                                }
-                            }
-                            if (_context.State.reelSet == 2)
-                            {
-                                dic = fsMCSymbolsWeightsRS3;
-                                if (dic.ContainsKey("100"))
-                                {
-                                    float z = (float)200 / (float)dic["100"];
-                                    var y = dic.Select(x => new{ArgKey = int.Parse(x.Key), ArgValue = x.Value * z}).OrderBy(x => x.ArgKey);
-                                }
-                                if (dic.ContainsKey("100") && dic["100"] == 200)
-                                {
-                                }
-                            }
-
-                            
-                            if (!dic.ContainsKey(mcSymbolToAdd.JPSymbolIfString))
-                            {
-                                dic.Add(mcSymbolToAdd.JPSymbolIfString, 0);
-                            }
-                            dic[mcSymbolToAdd.JPSymbolIfString]++;
-                        }
+                        //if (_context.RequestItems.isFreeSpin)
+                        //{
+                        //    if (_context.State.isRespinResolver)
+                        //    {
+                        //        if (_context.State.respinTypeResolver == HoldAndSpin.First)
+                        //        {
+                        //            RespinBreakDown01000 += mcSymbolToAdd.winAmount;
+                        //        }
+                        //        if (_context.State.respinTypeResolver == HoldAndSpin.Second)
+                        //        {
+                        //            RespinBreakDown00010 += mcSymbolToAdd.winAmount;
+                        //        }
+                        //        if (_context.State.respinTypeResolver == HoldAndSpin.Both)
+                        //        {
+                        //            RespinBreakDown01010 += mcSymbolToAdd.winAmount;
+                        //        }
+                        //    }
+                        //    else
+                        //    {
+                        //        RespinBreakDownNoRespin += mcSymbolToAdd.winAmount;
+                        //    }
+                        //    var dic = fsMCSymbolsWeightsRS1;
+                        //
+                        //    if (_context.State.reelSet == 0)
+                        //    {
+                        //        dic = fsMCSymbolsWeightsRS1;
+                        //        if (dic.ContainsKey("100") && dic["100"] == 1731)
+                        //        {
+                        //
+                        //        }
+                        //    }
+                        //    if (_context.State.reelSet == 1)
+                        //    {
+                        //        dic = fsMCSymbolsWeightsRS2;
+                        //        if (dic.ContainsKey("100"))
+                        //        {
+                        //            float z = (float)1200 / (float)dic["100"];
+                        //            var y = dic.Select(x => new { ArgKey = int.Parse(x.Key), ArgValue = x.Value * z }).OrderBy(x => x.ArgKey);
+                        //        }
+                        //        if (dic.ContainsKey("100") && dic["100"] == 1200)
+                        //        {
+                        //        }
+                        //    }
+                        //    if (_context.State.reelSet == 2)
+                        //    {
+                        //        dic = fsMCSymbolsWeightsRS3;
+                        //        if (dic.ContainsKey("100"))
+                        //        {
+                        //            float z = (float)200 / (float)dic["100"];
+                        //            var y = dic.Select(x => new{ArgKey = int.Parse(x.Key), ArgValue = x.Value * z}).OrderBy(x => x.ArgKey);
+                        //        }
+                        //        if (dic.ContainsKey("100") && dic["100"] == 200)
+                        //        {
+                        //        }
+                        //    }
+                        //
+                        //    
+                        //    if (!dic.ContainsKey(mcSymbolToAdd.JPSymbolIfString))
+                        //    {
+                        //        dic.Add(mcSymbolToAdd.JPSymbolIfString, 0);
+                        //    }
+                        //    dic[mcSymbolToAdd.JPSymbolIfString]++;
+                        //}
                         result.WonAmount += mcSymbolToAdd.winAmount;
                         win.MCSymbols.Add(mcSymbolToAdd);
                         _context.State.BonusGame.MCSymbols.Add(mcSymbolToAdd);
@@ -231,14 +231,14 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
 
                     
 
-                    if (!parts.ContainsKey(stringToChoose + "5ofakind"))
-                    {
-                        parts.Add(stringToChoose + "5ofakind", win.WinAmount);
-                    }
-                    else
-                    {
-                        parts[stringToChoose + "5ofakind"] += win.WinAmount;
-                    }
+                    //if (!parts.ContainsKey(stringToChoose + "5ofakind"))
+                    //{
+                    //    parts.Add(stringToChoose + "5ofakind", win.WinAmount);
+                    //}
+                    //else
+                    //{
+                    //    parts[stringToChoose + "5ofakind"] += win.WinAmount;
+                    //}
                 }
                 else
                 {
@@ -248,64 +248,64 @@ namespace AGS.Slots.MermaidsFortune.Logic.Engine.MermaidsFortune
 
                     win.WinAmount += currentLineWinAmount;
                     result.WonAmount += currentLineWinAmount;
-                    if (_context.RequestItems.isFreeSpin)
-                    {
-                        if (_context.State.isRespinResolver)
-                        {
-                            if (_context.State.respinTypeResolver == HoldAndSpin.First)
-                            {
-                                RespinBreakDown01000 += win.WinAmount;
-                            }
-                            if (_context.State.respinTypeResolver == HoldAndSpin.Second)
-                            {
-                                RespinBreakDown00010 += win.WinAmount;
-                            }
-                            if (_context.State.respinTypeResolver == HoldAndSpin.Both)
-                            {
-                                RespinBreakDown01010 += win.WinAmount;
-                            }
-                        }
-                        else
-                        {
-                            RespinBreakDownNoRespin += win.WinAmount;
-                        }
-                    }
-                    if (win.Symbol == 9)
-                    {
-                        if (win.LongestSequence == 3)
-                        {
-                            if (!parts.ContainsKey(stringToChoose + "3ofakind"))
-                            {
-                                parts.Add(stringToChoose + "3ofakind", win.WinAmount);
-                            }
-                            else
-                            {
-                                parts[stringToChoose + "3ofakind"] += win.WinAmount;
-                            }
-                        }
-                        else if (win.LongestSequence == 4)
-                        {
-                            if (!parts.ContainsKey(stringToChoose + "4ofakind"))
-                            {
-                                parts.Add(stringToChoose + "4ofakind", win.WinAmount);
-                            }
-                            else
-                            {
-                                parts[stringToChoose + "4ofakind"] += win.WinAmount;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (!parts.ContainsKey(stringToChoose + "regular"))
-                        {
-                            parts.Add(stringToChoose + "regular", win.WinAmount);
-                        }
-                        else
-                        {
-                            parts[stringToChoose + "regular"] += win.WinAmount;
-                        }
-                    }
+                    //if (_context.RequestItems.isFreeSpin)
+                    //{
+                    //    if (_context.State.isRespinResolver)
+                    //    {
+                    //        if (_context.State.respinTypeResolver == HoldAndSpin.First)
+                    //        {
+                    //            RespinBreakDown01000 += win.WinAmount;
+                    //        }
+                    //        if (_context.State.respinTypeResolver == HoldAndSpin.Second)
+                    //        {
+                    //            RespinBreakDown00010 += win.WinAmount;
+                    //        }
+                    //        if (_context.State.respinTypeResolver == HoldAndSpin.Both)
+                    //        {
+                    //            RespinBreakDown01010 += win.WinAmount;
+                    //        }
+                    //    }
+                    //    else
+                    //    {
+                    //        RespinBreakDownNoRespin += win.WinAmount;
+                    //    }
+                    //}
+                    //if (win.Symbol == 9)
+                    //{
+                    //    if (win.LongestSequence == 3)
+                    //    {
+                    //        if (!parts.ContainsKey(stringToChoose + "3ofakind"))
+                    //        {
+                    //            parts.Add(stringToChoose + "3ofakind", win.WinAmount);
+                    //        }
+                    //        else
+                    //        {
+                    //            parts[stringToChoose + "3ofakind"] += win.WinAmount;
+                    //        }
+                    //    }
+                    //    else if (win.LongestSequence == 4)
+                    //    {
+                    //        if (!parts.ContainsKey(stringToChoose + "4ofakind"))
+                    //        {
+                    //            parts.Add(stringToChoose + "4ofakind", win.WinAmount);
+                    //        }
+                    //        else
+                    //        {
+                    //            parts[stringToChoose + "4ofakind"] += win.WinAmount;
+                    //        }
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    if (!parts.ContainsKey(stringToChoose + "regular"))
+                    //    {
+                    //        parts.Add(stringToChoose + "regular", win.WinAmount);
+                    //    }
+                    //    else
+                    //    {
+                    //        parts[stringToChoose + "regular"] += win.WinAmount;
+                    //    }
+                    //}
                 }
             }
 

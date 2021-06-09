@@ -86,101 +86,101 @@ namespace TestSlotsConsole
                 string.Format("Spins: {0}", stats.Spins),
                 string.Format("Errors: {0}", stats.Errors + "\n\n\n\n\n\n")
                  );
-            string parts = null;
-            string regular = "Regular - ";
-            string fs = "FS - ";
-            var regularregular = "regular regular - " + (MermaidsFortuneResolver.parts[regular + "regular"] / (double)totalDebit) * 100 + "\n";
-            var regularbn = "regular bn - " + (MermaidsFortuneResolver.parts[regular + "bn"] / (double)totalDebit) * 100 + "\n";
-            var regularfive = "regular five - " + (MermaidsFortuneResolver.parts[regular + "5ofakind"] / (double)totalDebit) * 100 + "\n";
-            var regularfour = "regular four - " + (MermaidsFortuneResolver.parts[regular + "4ofakind"] / (double)totalDebit) * 100 + "\n";
-            var regularthree = "regular three - " + (MermaidsFortuneResolver.parts[regular + "3ofakind"] / (double)totalDebit) * 100 + "\n";
-            var regulartotal = "regular total - " + ((MermaidsFortuneResolver.parts[regular + "bn"] +
-                                                     MermaidsFortuneResolver.parts[regular + "regular"] +
-                                                     MermaidsFortuneResolver.parts[regular + "5ofakind"] +
-                                                     MermaidsFortuneResolver.parts[regular + "4ofakind"] +
-                                                     MermaidsFortuneResolver.parts[regular + "3ofakind"]) / (double)totalDebit) * 100 + "\n\n\n";
-            var fsregular = "fs regular - " + (MermaidsFortuneResolver.parts[fs + "regular"] / (double)totalDebit) * 100 + "\n";
-            var fsbn = "fs bn - " + (MermaidsFortuneResolver.parts[fs + "bn"] / (double)totalDebit) * 100 + "\n";
-            var fsfive = "fs five - " + (MermaidsFortuneResolver.parts[fs + "5ofakind"] / (double)totalDebit) * 100 + "\n";
-            var fsfour = "fs four - " + (MermaidsFortuneResolver.parts[fs + "4ofakind"] / (double)totalDebit) * 100 + "\n";
-            var fsthree = "fs three - " + (MermaidsFortuneResolver.parts[fs + "3ofakind"] / (double)totalDebit) * 100 + "\n";
-            var fstotal = "fs total - " + ((MermaidsFortuneResolver.parts[fs + "bn"] +
-                                             MermaidsFortuneResolver.parts[fs + "regular"] +
-                                             MermaidsFortuneResolver.parts[fs + "5ofakind"] +
-                                             MermaidsFortuneResolver.parts[fs + "4ofakind"] +
-                                             MermaidsFortuneResolver.parts[fs + "3ofakind"]) / (double)totalDebit) * 100 + "\n\n\n";
-            var totalregular = "total regular - " + ((MermaidsFortuneResolver.parts[regular + "regular"] + MermaidsFortuneResolver.parts[fs + "regular"]) / (double)totalDebit) * 100 + "\n";
-            var totalbn = "total bn - " + ((MermaidsFortuneResolver.parts[regular + "bn"] + MermaidsFortuneResolver.parts[fs + "bn"]) / (double)totalDebit) * 100 + "\n";
-            var totalfive = "total five - " + ((MermaidsFortuneResolver.parts[regular + "5ofakind"] + MermaidsFortuneResolver.parts[fs + "5ofakind"]) / (double)totalDebit) * 100 + "\n";
-            var totalfour = "total four - " + ((MermaidsFortuneResolver.parts[regular + "4ofakind"] + MermaidsFortuneResolver.parts[fs + "4ofakind"]) / (double)totalDebit) * 100 + "\n";
-            var totalthree = "total three - " + ((MermaidsFortuneResolver.parts[regular + "4ofakind"] + MermaidsFortuneResolver.parts[fs + "3ofakind"]) / (double)totalDebit) * 100 + "\n";
-            var totaltotal = "total total - " + ((MermaidsFortuneResolver.parts[regular + "bn"] + MermaidsFortuneResolver.parts[fs + "bn"] +
-                                                  MermaidsFortuneResolver.parts[regular + "regular"] + MermaidsFortuneResolver.parts[fs + "regular"] +
-                                                  MermaidsFortuneResolver.parts[regular + "5ofakind"] + MermaidsFortuneResolver.parts[fs + "5ofakind"] +
-                                                  MermaidsFortuneResolver.parts[regular + "4ofakind"] + MermaidsFortuneResolver.parts[fs + "4ofakind"] +
-                                                  MermaidsFortuneResolver.parts[regular + "3ofakind"] + MermaidsFortuneResolver.parts[fs + "3ofakind"])
-                / (double)totalDebit) * 100 + "\n\n\n";
-            
-            parts += regularregular + regularbn + regularfive + regularfour + regularthree + regulartotal;
-            parts += fsregular + fsbn + fsfive + fsfour + fsthree + fstotal;
-            parts += totalregular + totalbn + totalfive + totalfour + totalthree + totaltotal;
-            parts += "FS Break Down:\n";
-            parts += "Respin 01000  First- " + MermaidsFortuneResolver.RespinBreakDown01000 / (double)totalDebit * 100 + "\n";
-            parts += "Respin 00010  Second - " + MermaidsFortuneResolver.RespinBreakDown00010 / (double)totalDebit * 100 + "\n";
-            parts += "Respin 01010 - Both " + MermaidsFortuneResolver.RespinBreakDown01010 / (double)totalDebit * 100 + "\n";
-            parts += "No respin " + MermaidsFortuneResolver.RespinBreakDownNoRespin / (double)totalDebit * 100 + "\n";
-            parts += "All respin sum = " + (MermaidsFortuneResolver.RespinBreakDown01000 / (double) totalDebit +
-                                            MermaidsFortuneResolver.RespinBreakDown00010 / (double) totalDebit +
-                                            MermaidsFortuneResolver.RespinBreakDown01010 / (double) totalDebit +
-                                            MermaidsFortuneResolver.RespinBreakDownNoRespin / (double) totalDebit) * 100 + "\n";
-            parts += "FS Hits :\n";
-            parts += "Respin Hits 01000  First- " + MermaidsFortuneResolver.HitRateRespinBreakDown01000 + "\n";
-            parts += "Respin Hits 00010  Second - " + MermaidsFortuneResolver.HitRateRespinBreakDown00010 + "\n";    
-            parts += "Respin Hits 01010 - Both " + MermaidsFortuneResolver.HitRateRespinBreakDown01010 + "\n";
-            parts += "FS Hit rate:\n";
-            parts += "Respin HitRate 01000  First- " + MermaidsFortuneResolver.TotalFS / (double)MermaidsFortuneResolver.HitRateRespinBreakDown01000 + "\n";
-            parts += "Respin HitRate 00010  Second - " + MermaidsFortuneResolver.TotalFS / (double)MermaidsFortuneResolver.HitRateRespinBreakDown00010 + "\n";
-            parts += "Respin HitRate 01010 - Both " + MermaidsFortuneResolver.TotalFS / (double)MermaidsFortuneResolver.HitRateRespinBreakDown01010 + "\n";
-            parts += "FS wins:\n";
-            parts += "Total left respin win- " + MermaidsFortuneResolver.RespinBreakDown01000 * 50 + "\n";
-            parts += "Total right respin win - " + MermaidsFortuneResolver.RespinBreakDown00010 * 50 + "\n";
-            parts += "Total both respin win " + MermaidsFortuneResolver.RespinBreakDown01010 * 50 + "\n";
-            parts += "FG_BONUS_WEIGHTS_1:" + "\n";
-            float z;
-            if (MermaidsFortuneResolver.fsMCSymbolsWeightsRS1.ContainsKey("100"))
-            {
-                z = (float)1731 / (float)MermaidsFortuneResolver.fsMCSymbolsWeightsRS1["100"];
-                var y = MermaidsFortuneResolver.fsMCSymbolsWeightsRS1.Select(x => new { ArgKey = int.Parse(x.Key), ArgValue = x.Value * z }).OrderBy(x => x.ArgKey).ToDictionary(x => x.ArgKey);
-                foreach (var xx in y)
-                {
-                    parts += xx.Key + " : " + xx.Value.ArgValue + "\n";
-                }
-            }
-
-            
-            parts += "FG_BONUS_WEIGHTS_2:" + "\n";
-            if (MermaidsFortuneResolver.fsMCSymbolsWeightsRS2.ContainsKey("100"))
-            {
-                z = (float)1200 / (float)MermaidsFortuneResolver.fsMCSymbolsWeightsRS2["100"];
-                var y = MermaidsFortuneResolver.fsMCSymbolsWeightsRS2.Select(x => new { ArgKey = int.Parse(x.Key), ArgValue = x.Value * z }).OrderBy(x => x.ArgKey).ToDictionary(x => x.ArgKey);
-                foreach (var xx in y)
-                {
-                    parts += xx.Key + " : " + xx.Value.ArgValue + "\n";
-                }
-            }
-            if (MermaidsFortuneResolver.fsMCSymbolsWeightsRS3.ContainsKey("100"))
-            {
-                parts += "FG_BONUS_WEIGHTS_3:" + "\n";
-                z = (float)200 / (float)MermaidsFortuneResolver.fsMCSymbolsWeightsRS3["100"];
-                var y = MermaidsFortuneResolver.fsMCSymbolsWeightsRS3.Select(x => new { ArgKey = int.Parse(x.Key), ArgValue = x.Value * z }).OrderBy(x => x.ArgKey).ToDictionary(x => x.ArgKey);
-                foreach (var xx in y)
-                {
-                    parts += xx.Key + " : " + xx.Value.ArgValue + "\n";
-                }
-            }
-
-            
-            ret += parts;
+            //string parts = null;
+            //string regular = "Regular - ";
+            //string fs = "FS - ";
+            //var regularregular = "regular regular - " + (MermaidsFortuneResolver.parts[regular + "regular"] / (double)totalDebit) * 100 + "\n";
+            //var regularbn = "regular bn - " + (MermaidsFortuneResolver.parts[regular + "bn"] / (double)totalDebit) * 100 + "\n";
+            //var regularfive = "regular five - " + (MermaidsFortuneResolver.parts[regular + "5ofakind"] / (double)totalDebit) * 100 + "\n";
+            //var regularfour = "regular four - " + (MermaidsFortuneResolver.parts[regular + "4ofakind"] / (double)totalDebit) * 100 + "\n";
+            //var regularthree = "regular three - " + (MermaidsFortuneResolver.parts[regular + "3ofakind"] / (double)totalDebit) * 100 + "\n";
+            //var regulartotal = "regular total - " + ((MermaidsFortuneResolver.parts[regular + "bn"] +
+            //                                         MermaidsFortuneResolver.parts[regular + "regular"] +
+            //                                         MermaidsFortuneResolver.parts[regular + "5ofakind"] +
+            //                                         MermaidsFortuneResolver.parts[regular + "4ofakind"] +
+            //                                         MermaidsFortuneResolver.parts[regular + "3ofakind"]) / (double)totalDebit) * 100 + "\n\n\n";
+            //var fsregular = "fs regular - " + (MermaidsFortuneResolver.parts[fs + "regular"] / (double)totalDebit) * 100 + "\n";
+            //var fsbn = "fs bn - " + (MermaidsFortuneResolver.parts[fs + "bn"] / (double)totalDebit) * 100 + "\n";
+            //var fsfive = "fs five - " + (MermaidsFortuneResolver.parts[fs + "5ofakind"] / (double)totalDebit) * 100 + "\n";
+            //var fsfour = "fs four - " + (MermaidsFortuneResolver.parts[fs + "4ofakind"] / (double)totalDebit) * 100 + "\n";
+            //var fsthree = "fs three - " + (MermaidsFortuneResolver.parts[fs + "3ofakind"] / (double)totalDebit) * 100 + "\n";
+            //var fstotal = "fs total - " + ((MermaidsFortuneResolver.parts[fs + "bn"] +
+            //                                 MermaidsFortuneResolver.parts[fs + "regular"] +
+            //                                 MermaidsFortuneResolver.parts[fs + "5ofakind"] +
+            //                                 MermaidsFortuneResolver.parts[fs + "4ofakind"] +
+            //                                 MermaidsFortuneResolver.parts[fs + "3ofakind"]) / (double)totalDebit) * 100 + "\n\n\n";
+            //var totalregular = "total regular - " + ((MermaidsFortuneResolver.parts[regular + "regular"] + MermaidsFortuneResolver.parts[fs + "regular"]) / (double)totalDebit) * 100 + "\n";
+            //var totalbn = "total bn - " + ((MermaidsFortuneResolver.parts[regular + "bn"] + MermaidsFortuneResolver.parts[fs + "bn"]) / (double)totalDebit) * 100 + "\n";
+            //var totalfive = "total five - " + ((MermaidsFortuneResolver.parts[regular + "5ofakind"] + MermaidsFortuneResolver.parts[fs + "5ofakind"]) / (double)totalDebit) * 100 + "\n";
+            //var totalfour = "total four - " + ((MermaidsFortuneResolver.parts[regular + "4ofakind"] + MermaidsFortuneResolver.parts[fs + "4ofakind"]) / (double)totalDebit) * 100 + "\n";
+            //var totalthree = "total three - " + ((MermaidsFortuneResolver.parts[regular + "4ofakind"] + MermaidsFortuneResolver.parts[fs + "3ofakind"]) / (double)totalDebit) * 100 + "\n";
+            //var totaltotal = "total total - " + ((MermaidsFortuneResolver.parts[regular + "bn"] + MermaidsFortuneResolver.parts[fs + "bn"] +
+            //                                      MermaidsFortuneResolver.parts[regular + "regular"] + MermaidsFortuneResolver.parts[fs + "regular"] +
+            //                                      MermaidsFortuneResolver.parts[regular + "5ofakind"] + MermaidsFortuneResolver.parts[fs + "5ofakind"] +
+            //                                      MermaidsFortuneResolver.parts[regular + "4ofakind"] + MermaidsFortuneResolver.parts[fs + "4ofakind"] +
+            //                                      MermaidsFortuneResolver.parts[regular + "3ofakind"] + MermaidsFortuneResolver.parts[fs + "3ofakind"])
+            //    / (double)totalDebit) * 100 + "\n\n\n";
+            //
+            //parts += regularregular + regularbn + regularfive + regularfour + regularthree + regulartotal;
+            //parts += fsregular + fsbn + fsfive + fsfour + fsthree + fstotal;
+            //parts += totalregular + totalbn + totalfive + totalfour + totalthree + totaltotal;
+            //parts += "FS Break Down:\n";
+            //parts += "Respin 01000  First- " + MermaidsFortuneResolver.RespinBreakDown01000 / (double)totalDebit * 100 + "\n";
+            //parts += "Respin 00010  Second - " + MermaidsFortuneResolver.RespinBreakDown00010 / (double)totalDebit * 100 + "\n";
+            //parts += "Respin 01010 - Both " + MermaidsFortuneResolver.RespinBreakDown01010 / (double)totalDebit * 100 + "\n";
+            //parts += "No respin " + MermaidsFortuneResolver.RespinBreakDownNoRespin / (double)totalDebit * 100 + "\n";
+            //parts += "All respin sum = " + (MermaidsFortuneResolver.RespinBreakDown01000 / (double) totalDebit +
+            //                                MermaidsFortuneResolver.RespinBreakDown00010 / (double) totalDebit +
+            //                                MermaidsFortuneResolver.RespinBreakDown01010 / (double) totalDebit +
+            //                                MermaidsFortuneResolver.RespinBreakDownNoRespin / (double) totalDebit) * 100 + "\n";
+            //parts += "FS Hits :\n";
+            //parts += "Respin Hits 01000  First- " + MermaidsFortuneResolver.HitRateRespinBreakDown01000 + "\n";
+            //parts += "Respin Hits 00010  Second - " + MermaidsFortuneResolver.HitRateRespinBreakDown00010 + "\n";    
+            //parts += "Respin Hits 01010 - Both " + MermaidsFortuneResolver.HitRateRespinBreakDown01010 + "\n";
+            //parts += "FS Hit rate:\n";
+            //parts += "Respin HitRate 01000  First- " + MermaidsFortuneResolver.TotalFS / (double)MermaidsFortuneResolver.HitRateRespinBreakDown01000 + "\n";
+            //parts += "Respin HitRate 00010  Second - " + MermaidsFortuneResolver.TotalFS / (double)MermaidsFortuneResolver.HitRateRespinBreakDown00010 + "\n";
+            //parts += "Respin HitRate 01010 - Both " + MermaidsFortuneResolver.TotalFS / (double)MermaidsFortuneResolver.HitRateRespinBreakDown01010 + "\n";
+            //parts += "FS wins:\n";
+            //parts += "Total left respin win- " + MermaidsFortuneResolver.RespinBreakDown01000 * 50 + "\n";
+            //parts += "Total right respin win - " + MermaidsFortuneResolver.RespinBreakDown00010 * 50 + "\n";
+            //parts += "Total both respin win " + MermaidsFortuneResolver.RespinBreakDown01010 * 50 + "\n";
+            //parts += "FG_BONUS_WEIGHTS_1:" + "\n";
+            //float z;
+            //if (MermaidsFortuneResolver.fsMCSymbolsWeightsRS1.ContainsKey("100"))
+            //{
+            //    z = (float)1731 / (float)MermaidsFortuneResolver.fsMCSymbolsWeightsRS1["100"];
+            //    var y = MermaidsFortuneResolver.fsMCSymbolsWeightsRS1.Select(x => new { ArgKey = int.Parse(x.Key), ArgValue = x.Value * z }).OrderBy(x => x.ArgKey).ToDictionary(x => x.ArgKey);
+            //    foreach (var xx in y)
+            //    {
+            //        parts += xx.Key + " : " + xx.Value.ArgValue + "\n";
+            //    }
+            //}
+            //
+            //
+            //parts += "FG_BONUS_WEIGHTS_2:" + "\n";
+            //if (MermaidsFortuneResolver.fsMCSymbolsWeightsRS2.ContainsKey("100"))
+            //{
+            //    z = (float)1200 / (float)MermaidsFortuneResolver.fsMCSymbolsWeightsRS2["100"];
+            //    var y = MermaidsFortuneResolver.fsMCSymbolsWeightsRS2.Select(x => new { ArgKey = int.Parse(x.Key), ArgValue = x.Value * z }).OrderBy(x => x.ArgKey).ToDictionary(x => x.ArgKey);
+            //    foreach (var xx in y)
+            //    {
+            //        parts += xx.Key + " : " + xx.Value.ArgValue + "\n";
+            //    }
+            //}
+            //if (MermaidsFortuneResolver.fsMCSymbolsWeightsRS3.ContainsKey("100"))
+            //{
+            //    parts += "FG_BONUS_WEIGHTS_3:" + "\n";
+            //    z = (float)200 / (float)MermaidsFortuneResolver.fsMCSymbolsWeightsRS3["100"];
+            //    var y = MermaidsFortuneResolver.fsMCSymbolsWeightsRS3.Select(x => new { ArgKey = int.Parse(x.Key), ArgValue = x.Value * z }).OrderBy(x => x.ArgKey).ToDictionary(x => x.ArgKey);
+            //    foreach (var xx in y)
+            //    {
+            //        parts += xx.Key + " : " + xx.Value.ArgValue + "\n";
+            //    }
+            //}
+            //
+            //
+            //ret += parts;
             return ret;
 
         }
