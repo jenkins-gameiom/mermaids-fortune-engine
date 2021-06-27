@@ -137,7 +137,7 @@ namespace AGS.Slots.MermaidsFortune.Platform
                     }
                 }
 
-
+                _context.State.isReSpin = false;
                 //first reel is 0'd
                 if (res.Reels[1].All(x => x == 0) && !res.Reels[3].All(x => x == 0))
                 {
