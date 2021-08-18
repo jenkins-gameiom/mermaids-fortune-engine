@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="criticalFiles.json" />
     <None Remove="Engine\MermaidsFortune\Forces\bigwin.json" />
     <None Remove="Engine\MermaidsFortune\Forces\fiveofakind.json" />
     <None Remove="Engine\MermaidsFortune\Forces\fiveofakindgrand.json" />
@@ -126,6 +127,11 @@
     </Content>
     <Content Include="Math96.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="criticalFiles.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
 
