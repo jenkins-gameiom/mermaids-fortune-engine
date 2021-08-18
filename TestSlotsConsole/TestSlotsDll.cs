@@ -57,10 +57,6 @@ namespace TestSlotsConsole
                 var initGe = true;
                 while (context.State.freeSpinsLeft > 0)
                 {
-                    if (context.State.freeSpinsLeft == 1)
-                    {
-
-                    }
                     context.RequestItems.isFreeSpin = true;
                     ge = new GameEngine(context, new MermaidsFortuneResolver(context, configs, random),
                         new MermaidsFortuneScanner(context, random, configs), configs, random);

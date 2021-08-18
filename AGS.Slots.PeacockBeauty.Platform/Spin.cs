@@ -62,7 +62,7 @@ namespace AGS.Slots.MermaidsFortune.Platform
                             var reels = _context.MathFile.GetFullReels(_context, selectedIndexes).reels;
                             for (int i = 0; i < reels.Count; i++)
                             {
-                                int sNum = 3;
+                                int sNum = i == 2 ? 4 : 3;
                                 var currReel = new List<int>();
                                 for (int j = 0; j < sNum; j++)
                                     currReel.Add(reels[i][(j + selectedIndexes[i]) % reels[i].Count]);
@@ -137,7 +137,7 @@ namespace AGS.Slots.MermaidsFortune.Platform
                     }
                 }
 
-
+                _context.State.isReSpin = false;
                 //first reel is 0'd
                 if (res.Reels[1].All(x => x == 0) && !res.Reels[3].All(x => x == 0))
                 {

@@ -107,13 +107,14 @@ namespace AGS.Slots.MermaidsFortune.WebAPI
                     {
                         //request = Commons.Json.Clone(dynamicRequest);
                         response =  _game.Spin(dynamicRequest);
-                        response.privateState.lastState = response.publicState;
-                        result = Json.Encode(response);
                         if (Json.HasProperty(response, "error"))
                         {
                             ErrorRequests++;
                             _logger.LogError((string)string.Format("MermaidsFortune generated an error during bonuspick, the request is:{0},action typeis:{1} error is:{2}", request, ActionType.spin, (string)response.error.stackTrace));
+                            throw new Exception((string) response.error.message);
                         }
+                        response.privateState.lastState = response.publicState;
+                        result = Json.Encode(response);
                         SpinCounter++;
                     }
                     catch (Exception ex)
