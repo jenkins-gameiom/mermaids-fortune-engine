@@ -64,7 +64,7 @@ namespace ReadExcel
                             continue;
                         }
                     }
-
+                    
                     //write the value to the console
                     if (i % 2 != 0 && xlRange.Cells[j, i] != null && xlRange.Cells[j, i].Value2 != null)
                     {
@@ -98,7 +98,6 @@ namespace ReadExcel
                     totalWeights += "]";
                     totalWeights += "\n";
                 }
-            }
-        }
+            }  }
     }
 }
