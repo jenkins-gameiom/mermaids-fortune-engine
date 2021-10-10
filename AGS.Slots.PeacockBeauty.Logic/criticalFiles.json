@@ -1,0 +1,20 @@
+﻿{
+    "criticalFilesLinux": [
+        "\\AGS.Slots.MermaidsFortune.Common.dll",
+        "\\AGS.Slots.MermaidsFortune.Logic.dll",
+        "\\AGS.Slots.MermaidsFortune.Platform.dll",
+        "\\AGS.Slots.MermaidsFortune.WebAPI.dll",
+        "\\GameEngineBuild-Linux\\AGS.Slots.MermaidsFortune.WebAPI.dll",
+        "\\Math94.json",
+        "\\Math96.json"
+    ],
+    "criticalFilesWindows": [
+        "\\AGS.Slots.MermaidsFortune.Common.dll",
+        "\\AGS.Slots.MermaidsFortune.Logic.dll",
+        "\\AGS.Slots.MermaidsFortune.Platform.dll",
+        "\\AGS.Slots.MermaidsFortune.WebAPI.dll",
+        "\\AGS.Slots.MermaidsFortune.WebAPI.exe",
+        "\\Math94.json",
+        "\\Math96.json"
+    ]
+}
